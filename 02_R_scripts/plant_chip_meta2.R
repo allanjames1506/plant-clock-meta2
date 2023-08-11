@@ -14,7 +14,7 @@ install_github("jokergoo/ComplexHeatmap")
 library(ComplexHeatmap)
 library(ComplexUpset)
 
-setwd("/Users/Allan/Documents/plant_ChIP_meta/")
+setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
 # gather and join together all the WebPlotDigitizer files for each cluster group
 # WebPlotDigitizer https://apps.automeris.io/wpd/
