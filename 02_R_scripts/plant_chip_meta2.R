@@ -168,6 +168,8 @@ plot_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
         plot.subtitle = element_text(color = "grey30")
   )
 
+plot_day1_vs_day2_150_AMP
+
 ggsave('./03_plots/plot_day1_vs_day2_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
 
 plot_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
@@ -187,6 +189,8 @@ plot_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
   theme(plot.title = element_text(color = "grey30"),
         plot.subtitle = element_text(color = "grey30")
   )
+
+plot_day1_vs_day5_150_AMP
 
 ggsave('./03_plots/plot_day1_vs_day5_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
 
