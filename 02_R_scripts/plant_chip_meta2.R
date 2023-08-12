@@ -1186,15 +1186,18 @@ col_fun2(seq(-5,5))
 
 row_ha_hmap_d1d2_full = rowAnnotation(context = odds_d1d2$group, size = anno_barplot(odds_d1d2$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
 
-m_d1d2 = Heatmap(odds_d1d2_matrix,
-                 name='Odds Ratio', 
+png(file="./03_plots/heatmap_d1d2_full.png", width = 200, height = 300, units='mm', res = 300)
+
+m_d1d2 <- Heatmap(odds_d1d2_matrix,
+                 name='Odds Ratio',
                  heatmap_legend_param = list(legend_direction = "horizontal", 
                                              title_gp = gpar(fontsize = 10), 
                                              legend_width = unit(5, "cm"), at = c(0, 5, 10, 15, 20, 25, 30), 
                                              labels = c(0, 5, 10, 15, 20, 25, 30), 
                                              title = "Odds Ratio", 
                                              legend_height = unit(4, "cm"), 
-                                             title_position = "topleft", border="gray40"), 
+                                             title_position = "topleft", 
+                                             border="gray40"), 
                  column_names_rot = 45, 
                  column_title = NULL, 
                  rect_gp = gpar(col = "gray40", lwd = 1), 
@@ -1222,6 +1225,8 @@ draw(m_d1d2, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
 
 decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
+dev.off()
+
 # https://jokergoo.github.io/2020/05/11/set-cell-width/height-in-the-heatmap/
 
 m = draw(m_d1d2, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
@@ -1230,11 +1235,6 @@ w = convertX(w, "inch", valueOnly = TRUE)
 h = ComplexHeatmap:::height(m)
 h = convertY(h, "inch", valueOnly = TRUE)
 c(w, h)
-
-# dev.off()
-# plot(rnorm(50), rnorm(50))
-# dev.cur()
-# dev.off(2)
 
 #* trimmed----
 odds_d1d2_trimmed <- odds_d1d2 %>%
@@ -1248,7 +1248,9 @@ odds_d1d2_trimmed_matrix <- as.matrix(odds_d1d2_trimmed_matrix)
 rownames(odds_d1d2_trimmed_matrix) <- c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72)
 
 row_ha_hmap_d1d2_trimmed = rowAnnotation(context = odds_d1d2_trimmed$group, size = anno_barplot(odds_d1d2_trimmed$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
-draw(row_ha_hmap_d1d2_trimmed)
+
+png(file="./03_plots/heatmap_d1d2_trimmed.png", width = 200, height = 200, units='mm', res = 300)
+
 m_d1d2_trimmed = Heatmap(odds_d1d2_trimmed_matrix,
                          name='Odds Ratio',
                          heatmap_legend_param = list(legend_direction = "horizontal", 
@@ -1285,14 +1287,7 @@ draw(m_d1d2_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lg
 
 decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
-# https://jokergoo.github.io/2020/05/11/set-cell-width/height-in-the-heatmap/
-
-m = draw(m_d1d2_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
-w = ComplexHeatmap:::width(m)
-w = convertX(w, "inch", valueOnly = TRUE)
-h = ComplexHeatmap:::height(m)
-h = convertY(h, "inch", valueOnly = TRUE)
-c(w, h)
+dev.off()
 
 #d1-d5----
 
@@ -1304,6 +1299,8 @@ odds_d1d5_matrix<-as.matrix(odds_d1d5_matrix)
 rownames(odds_d1d5_matrix) <- 1:74
 
 row_ha_hmap_d1d5_full = rowAnnotation(context = odds_d1d5$group, size = anno_barplot(odds_d1d5$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+
+png(file="./03_plots/heatmap_d1d5_full.png", width = 200, height = 300, units='mm', res = 300)
 
 m_d1d5 = Heatmap(odds_d1d5_matrix,
                  name='Odds Ratio', 
@@ -1334,18 +1331,13 @@ m_d1d5 = Heatmap(odds_d1d5_matrix,
                  row_km_repeats = 100, 
                  cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d5_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d5_matrix[i, j]), x, y, gp = gpar(fontsize =8, col='black'))})
 
+lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium", "Lose High"), title="cluster context", type = "points", pch=15, title_gp = gpar(fontsize = 10), size=unit(5,"mm"), border="black", legend_gp=gpar(col=c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'))))
+
 draw(m_d1d5, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
 
 decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
-# https://jokergoo.github.io/2020/05/11/set-cell-width/height-in-the-heatmap/
-
-m = draw(m_d1d5, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
-w = ComplexHeatmap:::width(m)
-w = convertX(w, "inch", valueOnly = TRUE)
-h = ComplexHeatmap:::height(m)
-h = convertY(h, "inch", valueOnly = TRUE)
-c(w, h)
+dev.off()
 
 #* trimmed----
 odds_d1d5_trimmed <- odds_d1d5 %>%
@@ -1359,6 +1351,8 @@ odds_d1d5_trimmed_matrix <- as.matrix(odds_d1d5_trimmed_matrix)
 rownames(odds_d1d5_trimmed_matrix) <- c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72)
 
 row_ha_hmap_d1d5_trimmed = rowAnnotation(context = odds_d1d5_trimmed$group, size = anno_barplot(odds_d1d5_trimmed$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+
+png(file="./03_plots/heatmap_d1d5_trimmed.png", width = 200, height = 200, units='mm', res = 300)
 
 m_d1d5_trimmed = Heatmap(odds_d1d5_trimmed_matrix,
                          name='Odds Ratio',
@@ -1389,21 +1383,13 @@ m_d1d5_trimmed = Heatmap(odds_d1d5_trimmed_matrix,
                          row_km_repeats = 100,
                          cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d5_trimmed_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d5_trimmed_matrix[i, j]), x, y, gp = gpar(fontsize =11, col='black', fontface = 'bold'))})
 
-
 lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium", "Lose High"), title="cluster context", type = "points", pch=15, title_gp = gpar(fontsize = 10), size=unit(5,"mm"), border="black", legend_gp=gpar(col=c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'))))
 
 draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
 
 decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
-# https://jokergoo.github.io/2020/05/11/set-cell-width/height-in-the-heatmap/
-
-m = draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
-w = ComplexHeatmap:::width(m)
-w = convertX(w, "inch", valueOnly = TRUE)
-h = ComplexHeatmap:::height(m)
-h = convertY(h, "inch", valueOnly = TRUE)
-c(w, h)
+dev.off()
 
 # UpSet Plots----
 
