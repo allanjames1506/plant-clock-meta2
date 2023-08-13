@@ -1,5 +1,7 @@
 # a meta analysis of Arabidopsis clock ChIP data and overlap with cold TF network
 
+# 1 LIBRARIES----
+
 library(tidyverse)
 library(janitor)
 library(MetaCycle)
@@ -15,6 +17,8 @@ library(ComplexHeatmap)
 library(ComplexUpset)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
+
+# 2 CLUSTER GROUP PROFILES - WebPlotDigitizer----
 
 # gather and join together all the WebPlotDigitizer files for each cluster group
 # WebPlotDigitizer https://apps.automeris.io/wpd/
@@ -51,6 +55,8 @@ clusters_aggregated_day5_df <- data.frame(t(clusters_aggregated_day5[, -1])) %>%
   relocate(clusters) %>% 
   write_csv('./01_tidy_data/clusters_aggregated_day5.csv')
 
+# 3 MetaCycle - RHYTHMIC SIGNALS----
+
 # use meta2d from MetaCycle package to detect rhythmic signals from time-series datasets with multiple methods
 # https://cran.r-project.org/web/packages/MetaCycle/MetaCycle.pdf
 # https://cran.r-project.org/web/packages/MetaCycle/vignettes/implementation.html
@@ -76,6 +82,8 @@ day2_output <- read_csv('./00_raw_data/cluster_days_output_day2/meta2d_clusters_
 day5_output <- read_csv('./00_raw_data/cluster_days_output_day5/meta2d_clusters_aggregated_day5.csv') %>% 
   select(CycID, meta2d_pvalue, meta2d_period, meta2d_phase, meta2d_AMP) %>% 
   dplyr::rename(cluster = CycID, d5_meta2d_pvalue = meta2d_pvalue, d5_meta2d_period = meta2d_period, d5_meta2d_phase = meta2d_phase, d5_meta2d_AMP = meta2d_AMP)
+
+# *3.1 compare d1d2----
 
 # compare d1 vs d2 and set rules for classifying amplitude and rhythm changes between days
 # _150 means 1.5 fold up or down difference in amplitude
@@ -113,6 +121,8 @@ day1_vs_day2_150 <- full_join(day1_output, day2_output, by = "cluster") %>%
 
 write_csv(day1_vs_day2_150, './01_tidy_data/day1_vs_day2_150.csv')
 
+# *3.2 compare d1d5----
+
 # compare d1 vs d5 and set rules for classifying amplitude and rhythm changes between days
 # _150 means 1.5 fold up or down difference in amplitude
 day1_vs_day5_150 <- full_join(day1_output, day5_output, by = "cluster") %>% 
@@ -149,6 +159,10 @@ day1_vs_day5_150 <- full_join(day1_output, day5_output, by = "cluster") %>%
 
 write_csv(day1_vs_day5_150, './01_tidy_data/day1_vs_day5_150.csv')
 
+# 4 MetaCycle SCATTER PLOTS----
+
+# *4.1 compare d1d2 amplitude----
+
 # Scatter plot of the MetaCycle outputs for Amplitude coloured by the amp_flag grouping
 plot_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>% 
   filter(pval_flag == 'd1_nr_d2_r' | pval_flag == 'd1_r_d2_nr' | pval_flag == 'd1_r_d2_r') %>%
@@ -172,6 +186,8 @@ plot_day1_vs_day2_150_AMP
 
 ggsave('./03_plots/plot_day1_vs_day2_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
 
+# *4.2 compare d1d5 amplitude----
+
 plot_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
   filter(pval_flag == 'd1_nr_d5_r' | pval_flag == 'd1_r_d5_nr' | pval_flag == 'd1_r_d5_r') %>%
   ggplot(aes(x = d1_meta2d_AMP, y = d5_meta2d_AMP, colour = amp_flag, shape = pval_flag)) +
@@ -194,7 +210,7 @@ plot_day1_vs_day5_150_AMP
 
 ggsave('./03_plots/plot_day1_vs_day5_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
 
-
+# 5 CLUSTER IDs for AMP PROFILES----
 get_clusters <- function(df, filter_col, amp_flag_id){
   
   clusters <- df %>% 
@@ -205,6 +221,8 @@ get_clusters <- function(df, filter_col, amp_flag_id){
   return(clusters)
 }
 
+# *5.1 d1d2----
+
 # day1 vs day 2
 amp_gain_high_clusters_d1_d2 <- get_clusters(day1_vs_day2_150, amp_flag, 'gain_high')
 amp_gain_medium_clusters_d1_d2 <- get_clusters(day1_vs_day2_150, amp_flag, 'gain_medium')
@@ -212,12 +230,16 @@ amp_lose_high_clusters_d1_d2 <- get_clusters(day1_vs_day2_150, amp_flag, 'lose_h
 amp_lose_medium_clusters_d1_d2 <- get_clusters(day1_vs_day2_150, amp_flag, 'lose_medium')
 amp_other_clusters_d1_d2 <- get_clusters(day1_vs_day2_150, amp_flag, 'other')
 
+# *5.2 d1d5----
+
 # day1 vs day 5
 amp_gain_high_clusters_d1_d5 <- get_clusters(day1_vs_day5_150, amp_flag, 'gain_high')
 amp_gain_medium_clusters_d1_d5 <- get_clusters(day1_vs_day5_150, amp_flag, 'gain_medium')
 amp_lose_high_clusters_d1_d5 <- get_clusters(day1_vs_day5_150, amp_flag, 'lose_high')
 amp_lose_medium_clusters_d1_d5 <- get_clusters(day1_vs_day5_150, amp_flag, 'lose_medium')
 amp_other_clusters_d1_d5 <- get_clusters(day1_vs_day5_150, amp_flag, 'other')
+
+# 6 TF CLUSTERS and GENE_IDs----
 
 # An analysis of established and published Arabidopsis clock ChIP targets in TF network
 # read the TF network cluster
@@ -232,6 +254,10 @@ TF <- read_csv("./00_raw_data/TF Network Cluster Nov2018.csv") %>%
   mutate(cluster = str_sub(cluster, 9, -1)) %>% 
   write_csv("./01_tidy_data/TF Network Cluster Nov2018 pivot longer.csv")
 
+# 7 CLOCK ChIP DATASETS----
+
+# *7.1 LHY----
+
 # LHY dataset
 # read in the Adams LHY paper dataset and skip first 2 lines
 # The LHY paper is Adams et al. (2018) New Phytologist 220(3); 897
@@ -241,6 +267,9 @@ adams <- read_csv("./00_raw_data/nph15415-sup-0002-tables2.csv",skip=2) %>%
   filter(!is.na(gene_ID)) %>%
   distinct(gene_ID) %>% 
   write_csv("./01_tidy_data/LHY_targets.csv")
+
+# *7.2 CCA1----
+# **7.2.1 CCA1 Nagel----
 
 # CCA1 Nagel et al. dataset
 # read in the Nagel CCA1 paper dataset and skip first 2 lines
@@ -252,6 +281,8 @@ nagel <- read_csv("./00_raw_data/pnas.1513609112.sd01.csv",skip=2) %>%
   distinct(gene_ID) %>% 
   write_csv("./01_tidy_data/CCA1_nagel_targets.csv")
 
+# **7.2.2 CCA1 Kamioka----
+
 # CCA1 Kamioka et al. dataset
 # read in the Kamioka CCA1 paper dataset and skip first 2 lines
 # The CCA1 paper is Kamioka et al. (2016) Plant Cell 28(3); 696
@@ -261,10 +292,14 @@ kamioka <- read_csv("./00_raw_data/TPC2015-00737-RAR3_Supplemental_Data_Set_1C.c
   distinct(gene_ID) %>% 
   write_csv("./01_tidy_data/CCA1_kamioka_targets.csv")
 
+# **7.2.3 Nagel-Kamioka merge----
+
 # merge the nagel and kamioka CCA1 datasets
 # use inner_join from dplyr
 # 249 obs.
 kamioka_nagel_merge <- inner_join(nagel, kamioka, by = "gene_ID")
+
+# *7.3 TOC1----
 
 # TOC1 dataset
 # read in the Huang TOC1 paper dataset
@@ -275,6 +310,8 @@ huang <- read_csv("./00_raw_data/Huang TOC1 CHiP TableS1.csv") %>%
   distinct(gene_ID) %>% 
   write_csv("./01_tidy_data/TOC1_huang_targets.csv")
 
+# *7.4 PRR5----
+
 # PRR5 dataset
 # read in the Nakamichi PRR5 paper dataset
 # The PRR5 paper is Nakamichi et al. (2012) PNAS 109:17123
@@ -283,6 +320,8 @@ nakamichi <- read_csv("./00_raw_data/Dataset S3 Nakamichi et al PRR5 binding tar
   dplyr::select(gene_ID = 3) %>% 
   distinct(gene_ID) %>%
   write_csv("./01_tidy_data/PRR5_nakamichi_targets.csv")
+
+# *7.5 PRR7----
 
 # PRR7 dataset
 # read in the Liu PRR7 paper dataset
@@ -293,6 +332,8 @@ liu <- read_csv("./00_raw_data/Dataset S1 Liu et al PRR7 edit.csv") %>%
   distinct(gene_ID) %>%
   write_csv("./01_tidy_data/PRR7_liu_targets.csv")
 
+# *7.6 LUX----
+
 # LUX dataset
 # read in the Ezer EC paper for the LUX dataset (LUX_17 tab)
 # The Evening Complex (EC) paper is Ezer et al. (2017) Nature Plants 3: article 17087
@@ -301,6 +342,8 @@ ezer_LUX <- read_csv("./00_raw_data/Ezer et al nplants Suppl Table S6.csv") %>%
   dplyr::select(gene_ID = 1) %>% 
   distinct(gene_ID) %>% 
   write_csv("./01_tidy_data/LUX_ezer_targets.csv")
+
+# *7.7 ELF3----
 
 # ELF3 dataset
 # read in the Ezer EC paper for the ELF3 dataset (ELF3_22 tab)
@@ -311,6 +354,8 @@ ezer_ELF3 <- read_csv("./00_raw_data/ELF3_22 Ezer Table S6.csv") %>%
   distinct(gene_ID) %>%
   write_csv("./01_tidy_data/ELF3_ezer_targets.csv")
 
+# *7.8 ELF4----
+
 # ELF4 dataset
 # read in the Ezer EC paper for the ELF4 dataset (ELF4_22 tab)
 # The Evening Complex (EC) paper is Ezer et al. (2017) Nature Plants 3: article 17087
@@ -320,7 +365,7 @@ ezer_ELF4 <- read_csv("./00_raw_data/ELF4_22 Ezer Table S6.csv") %>%
   distinct(gene_ID) %>%
   write_csv("./01_tidy_data/ELF4_ezer_targets.csv")
 
-
+# 8 MERGE TF with CLOCK TARGETS----
 merge_TF_clock <- function(df, clock_id){
   
   merge <- inner_join(TF, df, by = 'gene_ID') %>%
@@ -341,6 +386,7 @@ TF_ezer_LUX_merge <- merge_TF_clock(ezer_LUX, 'LUX')
 TF_ezer_ELF3_merge <- merge_TF_clock(ezer_ELF3, 'ELF3')
 TF_ezer_ELF4_merge <- merge_TF_clock(ezer_ELF4, 'ELF4')
 
+# 9 CLUSTER IDs for MERGED----
 
 clock_clusters <- function(df_clock, df_clusters, label){
   
@@ -352,7 +398,8 @@ clock_clusters <- function(df_clock, df_clusters, label){
   
 }
 
-# d1-d2----
+# *9.1 d1-d2----
+
 # gain-high d1d2
 LHY_gain_high_d1d2 <- clock_clusters(TF_adams_merge, amp_gain_high_clusters_d1_d2, 'gain_high_d1_d2')
 CCA1_nagel_gain_high_d1d2 <- clock_clusters(TF_nagel_merge, amp_gain_high_clusters_d1_d2, 'gain_high_d1_d2')
@@ -413,7 +460,8 @@ LUX_other_d1d2 <- clock_clusters(TF_ezer_LUX_merge, amp_other_clusters_d1_d2, 'o
 ELF3_other_d1d2 <- clock_clusters(TF_ezer_ELF3_merge, amp_other_clusters_d1_d2, 'other_d1_d2')
 ELF4_other_d1d2 <- clock_clusters(TF_ezer_ELF4_merge, amp_other_clusters_d1_d2, 'other_d1_d2')
 
-# d1-d5----
+# *9.2 d1-d5----
+
 # gain-high d1d5
 LHY_gain_high_d1d5 <- clock_clusters(TF_adams_merge, amp_gain_high_clusters_d1_d5, 'gain_high_d1_d5')
 CCA1_nagel_gain_high_d1d5 <- clock_clusters(TF_nagel_merge, amp_gain_high_clusters_d1_d5, 'gain_high_d1_d5')
@@ -474,8 +522,8 @@ LUX_other_d1d5 <- clock_clusters(TF_ezer_LUX_merge, amp_other_clusters_d1_d5, 'o
 ELF3_other_d1d5 <- clock_clusters(TF_ezer_ELF3_merge, amp_other_clusters_d1_d5, 'other_d1_d5')
 ELF4_other_d1d5 <- clock_clusters(TF_ezer_ELF4_merge, amp_other_clusters_d1_d5, 'other_d1_d5')
 
-# bind all clock targets----
-# * d1d2----
+# *9.3 Bind clock targets----
+# **9.3.1 d1d2----
 # append all the LHY targets:
 # LHY amp_gain_high (45 obs) + LHY amp_gain_medium (100 obs) + LHY amp_lose_high (52 obs) + LHY amp_lose_medium (20 obs) + LHY amp_other (110 obs): total equals 327 obs
 LHY_bind_d1d2 <- bind_rows(LHY_gain_high_d1d2, LHY_gain_medium_d1d2, LHY_lose_high_d1d2, LHY_lose_medium_d1d2, LHY_other_d1d2)
@@ -547,7 +595,8 @@ names(ELF4_bind_d1d2)[3] <- "ELF4"
 
 write_csv(ELF4_bind_d1d2, './01_tidy_data/ELF4_bind_d1d2.csv')
 
-# * d1d5----
+# **9.3.2 d1d5----
+
 # append all the LHY targets:
 # LHY amp_gain_high (0 obs) + LHY amp_gain_medium (16 obs) + LHY amp_lose_high (87 obs) + LHY amp_lose_medium (53 obs) + LHY amp_other (144 obs): total equals 300 obs
 LHY_bind_d1d5 <- bind_rows(LHY_gain_high_d1d5, LHY_gain_medium_d1d5, LHY_lose_high_d1d5, LHY_lose_medium_d1d5, LHY_other_d1d5)
@@ -619,6 +668,8 @@ names(ELF4_bind_d1d5)[3] <- "ELF4"
 
 write_csv(ELF4_bind_d1d5, './01_tidy_data/ELF4_bind_d1d5.csv')
 
+# 10 SUMMARISE TARGETS----
+
 summarise_targets <- function(df, col_str, clock_id){
   
   summary <- df %>% 
@@ -631,7 +682,7 @@ summarise_targets <- function(df, col_str, clock_id){
   
 }
 
-# d1-d2----
+# *10.1 d1-d2----
 LHY_d1d2_summary <- summarise_targets(LHY_bind_d1d2, type, 'LHY')
 CCA1_nagel_d1d2_summary <- summarise_targets(CCA1_nagel_bind_d1d2, type, 'CCA1 Nagel')
 CCA1_kamioka_d1d2_summary <- summarise_targets(CCA1_kamioka_bind_d1d2, type, 'CCA1 Kamioka')
@@ -647,7 +698,7 @@ clock_d1_d2 <- bind_rows(LHY_d1d2_summary, CCA1_nagel_kamioka_d1d2_summary, TOC1
                          PRR5_d1d2_summary, PRR7_d1d2_summary, LUX_d1d2_summary, ELF3_d1d2_summary,
                          ELF4_d1d2_summary) 
 
-# d1-d5----
+# *10.2 d1-d5----
 LHY_d1d5_summary <- summarise_targets(LHY_bind_d1d5, type, 'LHY')
 CCA1_nagel_d1d5_summary <- summarise_targets(CCA1_nagel_bind_d1d5, type, 'CCA1 Nagel')
 CCA1_kamioka_d1d5_summary <- summarise_targets(CCA1_kamioka_bind_d1d5, type, 'CCA1 Kamioka')
@@ -662,6 +713,9 @@ ELF4_d1d5_summary <- summarise_targets(ELF4_bind_d1d5, type, 'ELF4')
 clock_d1_d5 <- bind_rows(LHY_d1d5_summary, CCA1_nagel_kamioka_d1d5_summary, TOC1_d1d5_summary,
                          PRR5_d1d5_summary, PRR7_d1d5_summary, LUX_d1d5_summary, ELF3_d1d5_summary,
                          ELF4_d1d5_summary)
+
+# *10.3 Stacked Bar Plot----
+# **10.3.1 d1d2----
 
 plot_clock_d1d2 <- clock_d1_d2 %>% 
   mutate(type = factor(type, levels = c('gain_high_d1_d2', 'gain_medium_d1_d2', 'other_d1_d2', 'lose_medium_d1_d2', 'lose_high_d1_d2')),
@@ -681,6 +735,8 @@ plot_clock_d1d2
 
 ggsave('./03_plots/plot_clock_d1d2.png', dpi = 300, height = 6, width = 6, units = 'in')
 
+# **10.3.2 d1d5----
+
 plot_clock_d1d5 <- clock_d1_d5 %>% 
   mutate(type = factor(type, levels = c('gain_high_d1_d5', 'gain_medium_d1_d5', 'other_d1_d5', 'lose_medium_d1_d5', 'lose_high_d1_d5')),
          clock = factor(clock, levels = c('CCA1', 'LHY', 'TOC1', 'PRR5', 'PRR7', 'LUX', 'ELF3', 'ELF4'))) %>% 
@@ -699,8 +755,12 @@ plot_clock_d1d5
 
 ggsave('./03_plots/plot_clock_d1d5.png', dpi = 300, height = 6, width = 6, units = 'in')
 
-# circular barplot----
-# d1d2----
+
+# 11 CIRCULAR BARPLOT----
+
+# *11.1 d1d2----
+
+# **11.1.1 data prep----
 
 gain_amp_high_d1d2 <- amp_gain_high_clusters_d1_d2 %>% 
   mutate(group = 'gain high')
@@ -750,7 +810,6 @@ get_CCGs_clusters <- function(df1, col_str1, col_str2, df2, clock_id, type1, typ
   
 }
 
-# d1-d2----
 LHY_CCG_cl_d1d2 <- get_CCGs_clusters(LHY_bind_d1d2, cluster, type, clusters_d1d2, LHY, 'gain_high_d1_d2', 'gain_medium_d1_d2', 'lose_high_d1_d2', 'lose_medium_d1_d2')
 CCA1_CCG_cl_d1d2 <- get_CCGs_clusters(CCA1_nagel_kamioka_bind_d1d2, cluster, type, clusters_d1d2, CCA1, 'gain_high_d1_d2', 'gain_medium_d1_d2', 'lose_high_d1_d2', 'lose_medium_d1_d2')
 TOC1_CCG_cl_d1d2 <- get_CCGs_clusters(TOC1_bind_d1d2, cluster, type, clusters_d1d2, TOC1, 'gain_high_d1_d2', 'gain_medium_d1_d2', 'lose_high_d1_d2', 'lose_medium_d1_d2')
@@ -760,6 +819,7 @@ LUX_CCG_cl_d1d2 <- get_CCGs_clusters(LUX_bind_d1d2, cluster, type, clusters_d1d2
 ELF3_CCG_cl_d1d2 <- get_CCGs_clusters(ELF3_bind_d1d2, cluster, type, clusters_d1d2, ELF3, 'gain_high_d1_d2', 'gain_medium_d1_d2', 'lose_high_d1_d2', 'lose_medium_d1_d2')
 ELF4_CCG_cl_d1d2 <- get_CCGs_clusters(ELF4_bind_d1d2, cluster, type, clusters_d1d2, ELF4, 'gain_high_d1_d2', 'gain_medium_d1_d2', 'lose_high_d1_d2', 'lose_medium_d1_d2')
 
+# **11.1.2 plot prep----
 clock_clusters_d1d2 <- purrr::reduce(list(LHY_CCG_cl_d1d2, CCA1_CCG_cl_d1d2, TOC1_CCG_cl_d1d2,
                                           PRR5_CCG_cl_d1d2, PRR7_CCG_cl_d1d2, LUX_CCG_cl_d1d2,
                                           ELF3_CCG_cl_d1d2, ELF4_CCG_cl_d1d2), dplyr::left_join) %>% 
@@ -819,7 +879,8 @@ grid_data_circbar_d1d2$start <- grid_data_circbar_d1d2$start - 1
 
 grid_data_circbar_d1d2 <- grid_data_circbar_d1d2[-1,]
 
-# Make the plot
+# **11.1.3 make the plot----
+
 circbar_d1d2_plot <- ggplot(circbar_d1d2_gs) +
   
   # Add the stacked bar
@@ -856,7 +917,9 @@ circbar_d1d2_plot
 
 ggsave(circbar_d1d2_plot, file="./03_plots/circbar_d1d2_plot.png", width=8, height=8, units="in",dpi=200)
 
-# d1-d5----
+# *11.2 d1d5----
+
+# **11.2.1 data prep----
 
 gain_amp_high_d1d5 <- amp_gain_high_clusters_d1_d5 %>% 
   mutate(group = 'gain high')
@@ -889,6 +952,8 @@ PRR7_CCG_cl_d1d5 <- get_CCGs_clusters(PRR7_bind_d1d5, cluster, type, clusters_d1
 LUX_CCG_cl_d1d5 <- get_CCGs_clusters(LUX_bind_d1d5, cluster, type, clusters_d1d5, LUX, 'gain_high_d1_d5', 'gain_medium_d1_d5', 'lose_high_d1_d5', 'lose_medium_d1_d5')
 ELF3_CCG_cl_d1d5 <- get_CCGs_clusters(ELF3_bind_d1d5, cluster, type, clusters_d1d5, ELF3, 'gain_high_d1_d5', 'gain_medium_d1_d5', 'lose_high_d1_d5', 'lose_medium_d1_d5')
 ELF4_CCG_cl_d1d5 <- get_CCGs_clusters(ELF4_bind_d1d5, cluster, type, clusters_d1d5, ELF4, 'gain_high_d1_d5', 'gain_medium_d1_d5', 'lose_high_d1_d5', 'lose_medium_d1_d5')
+
+# **11.2.2 plot prep----
 
 clock_clusters_d1d5 <- purrr::reduce(list(LHY_CCG_cl_d1d5, CCA1_CCG_cl_d1d5, TOC1_CCG_cl_d1d5,
                                           PRR5_CCG_cl_d1d5, PRR7_CCG_cl_d1d5, LUX_CCG_cl_d1d5,
@@ -945,7 +1010,8 @@ grid_data_circbar_d1d5$start <- grid_data_circbar_d1d5$start - 1
 
 grid_data_circbar_d1d5 <- grid_data_circbar_d1d5[-1,]
 
-# Make the plot
+# **11.2.3 make the plot----
+
 circbar_d1d5_plot <- ggplot(circbar_d1d5_gs) +
   
   # Add the stacked bar
@@ -982,7 +1048,9 @@ circbar_d1d5_plot
 
 ggsave(circbar_d1d5_plot, file="./03_plots/circbar_d1d5_plot.png", width=8, height=8, units="in",dpi=200)
 
-# Odds Ratios----
+# 12 ODDS RATIOS----
+
+# *12.1 TF cluster count----
 
 # 7302 gene loci grouped in 75 clusters (0-74); error in row 5772
 TF_network_clusters <- read_csv('./00_raw_data/TF Network Cluster Nov2018 long format.csv') %>%
@@ -1004,6 +1072,8 @@ TF_network_clusters_count <-  TF_network_clusters %>%
 #                 fishers_col3 = cluster_number) %>% 
 #   relocate(fishers_col2, .after = fishers_col1)
 
+# *12.2 Fishers Prep----
+
 fishers_prep<- function(df1, col_str1, col_str2, clock_id, col_str3, col_str4){
   
   prep1 <- df1 %>% 
@@ -1023,7 +1093,7 @@ fishers_prep<- function(df1, col_str1, col_str2, clock_id, col_str3, col_str4){
   
 }
 
-#d1-d2----
+# **12.2.1 d1-d2 Fishers prep----
 
 LHY_d1d2_fishers_prep <- fishers_prep(LHY_CCG_cl_d1d2, fishers_col2, fishers_col4, LHY, fishers_col1, fishers_col3)
 CCA1_d1d2_fishers_prep <- fishers_prep(CCA1_CCG_cl_d1d2, fishers_col2, fishers_col4, CCA1, fishers_col1, fishers_col3)
@@ -1035,7 +1105,7 @@ ELF3_d1d2_fishers_prep <- fishers_prep(ELF3_CCG_cl_d1d2, fishers_col2, fishers_c
 ELF4_d1d2_fishers_prep <- fishers_prep(ELF4_CCG_cl_d1d2, fishers_col2, fishers_col4, ELF4, fishers_col1, fishers_col3)
 
 
-#d1-d5----
+# **12.2.2 d1-d5 Fishers prep----
 
 LHY_d1d5_fishers_prep <- fishers_prep(LHY_CCG_cl_d1d5, fishers_col2, fishers_col4, LHY, fishers_col1, fishers_col3)
 CCA1_d1d5_fishers_prep <- fishers_prep(CCA1_CCG_cl_d1d5, fishers_col2, fishers_col4, CCA1, fishers_col1, fishers_col3)
@@ -1046,6 +1116,8 @@ LUX_d1d5_fishers_prep <- fishers_prep(LUX_CCG_cl_d1d5, fishers_col2, fishers_col
 ELF3_d1d5_fishers_prep <- fishers_prep(ELF3_CCG_cl_d1d5, fishers_col2, fishers_col4, ELF3, fishers_col1, fishers_col3)
 ELF4_d1d5_fishers_prep <- fishers_prep(ELF4_CCG_cl_d1d5, fishers_col2, fishers_col4, ELF4, fishers_col1, fishers_col3)
 
+# *12.3 Get Odds Ratios----
+
 get_odds <- function(df){
   
   odds<- df %>%
@@ -1055,7 +1127,7 @@ get_odds <- function(df){
   
 }
 
-#d1-d2----
+# **12.3.1 d1-d2----
 LHY_d1d2_fishers <- get_odds(LHY_d1d2_fishers_prep)
 colnames(LHY_d1d2_fishers)[5] <- "LHY"
 LHY_d1d2_fishers <- LHY_d1d2_fishers %>% 
@@ -1111,7 +1183,7 @@ odds_d1d2 <- bind_cols(clusters_d1d2,
   dplyr::rename(cluster_size = cluster_number) %>% 
   relocate(cluster_size, .before = LHY)
 
-#d1-d5----
+# **12.3.2 d1-d5----
 LHY_d1d5_fishers <- get_odds(LHY_d1d5_fishers_prep)
 colnames(LHY_d1d5_fishers)[5] <- "LHY"
 LHY_d1d5_fishers <- LHY_d1d5_fishers %>% 
@@ -1167,9 +1239,12 @@ odds_d1d5 <- bind_cols(clusters_d1d5,
   dplyr::rename(cluster_size = cluster_number) %>% 
   relocate(cluster_size, .before = LHY)
 
-#heatmaps----
-#d1-d2----
-#* full----
+# 13 HEATMAP----
+
+# *13.1 d1d2----
+
+# **13.1.1 full----
+
 odds_d1d2_matrix <- odds_d1d2 %>%
   dplyr::select(4:11)
 
@@ -1236,7 +1311,8 @@ h = ComplexHeatmap:::height(m)
 h = convertY(h, "inch", valueOnly = TRUE)
 c(w, h)
 
-#* trimmed----
+# **13.1.2 trimmed----
+
 odds_d1d2_trimmed <- odds_d1d2 %>%
   filter_at(vars(LHY:ELF4), any_vars(.>5)) 
 
@@ -1289,7 +1365,9 @@ decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit
 
 dev.off()
 
-#d1-d5----
+# *13.2 d1d5----
+
+# **13.2.1 full----
 
 odds_d1d5_matrix <- odds_d1d5 %>%
   dplyr::select(4:11)
@@ -1339,7 +1417,7 @@ decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit
 
 dev.off()
 
-#* trimmed----
+# **13.2.2 trimmed----
 odds_d1d5_trimmed <- odds_d1d5 %>%
   filter_at(vars(LHY:ELF4), any_vars(.>5)) 
 
@@ -1391,9 +1469,9 @@ decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit
 
 dev.off()
 
-# UpSet Plots----
+# 14 UpSetR PLOTS----
 
-# full----
+# *14.1 full----
 
 myGeneSets <- list(TF_network_LHY = TF_adams_merge$gene_ID,
                    TF_network_CCA1 = TF_kamioka_nagel_merge$gene_ID,
@@ -1425,7 +1503,7 @@ UpSet
 
 dev.off()
 
-# trimmed----
+# *14.2 trimmed----
 
 TF_adams_merge_trimmed <- TF_adams_merge %>% 
   filter(cluster %in% c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72))
@@ -1480,9 +1558,9 @@ UpSet_trimmed
 
 dev.off()
 
-# UpSet column identities----
+# 15 UpSetR COLUMN IDENTITIES----
 
-# col1----
+# *15.1 col1----
 # LHY targets alone i.e. not targets of CCA1, TOC1, LUX, ELF3, PRR7, PRR5 and ELF4
 # firstly an anti_join of CCA1 with LHY
 TF_LHY_TOC1 <- anti_join(TF_adams_merge_trimmed, TF_huang_merge_trimmed, by="gene_ID")
@@ -1523,7 +1601,7 @@ UpSet_trimmed_col1 <- UpSet_trimmed_col1 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col2----
+# *15.2 col2----
 # TOC1 targets alone i.e. not targets of CCA1, LHY, LUX, ELF3, PRR7, PRR5 and ELF4
 # firstly an anti_join of CCA1 with LHY
 TF_TOC1_LHY <- anti_join(TF_huang_merge_trimmed, TF_adams_merge_trimmed, by="gene_ID")
@@ -1564,7 +1642,7 @@ UpSet_trimmed_col2 <- UpSet_trimmed_col2 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col3----
+# *15.3 col3----
 # LUX targets alone i.e. not targets of CCA1, LHY, TOC1, ELF3, PRR7, PRR5 and ELF4
 # firstly an anti_join of CCA1 with LHY
 TF_LUX_LHY <- anti_join(TF_ezer_LUX_merge_trimmed, TF_adams_merge_trimmed, by="gene_ID")
@@ -1605,7 +1683,7 @@ UpSet_trimmed_col3 <- UpSet_trimmed_col3 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col4----
+# *15.4 col4----
 # CCA1 and LHY common targets - not targets of LUX, TOC1, ELF3, PRR7, PRR5 and ELF4
 # firstly an inner_join of CCA1 with LHY
 TF_common_LHY_CCA1 <- inner_join(TF_adams_merge_trimmed[,1:2], TF_kamioka_nagel_merge_trimmed[,2], by="gene_ID")
@@ -1646,7 +1724,7 @@ UpSet_trimmed_col4 <- UpSet_trimmed_col4 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col5----
+# *15.5 col5----
 # LUX and ELF3 common targets - not targets of LHY, CCA1, TOC1, PRR7, PRR5 and ELF4
 # firstly an inner_join of LUX with ELF3
 TF_common_LUX_ELF3 <- inner_join(TF_ezer_LUX_merge_trimmed[,1:2], TF_ezer_ELF3_merge_trimmed[,2], by="gene_ID")
@@ -1687,7 +1765,7 @@ UpSet_trimmed_col5 <- UpSet_trimmed_col5 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col6----
+# *15.6 col6----
 # PRR5 targets alone - not targets of LUX, LHY, TOC1, CCA1, ELF3, PRR7 and ELF4
 # firstly an anti_join of PRR5 with LUX
 TF_PRR5_LUX <- anti_join(TF_nakamichi_merge_trimmed, TF_ezer_LUX_merge_trimmed, by="gene_ID")
@@ -1728,7 +1806,7 @@ UpSet_trimmed_col6 <- UpSet_trimmed_col6 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col7----
+# *15.7 col7----
 # PRR7 targets alone - not targets of LUX, LHY, TOC1, CCA1, ELF3, PRR5 and ELF4
 # firstly an anti_join of PRR7 with LUX
 TF_PRR7_LUX <- anti_join(TF_liu_merge_trimmed, TF_ezer_LUX_merge_trimmed, by="gene_ID")
@@ -1769,7 +1847,7 @@ UpSet_trimmed_col7 <- UpSet_trimmed_col7 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col8----
+# *15.8 col8----
 # LUX and LHY common targets - not targets of TOC1, CCA1, ELF3, PRR7, PRR5 and ELF4
 # firstly an inner_join of PRR7 with LUX
 TF_common_LUX_LHY <- inner_join(TF_ezer_LUX_merge_trimmed[,1:2], TF_adams_merge_trimmed[,2], by="gene_ID")
@@ -1810,7 +1888,7 @@ UpSet_trimmed_col8 <- UpSet_trimmed_col8 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col9----
+# *15.9 col9----
 # LUX and LHY and CCA1 common targets - not targets of TOC1, ELF3, PRR7, PRR5 and ELF4
 # firstly take TF_common_LUX_LHY and then inner_join with CCA1
 TF_common_LUX_LHY_CCA1 <- inner_join(TF_common_LUX_LHY[,1:2], TF_kamioka_nagel_merge_trimmed[,2], by="gene_ID")
@@ -1848,7 +1926,7 @@ UpSet_trimmed_col9 <- UpSet_trimmed_col9 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col10----
+# *15.10 col10----
 # LUX and TOC1 common targets - not targets of LHY, CCA1, ELF3, PRR7, PRR5 and ELF4
 # firstly take an inner_join of LUX with TOC1
 TF_common_LUX_TOC1 <- inner_join(TF_ezer_LUX_merge_trimmed[,1:2], TF_huang_merge_trimmed[,2], by="gene_ID")
@@ -1889,7 +1967,7 @@ UpSet_trimmed_col10 <- UpSet_trimmed_col10 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col11----
+# *15.11 col11----
 # CCA1 targets alone - not targets of LUX, LHY, TOC1, ELF3, PRR7, PRR5 and ELF4
 # firstly take an anti_join of CCA1 with LUX
 TF_CCA1_LUX <- anti_join(TF_kamioka_nagel_merge_trimmed, TF_ezer_LUX_merge_trimmed, by="gene_ID")
@@ -1930,7 +2008,7 @@ UpSet_trimmed_col11 <- UpSet_trimmed_col11 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col12----
+# *15.12 col12----
 # LUX and ELF3 and ELF4 common targets - not targets of LHY, TOC1, CCA1, PRR7, and PRR5 
 # firstly take TF_common_LUX_ELF3 and do an inner_join with ELF4
 TF_common_LUX_ELF3_ELF4 <- inner_join(TF_common_LUX_ELF3[,1:2], TF_ezer_ELF4_merge_trimmed[,2], by="gene_ID")
@@ -1968,7 +2046,7 @@ UpSet_trimmed_col12 <- UpSet_trimmed_col12 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col13----
+# *15.13 col13----
 # LHY and TOC1 common targets - not targets of LUX, CCA1, ELF3, PRR7, PRR5 and ELF4 
 # firstly take LHY and do an inner_join with TOC1
 TF_common_LHY_TOC1 <- inner_join(TF_adams_merge_trimmed[,1:2], TF_huang_merge_trimmed[,2], by="gene_ID")
@@ -2010,7 +2088,7 @@ UpSet_trimmed_col13 <- UpSet_trimmed_col13 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col14----
+# *15.14 col14----
 # LHY and TOC1 and CCA1 common targets - not targets of LUX, ELF3, PRR7, PRR5 and ELF4 
 # firstly take TF_common_LHY_TOC1 and do an inner_join with CCA1
 TF_common_LHY_TOC1_CCA1 <- inner_join(TF_common_LHY_TOC1[,1:2], TF_kamioka_nagel_merge_trimmed[,2], by="gene_ID")
@@ -2049,7 +2127,7 @@ UpSet_trimmed_col14 <- UpSet_trimmed_col14 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col15----
+# *15.15 col15----
 # LUX and TOC1 and PRR5 common targets - not targets of LHY, CCA1, ELF3, PRR7 and ELF4 
 # firstly take TF_common_LUX_TOC1 and do an inner_join with PRR5
 TF_common_LUX_TOC1_PRR5 <- inner_join(TF_common_LUX_TOC1[,1:2], TF_nakamichi_merge_trimmed[,2], by="gene_ID")
@@ -2088,7 +2166,7 @@ UpSet_trimmed_col15 <- UpSet_trimmed_col15 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col16----
+# *15.16 col16----
 # LUX and LHY and ELF3 common targets - not targets of TOC1, CCA1, PRR7, PRR5 and ELF4 
 # firstly take TF_common_LUX_LHY and do an inner_join with ELF3
 TF_common_LUX_LHY_ELF3 <- inner_join(TF_common_LUX_LHY[,1:2], TF_ezer_ELF3_merge_trimmed[,2], by="gene_ID")
@@ -2127,7 +2205,7 @@ UpSet_trimmed_col16 <- UpSet_trimmed_col16 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col17----
+# *15.17 col17----
 # LUX and LHY and CCA1 and PRR7 common targets - not targets of TOC1, ELF3, PRR5 and ELF4 
 # firstly take TF_common_LUX_LHY_CCA1 and do an inner_join with PRR7
 TF_common_LUX_LHY_CCA1_PRR7 <- inner_join(TF_common_LUX_LHY_CCA1[,1:2], TF_liu_merge_trimmed[,2], by="gene_ID")
@@ -2164,7 +2242,7 @@ UpSet_trimmed_col17 <- UpSet_trimmed_col17 %>%
   dplyr::rename(type_d1d5 = type)
 
 
-# col18----
+# *15.18 col18----
 # ELF3 targets alone - not targets of LUX, LHY, TOC1, CCA1, PRR7, PRR5 and ELF4 
 # firstly an anti_join ELF3 with LUX
 TF_ELF3_LUX <- anti_join(TF_ezer_ELF3_merge_trimmed, TF_ezer_LUX_merge_trimmed, by="gene_ID")
@@ -2207,7 +2285,7 @@ UpSet_trimmed_col18 <- UpSet_trimmed_col18 %>%
   dplyr::rename(type_d1d5 = type)
 
 
-# col19----
+# *15.19 col19----
 # LUX and ELF3 and PRR5 and ELF4 common targets - not targets of LHY, TOC1, CCA1, and PRR7
 # firstly start with TF_common_LUX_ELF3_ELF4 and do an inner_join with PRR5 
 
@@ -2243,7 +2321,7 @@ UpSet_trimmed_col19 <- UpSet_trimmed_col19 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col20----
+# *15.20 col20----
 # LUX and TOC1 and ELF3 and PRR7 and PRR5 and ELF4 common targets - not targets of LHY and CCA1
 # firstly start with TF_common_LUX_ELF3_ELF4_PRR5 and do an inner_join with TOC1 
 
@@ -2276,7 +2354,7 @@ UpSet_trimmed_col20 <- UpSet_trimmed_col20 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col21----
+# *15.21 col21----
 # LUX and LHY and ELF3 and ELF4 common targets - not targets of TOC1, CCA1, PRR7 and PRR5
 # firstly start with TF_common_LUX_LHY_ELF3 and do an inner_join with ELF4 
 
@@ -2312,7 +2390,7 @@ UpSet_trimmed_col21 <- UpSet_trimmed_col21 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col22----
+# *15.22 col22----
 # LUX and LHY and CCA1 and ELF3 and PRR7 and PRR5 targets - not targets of TOC1 and ELF4
 # firstly start with TF_common_LUX_LHY_CCA1_PRR7 and do an inner_join with ELF3 and PRR5 
 
@@ -2345,7 +2423,7 @@ UpSet_trimmed_col22 <- UpSet_trimmed_col22 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col23----
+# *15.23 col23----
 # LUX and LHY and TOC1 common targets - not targets of CCA1, ELF3, PRR7, PRR5 and ELF4
 # firstly start with TF_common_LUX_LHY and do an inner_join with TOC1 
 
@@ -2384,7 +2462,7 @@ UpSet_trimmed_col23 <- UpSet_trimmed_col23 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col24----
+# *15.24 col24----
 # PRR7 and PRR5 common targets - not targets of LUX, LHY, TOC1, CCA1, ELF3 and ELF4
 # # firstly an inner_join of PRR5 with PRR7 
 
@@ -2426,7 +2504,7 @@ UpSet_trimmed_col24 <- UpSet_trimmed_col24 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col25----
+# *15.25 col25----
 # TOC1 and PRR7 common targets - not targets of LUX, LHY, CCA1, ELF3, PRR5 and ELF4
 # # firstly an inner_join of PRR7 with TOC1 
 
@@ -2468,7 +2546,7 @@ UpSet_trimmed_col25 <- UpSet_trimmed_col25 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col26----
+# *15.26 col26----
 # LHY and TOC1 and PRR7 common targets - not targets of LUX, CCA1, ELF3, PRR5 and ELF4
 # # firstly take TF_common_LHY_TOC1 and do an inner_join with PRR7 
 
@@ -2507,7 +2585,7 @@ UpSet_trimmed_col26 <- UpSet_trimmed_col26 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col27----
+# *15.27 col27----
 # LUX and ELF3 and PRR5 common targets - not targets of LHY, TOC1, CCA1, PRR7 and ELF4
 # # firstly take TF_common_LUX_ELF3 and do an inner_join with PRR5 
 
@@ -2546,7 +2624,7 @@ UpSet_trimmed_col27 <- UpSet_trimmed_col27 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col28----
+# *15.28 col28----
 # LUX and CCA1 and ELF3 - not targets of LHY, TOC1, PRR7, PRR5 and ELF4
 # # firstly take TF_common_LUX_ELF3 and do an inner_join with CCA1 
 
@@ -2585,7 +2663,7 @@ UpSet_trimmed_col28 <- UpSet_trimmed_col28 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col29----
+# *15.29 col29----
 # LUX and TOC1 and ELF3 - not targets of LHY, CCA1, PRR7, PRR5 and ELF4
 # # firstly take TF_common_LUX_TOC1 and do an inner_join with ELF3 
 
@@ -2624,7 +2702,7 @@ UpSet_trimmed_col29 <- UpSet_trimmed_col29 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col30----
+# *15.30 col30----
 # LUX and TOC1 and CCA1 - not targets of LHY, ELF3, PRR7, PRR5 and ELF4
 # # firstly take TF_common_LUX_TOC1 and do an inner_join with CCA1 
 
@@ -2663,7 +2741,7 @@ UpSet_trimmed_col30 <- UpSet_trimmed_col30 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col31----
+# *15.31 col31----
 # LUX and LHY and ELF3 and PRR7 and PRR5 and ELF4 - not targets of TOC1 and CCA1
 # # firstly take TF_common_LUX_LHY_ELF3 and do an inner_join with TF_common_PRR7_PRR5 
 
@@ -2696,7 +2774,7 @@ UpSet_trimmed_col31 <- UpSet_trimmed_col31 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col32----
+# *15.32 col32----
 # LUX and LHY and CCA1 and ELF3 common targets - not targets of TOC1, PRR7, PRR5 and ELF4
 # # firstly take TF_common_LUX_LHY_CCA1 and do an inner_join with ELF3 
 
@@ -2732,7 +2810,7 @@ UpSet_trimmed_col32 <- UpSet_trimmed_col32 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col33----
+# *15.33 col33----
 # LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and PRR5 common targets - not targets of ELF4
 # # firstly take TF_common_LUX_LHY_TOC1 and do an inner_join with CCA1, ELF3, PRR7 and PRR5 
 
@@ -2768,7 +2846,7 @@ UpSet_trimmed_col33 <- UpSet_trimmed_col33 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col34----
+# *15.34 col34----
 # LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and PRR5 and ELF4 common targets
 # firstly take TF_common_LUX_LHY_TOC1_CCA1_ELF3_PRR7_PRR5 and do an inner_join with ELF4 
 
@@ -2792,7 +2870,7 @@ UpSet_trimmed_col34 <- UpSet_trimmed_col34 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col35----
+# *15.35 col35----
 # ELF3 and ELF4 common targets - not targets of LUX, LHY, TOC1, CCA1, PRR7 and PRR5
 # firstly an inner_join of ELF3 with ELF4 
 
@@ -2834,7 +2912,7 @@ UpSet_trimmed_col35 <- UpSet_trimmed_col35 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col36----
+# *15.36 col36----
 # TOC1 and PRR5 common targets - not targets of LUX, LHY, CCA1, ELF3, PRR7 and ELF4
 # firstly an inner_join of TOC1 with PRR5 
 
@@ -2877,7 +2955,7 @@ UpSet_trimmed_col36 <- UpSet_trimmed_col36 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col37----
+# *15.37 col37----
 # TOC1 and PRR7 and PRR5 common targets - not targets of LUX, LHY, CCA1, ELF3 and ELF4
 # firstly take TF_common_TOC1_PRR7 and do an inner_join with PRR5 
 
@@ -2916,7 +2994,7 @@ UpSet_trimmed_col37 <- UpSet_trimmed_col37 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col38----
+# *15.38 col38----
 # TOC1 and CCA1 common targets - not targets of LUX, LHY, ELF3, PRR7, PRR5 and ELF4
 # firstly an inner_join of TOC1 with CCA1
 
@@ -2958,7 +3036,7 @@ UpSet_trimmed_col38 <- UpSet_trimmed_col38 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col39----
+# *15.39 col39----
 # LHY and PRR7 common targets - not targets of LUX, TOC1, CCA1, ELF3, PRR5 and ELF4
 # firstly an inner_join of LHY with PRR7
 
@@ -3000,7 +3078,7 @@ UpSet_trimmed_col39 <- UpSet_trimmed_col39 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col40----
+# *15.40 col40----
 # LHY and PRR7 and PRR5 common targets - not targets of LUX, TOC1, CCA1, ELF3 and ELF4
 # firstly take TF_common_LHY_PRR7 an then do an inner_join with PRR5
 
@@ -3039,7 +3117,7 @@ UpSet_trimmed_col40 <- UpSet_trimmed_col40 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# # col41----
+# # *15.41 col41----
 # # ELF4 targets alone i.e. not targets of LUX, LHY, CCA1, TOC1, CCA1, ELF3, PRR7, and PRR5 
 # # An anti_join of ELF4 and LUX gives 1 obs
 # 
@@ -3077,7 +3155,7 @@ UpSet_trimmed_col40 <- UpSet_trimmed_col40 %>%
 #   dplyr::select(-5) %>% 
 #   dplyr::rename(type_d1d5 = type)
 
-# col42----
+# *15.42 col42----
 # LHY and CCA1 and PRR7 - not targets of LUX, TOC1, ELF3, PRR5 and ELF4
 # firstly take TF_common_LHY_CCA1 and do an inner_join with PRR7 
 
@@ -3116,7 +3194,7 @@ UpSet_trimmed_col42 <- UpSet_trimmed_col42 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col43----
+# *15.43 col43----
 # LHY and TOC1 and CCA1 and PRR7 and PRR5 - not targets of LUX, ELF3 and ELF4
 # firstly take TF_common_LHY_TOC1_CCA1 and do an inner join with PRR7 
 
@@ -3152,7 +3230,7 @@ UpSet_trimmed_col43 <- UpSet_trimmed_col43 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col44----
+# *15.44 col44----
 # LHY and CCA1 and ELF3 - not targets of LUX, TOC1, PRR7, PRR5 and ELF4
 # firstly take TF_common_LHY_CCA1 and do an inner join with ELF3 
 
@@ -3191,7 +3269,7 @@ UpSet_trimmed_col44 <- UpSet_trimmed_col44 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col45----
+# *15.45 col45----
 # LUX and LHY and TOC1 and CCA1 - not targets of ELF3, PRR7, PRR5 and ELF4
 # firstly take TF_common_LUX_LHY_TOC1 and do an inner join with CCA1 
 
@@ -3227,7 +3305,7 @@ UpSet_trimmed_col45 <- UpSet_trimmed_col45 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col46----
+# *15.46 col46----
 # LHY and TOC1 and PRR7 and PRR5 - not targets of LUX, CCA1, ELF3 and ELF4
 # firstly take TF_common_LHY_TOC1_PRR7 and do an inner join with PRR5 
 
@@ -3263,7 +3341,7 @@ UpSet_trimmed_col46 <- UpSet_trimmed_col46 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col47----
+# *15.47 col47----
 # LHY and CCA1 and PRR5 - not targets of LUX, TOC1, ELF3, PRR7 and ELF4
 # firstly take TF_common_LHY_CCA1 and do an inner join with PRR5 
 
@@ -3302,7 +3380,7 @@ UpSet_trimmed_col47 <- UpSet_trimmed_col47 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col48----
+# *15.48 col48----
 # LUX and LHY and TOC1 and PRR5 - not targets of CCA1, ELF3, PRR7 and ELF4
 # firstly take TF_common_LUX_LHY_TOC1 and do an inner join with PRR5 
 
@@ -3338,7 +3416,7 @@ UpSet_trimmed_col48 <- UpSet_trimmed_col48 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col49----
+# *15.49 col49----
 # LUX and LHY and TOC1 and ELF3 and PRR7 and PRR5 and ELF4 - not targets of CCA1
 # firstly take TF_common_LUX_LHY_TOC1 and do an inner join with ELF3 
 
@@ -3374,7 +3452,7 @@ UpSet_trimmed_col49 <- UpSet_trimmed_col49 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col50----
+# *15.50 col50----
 # LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and ELF4 - not targets of PRR5
 # firstly take TF_common_LUX_LHY_TOC1 and do an inner join with CCA1 
 
@@ -3410,7 +3488,7 @@ UpSet_trimmed_col50 <- UpSet_trimmed_col50 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col51----
+# *15.51 col51----
 # LUX and TOC1 and CCA1 and ELF3 and PRR7 and PRR5 - not targets of LHY and ELF4
 # firstly take TF_common_LUX_TOC1_CCA1 and do an inner join with ELF3 
 
@@ -3446,7 +3524,7 @@ UpSet_trimmed_col51 <- UpSet_trimmed_col51 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col52----
+# *15.52 col52----
 # LUX and CCA1 and ELF3 and ELF4 - not targets of LHY, TOC1, PRR7 and PRR5
 # firstly take TF_common_LUX_ELF3_CCA1 and do an inner join with ELF4 
 
@@ -3482,7 +3560,7 @@ UpSet_trimmed_col52 <- UpSet_trimmed_col52 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col53----
+# *15.53 col53----
 # LUX and TOC1 and CCA1 and ELF3 and PRR5 and ELF4 - not targets of LHY and PRR7
 # firstly take TF_common_LUX_TOC1_CCA1 and do an inner join with ELF3 
 
@@ -3518,7 +3596,7 @@ UpSet_trimmed_col53 <- UpSet_trimmed_col53 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col54----
+# *15.54 col54----
 # LUX and TOC1 and ELF3 and PRR7 - not targets of LHY and CCA1 and PRR5 and ELF4
 # firstly take TF_common_LUX_TOC1_ELF3 and do an inner join with PRR7 
 
@@ -3554,7 +3632,7 @@ UpSet_trimmed_col54 <- UpSet_trimmed_col54 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col55----
+# *15.55 col55----
 # LUX and TOC1 and ELF3 and PRR5 - not targets of LHY and CCA1 and PRR7 and ELF4
 # firstly take TF_common_LUX_TOC1_ELF3 and do an inner join with PRR5 
 
@@ -3590,7 +3668,7 @@ UpSet_trimmed_col55 <- UpSet_trimmed_col55 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col56----
+# *15.56 col56----
 # LUX and TOC1 and PRR7 - not targets of LHY and CCA1 and ELF3 and PRR5 and ELF4
 # firstly take TF_common_LUX_TOC1 and do an inner join with PRR7 
 
@@ -3629,7 +3707,7 @@ UpSet_trimmed_col56 <- UpSet_trimmed_col56 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col57----
+# *15.57 col57----
 # LUX and TOC1 and PRR7 and PRR5 - not targets of LHY and CCA1 and ELF3 and ELF4
 # firstly take TF_common_LUX_TOC1 and do an inner join with PRR7 
 
@@ -3668,7 +3746,7 @@ UpSet_trimmed_col57 <- UpSet_trimmed_col57 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col58----
+# *15.58 col58----
 # LUX and TOC1 and ELF3 and PRR7 and ELF4 - not targets of LHY and CCA1 and PRR5
 # firstly take TF_common_LUX_TOC1_ELF3 and do an inner join with PRR7 
 
@@ -3704,7 +3782,7 @@ UpSet_trimmed_col58 <- UpSet_trimmed_col58 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col59----
+# *15.59 col59----
 # LUX and ELF3 and PRR7 and PRR5 - not targets of LHY and TOC1 and CCA1 and ELF4
 # firstly take TF_common_LUX_ELF3 and do an inner join with PRR7 
 
@@ -3743,7 +3821,7 @@ UpSet_trimmed_col59 <- UpSet_trimmed_col59 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col60----
+# *15.60 col60----
 # LUX and PRR7 and PRR5 - not targets of LHY and TOC1 and CCA1 and ELF3 and ELF4
 # firstly an inner join of LUX with PRR7 
 
@@ -3785,7 +3863,7 @@ UpSet_trimmed_col60 <- UpSet_trimmed_col60 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col61----
+# *15.61 col61----
 # LUX and ELF3 and PRR7 - not targets of LHY and TOC1 and CCA1 and PRR5 and ELF4
 # firstly an inner join of TF_common_LUX_ELF3 with PRR7 
 
@@ -3824,7 +3902,7 @@ UpSet_trimmed_col61 <- UpSet_trimmed_col61 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col62----
+# *15.62 col62----
 # LUX and ELF3 and PRR7 and ELF4 - not targets of LHY and TOC1 and CCA1 and PRR5
 # firstly an inner join of TF_common_LUX_ELF3_PRR7 with ELF4 
 
@@ -3860,7 +3938,7 @@ UpSet_trimmed_col62 <- UpSet_trimmed_col62 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col63----
+# *15.63 col63----
 # LUX and PRR7 - not targets of LHY and TOC1 and CCA1 and ELF3 and PRR5 and ELF4
 # firstly an anti join of TF_common_LUX_PRR7 with LHY 
 
@@ -3900,7 +3978,7 @@ UpSet_trimmed_col63 <- UpSet_trimmed_col63 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# col64----
+# *15.64 col64----
 # LUX and LHY and TOC1 and CCA1 and ELF3 - not targets of PRR7 and PRR5 and ELF4
 # firstly an inner join of TF_common_LUX_LHY_TOC1_CCA1 with ELF3 
 
@@ -3933,7 +4011,8 @@ UpSet_trimmed_col64 <- UpSet_trimmed_col64 %>%
   dplyr::select(-5) %>% 
   dplyr::rename(type_d1d5 = type)
 
-# UpSet plot overlap summaries
+# 16 UpSet COLUMN OVERLAP SUMMARIES----
+
 get_summary <- function(df, group_col, clock_id, col_number){
   
   s <- df %>% 
@@ -3943,7 +4022,7 @@ get_summary <- function(df, group_col, clock_id, col_number){
     mutate(column = {{ col_number }})
 }
 
-# d1d2----
+# *16.1 d1d2----
 col1_summary_d1d2 <- get_summary(UpSet_trimmed_col1, type_d1d2, 'LHY', 1)
 col2_summary_d1d2 <- get_summary(UpSet_trimmed_col2, type_d1d2, 'TOC1', 2)
 col3_summary_d1d2 <- get_summary(UpSet_trimmed_col3, type_d1d2, 'LUX', 3)
@@ -4015,7 +4094,8 @@ col62_summary_d1d2 <- get_summary(UpSet_trimmed_col62, type_d1d2, 'LUX and ELF3 
 col63_summary_d1d2 <- get_summary(UpSet_trimmed_col63, type_d1d2, 'LUX and PRR7', 63)
 col64_summary_d1d2 <- get_summary(UpSet_trimmed_col64, type_d1d2, 'LUX and LHY and TOC1 and CCA1 and ELF3', 64)
 
-# d1d5----
+# *16.2 d1d5----
+
 col1_summary_d1d5 <- get_summary(UpSet_trimmed_col1, type_d1d5, 'LHY', 1)
 col2_summary_d1d5 <- get_summary(UpSet_trimmed_col2, type_d1d5, 'TOC1', 2)
 col3_summary_d1d5 <- get_summary(UpSet_trimmed_col3, type_d1d5, 'LUX', 3)
@@ -4087,6 +4167,8 @@ col62_summary_d1d5 <- get_summary(UpSet_trimmed_col62, type_d1d5, 'LUX and ELF3 
 col63_summary_d1d5 <- get_summary(UpSet_trimmed_col63, type_d1d5, 'LUX and PRR7', 63)
 col64_summary_d1d5 <- get_summary(UpSet_trimmed_col64, type_d1d2, 'LUX and LHY and TOC1 and CCA1 and ELF3', 64)
 
+# *16.3 d1d2 bind columns----
+
 upset_columns_d1_d2 <- bind_rows(col1_summary_d1d2,
                                  col2_summary_d1d2,
                                  col3_summary_d1d2,
@@ -4151,6 +4233,8 @@ upset_columns_d1_d2 <- bind_rows(col1_summary_d1d2,
                                  col62_summary_d1d2,
                                  col63_summary_d1d2,
                                  col64_summary_d1d2)
+
+# *16.4 d1d5 bind columns----
 
 upset_columns_d1_d5 <- bind_rows(col1_summary_d1d5,
                                  col2_summary_d1d5,
@@ -4217,8 +4301,8 @@ upset_columns_d1_d5 <- bind_rows(col1_summary_d1d5,
                                  col63_summary_d1d5,
                                  col64_summary_d1d5)
 
+# *16.5 Stacked bar plot d1d2----
 
-# plot d1d2----
 plot_upset_columns_d1_d2 <- upset_columns_d1_d2 %>% 
   mutate(type = factor(type_d1d2, levels = c('gain_high_d1_d2', 'gain_medium_d1_d2', 'other_d1_d2', 'lose_medium_d1_d2', 'lose_high_d1_d2')),
          clock = fct_reorder(clock, column)) %>% 
@@ -4237,7 +4321,8 @@ plot_upset_columns_d1_d2
 
 ggsave('./03_plots/plot_clock_d1d2.png', dpi = 300, height = 6, width = 6, units = 'in')
 
-# plot d1d5----
+# *16.6 Stacked bar plot d1d5----
+
 plot_upset_columns_d1_d5 <- upset_columns_d1_d5 %>% 
   mutate(type = factor(type_d1d5, levels = c('gain_high_d1_d5', 'gain_medium_d1_d5', 'other_d1_d5', 'lose_medium_d1_d5', 'lose_high_d1_d5')),
          clock = fct_reorder(clock, column)) %>% 
@@ -4255,6 +4340,10 @@ plot_upset_columns_d1_d5 <- upset_columns_d1_d5 %>%
 plot_upset_columns_d1_d5
 
 ggsave('./03_plots/plot_clock_d1d5.png', dpi = 300, height = 6, width = 6, units = 'in')
+
+# 17 UpSet GGPLOT TRIMMED----
+
+# *17.1 Clock Matrix----
 
 sets_trimmed_clock <- sets_trimmed %>% 
   mutate(clock = case_when(LHY == 1 & CCA1 == 0 & TOC1 == 0 & PRR5 == 0 & PRR7 == 0 & LUX == 0 & ELF3 == 0 & ELF4 == 0 ~ 'LHY',
@@ -4324,6 +4413,8 @@ sets_trimmed_clock <- sets_trimmed %>%
   ))
 
 # https://krassowski.github.io/complex-upset/articles/Examples_R.html
+
+# *17.2 Upset Matrix----
 
 UpSet_trimmed_col1_col64 <- bind_rows(UpSet_trimmed_col1, 
                                       UpSet_trimmed_col2,
@@ -4395,6 +4486,8 @@ UpSet_trimmed_col1_col64 <- bind_rows(UpSet_trimmed_col1,
                              cluster %in% c(11, 58, 67) ~ 'g4',
                              TRUE ~ 'NA'))
 
+# *17.3 UpSet ggplot matrix prep----
+
 upset_ggplot_prep <- sets_trimmed_clock %>% group_by(clock) %>% dplyr::mutate(id = row_number()) %>% 
   left_join(UpSet_trimmed_col1_col64 %>% group_by(clock) %>% dplyr::mutate(id = row_number())) %>% 
   select(-id) %>% 
@@ -4409,6 +4502,8 @@ sets_trimmed[clock_components] = sets_trimmed[clock_components] == 1
 clock_components = colnames(upset_ggplot_prep)[1:8]
 
 upset_ggplot_prep[clock_components] = upset_ggplot_prep[clock_components] == 1
+
+# *17.4 make UpSet ggplot----
 
 # https://krassowski.github.io/complex-upset/
 
