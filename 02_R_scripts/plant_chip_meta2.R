@@ -1405,7 +1405,8 @@ myGeneSets <- list(TF_network_LHY = TF_adams_merge$gene_ID,
                    TF_network_ELF4 = TF_ezer_ELF4_merge$gene_ID)
 
 # fromList: a function to convert a list of named vectors to a data frame compatible with UpSetR
-sets <- fromList(myGeneSets)
+sets <- fromList(myGeneSets) %>% 
+  write_csv('./00_raw_data/sets.csv')
 
 UpSet <- UpSetR::upset(sets, 
                        nsets=8, 
@@ -4253,7 +4254,7 @@ plot_upset_columns_d1_d5 <- upset_columns_d1_d5 %>%
 
 plot_upset_columns_d1_d5
 
-ggsave('./03_plots/plot_clock_d1d2.png', dpi = 300, height = 6, width = 6, units = 'in')
+ggsave('./03_plots/plot_clock_d1d5.png', dpi = 300, height = 6, width = 6, units = 'in')
 
 sets_trimmed_clock <- sets_trimmed %>% 
   mutate(clock = case_when(LHY == 1 & CCA1 == 0 & TOC1 == 0 & PRR5 == 0 & PRR7 == 0 & LUX == 0 & ELF3 == 0 & ELF4 == 0 ~ 'LHY',
@@ -4401,8 +4402,6 @@ upset_ggplot_prep <- sets_trimmed_clock %>% group_by(clock) %>% dplyr::mutate(id
          type_d1d5 = factor(type_d1d5, levels = c('gain_high_d1_d5', 'gain_medium_d1_d5', 'other_d1_d5', 'lose_medium_d1_d5', 'lose_high_d1_d5')),
          heatmap = factor(heatmap, levels = c('g1', 'g2', 'g3', 'g4')))
 
-table(upset_ggplot_prep$heatmap)
-
 clock_components = colnames(sets_trimmed)[1:8]
 
 sets_trimmed[clock_components] = sets_trimmed[clock_components] == 1
@@ -4418,16 +4417,17 @@ upset_ggplot <- upset(upset_ggplot_prep,
                       annotations = list('Day1 vs Day2' = (ggplot(mapping=aes(fill=type_d1d2)) +
                                                              geom_bar(stat='count', position='fill') + 
                                                              scale_y_continuous(labels=scales::percent_format()) +
-                                                             theme(legend.position = "none") +
+                                                             theme(plot.margin = margin(t = 3, 1, 1, 1, "lines")) +
+                                                             theme(legend.direction = "horizontal") +
+                                                             theme(legend.position = c(0.5, 2)) +
                                                              labs(title = 'day 1 vs. day 2', fill = 'Amplitude', y = 'Proportion', x = '') +
                                                              scale_fill_manual(values=c('gain_high_d1_d2' = '#31a354', 'gain_medium_d1_d2' = '#74c476', 'other_d1_d2' = '#cccccc', 'lose_medium_d1_d2' = '#fb6a4a', 'lose_high_d1_d2' = '#de2d26'), 
                                                                                labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high'))),
                                          'Day1 vs Day5' = (ggplot(mapping=aes(fill = type_d1d5)) +
                                                              geom_bar(stat='count', position='fill') +
                                                              scale_y_continuous(labels=scales::percent_format()) +
-                                                             #theme(legend.position = "none") +
                                                              scale_fill_manual(values=c('gain_high_d1_d5' = '#31a354', 'gain_medium_d1_d5' = '#74c476', 'other_d1_d5' = '#cccccc', 'lose_medium_d1_d5' = '#fb6a4a', 'lose_high_d1_d5' = '#de2d26'), 
-                                                                               labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high')) +
+                                                                               labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high'), guide = FALSE) +
                                                              labs(title = 'day 1 vs. day 5', fill = 'Amplitude', y = 'Proportion', x = ''))),
                       name='clock components',
                       width_ratio=0.1,
@@ -4450,18 +4450,8 @@ upset_ggplot <- upset(upset_ggplot_prep,
 
 upset_ggplot
 
-upset_ggplot + patchwork::plot_layout(guides = "collect") + theme(legend.position = "top") 
+ggsave('./03_plots/UpSet_with_stacked_bar.png', dpi = 300, height = 8, width = 7, units = 'in')
 
-
-legend <- cowplot::get_legend(upset_ggplot)
-
-cowplot::plot_grid(
-  legend,
-  upset_ggplot + theme(legend.position = "none"),
-  ncol = 1, rel_heights = c(0.1, 1)
-)
-
-p + theme(legend.position = "none")
 
 data <- data.frame(
   entry = paste0("Entry.", 1:10),
