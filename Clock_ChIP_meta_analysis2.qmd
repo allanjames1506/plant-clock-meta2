@@ -331,7 +331,7 @@ some text here
 
 #### Trimmed: overlap targets in clusters with high OR from heatmap
 
-![](./03_plots/UpSet_trimmed)
+![](./03_plots/UpSet_with_stacked_bar_all)
 :::
 
 ## Quarto
