@@ -4615,9 +4615,16 @@ upset_column_makeup <- upset_ggplot_prep %>%
                                         clock == 'TOC1 and CCA1' ~ 62,
                                         clock == 'LUX and CCA1 and ELF3 and ELF4' ~ 63,
                                         TRUE ~ NA)) %>% 
-  arrange(upset_column_order) 
+  arrange(upset_column_order) %>% 
+  write_csv('./01_tidy_data/upset_column_makeup.csv')
 
-table(upset_column_makeup$upset_column_order)
+# 18 Bipartite Network----
+
+TF_bip4_c8 <- read_csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv")
+
+
+
+
 
 data <- data.frame(
   entry = paste0("Entry.", 1:10),
