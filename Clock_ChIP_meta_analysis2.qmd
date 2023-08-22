@@ -334,6 +334,431 @@ some text here
 ![](./03_plots/UpSet_with_stacked_bar_all)
 :::
 
+| clock                                                             | cluster | gene_ID   | type_d1d2         | type_d1d5         | heatmap | upset_column_order |
+|-------------------------------------------------------------------|---------|-----------|-------------------|-------------------|---------|--------------------|
+| LHY                                                               | 9       | AT1G20030 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G20440 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G20693 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G27930 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G52890 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G53035 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G64760 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G68500 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT1G70420 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT2G15970 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT2G16365 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT2G45660 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT2G47890 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT3G05800 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT3G51660 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT3G53990 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT5G17460 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT5G27930 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT5G37600 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 9       | AT5G57110 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 10      | AT1G12420 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 10      | AT1G68570 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 10      | AT2G32510 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 10      | AT3G13520 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 10      | AT3G18485 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 10      | AT3G61750 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 10      | AT5G52250 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 11      | AT1G06680 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 1                  |
+| LHY                                                               | 11      | AT2G06520 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 1                  |
+| LHY                                                               | 11      | AT2G35950 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 1                  |
+| LHY                                                               | 11      | AT2G40435 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 1                  |
+| LHY                                                               | 11      | AT5G49525 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 1                  |
+| LHY                                                               | 11      | AT5G59780 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 1                  |
+| LHY                                                               | 20      | AT1G67360 | gain_high_d1_d2   | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 20      | AT2G40130 | gain_high_d1_d2   | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 20      | AT2G41900 | gain_high_d1_d2   | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 20      | AT3G22370 | gain_high_d1_d2   | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 22      | AT3G21870 | gain_medium_d1_d2 | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 22      | AT4G05070 | gain_medium_d1_d2 | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 24      | AT1G02300 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT1G48330 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT1G48540 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT1G70820 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT3G10020 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT3G11720 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT3G53800 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT5G47240 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 24      | AT5G66880 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 25      | AT1G27630 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT1G28230 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT1G67370 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT3G10300 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT3G22830 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT3G46970 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT5G11150 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT5G11740 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT5G42420 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT5G43440 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 25      | AT5G49015 | other_d1_d2       | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 29      | AT4G37550 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 1                  |
+| LHY                                                               | 31      | AT1G08570 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 31      | AT2G40460 | gain_high_d1_d2   | other_d1_d5       | g3      | 1                  |
+| LHY                                                               | 34      | AT1G61380 | gain_high_d1_d2   | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 38      | AT1G78440 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 38      | AT3G14690 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 38      | AT3G48460 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 38      | AT5G43260 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
+| LHY                                                               | 42      | AT3G54000 | gain_medium_d1_d2 | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 42      | AT3G58850 | gain_medium_d1_d2 | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 42      | AT4G18010 | gain_medium_d1_d2 | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 42      | AT5G25240 | gain_medium_d1_d2 | other_d1_d5       | g2      | 1                  |
+| LHY                                                               | 52      | AT1G52770 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 52      | AT1G79440 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 52      | AT2G22450 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 52      | AT2G25730 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 52      | AT2G47390 | other_d1_d2       | lose_medium_d1_d5 | g1      | 1                  |
+| LHY                                                               | 56      | AT5G44190 | gain_medium_d1_d2 | lose_medium_d1_d5 | g3      | 1                  |
+| TOC1                                                              | 9       | AT1G76580 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT1G76590 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT2G22080 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT3G63010 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT4G17550 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT4G21570 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT4G27652 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT4G36010 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 9       | AT5G51180 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 10      | AT1G01420 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT1G53170 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT2G46420 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT3G02410 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT3G19580 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT3G53810 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT4G05050 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT4G30350 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 10      | AT4G32190 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 11      | AT1G13080 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 2                  |
+| TOC1                                                              | 11      | AT2G32150 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 2                  |
+| TOC1                                                              | 11      | AT2G41870 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 2                  |
+| TOC1                                                              | 11      | AT2G42750 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 2                  |
+| TOC1                                                              | 20      | AT1G01470 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT1G61890 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT1G77450 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT2G44940 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT3G05500 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT3G17800 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT3G24840 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT4G23630 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT4G33905 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT5G04340 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 20      | AT5G47650 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 22      | AT2G41010 | gain_medium_d1_d2 | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 22      | AT2G47490 | gain_medium_d1_d2 | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 24      | AT1G74930 | other_d1_d2       | lose_medium_d1_d5 | g1      | 2                  |
+| TOC1                                                              | 25      | AT2G37580 | other_d1_d2       | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 29      | AT2G37170 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 2                  |
+| TOC1                                                              | 29      | AT2G39730 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 2                  |
+| TOC1                                                              | 29      | AT5G13090 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 2                  |
+| TOC1                                                              | 31      | AT1G69260 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 31      | AT3G57020 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 31      | AT4G05100 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 31      | AT4G16490 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 31      | AT5G02270 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 31      | AT5G63130 | gain_high_d1_d2   | other_d1_d5       | g3      | 2                  |
+| TOC1                                                              | 34      | AT1G18200 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 34      | AT1G74450 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 34      | AT3G59880 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 34      | AT4G32020 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 34      | AT4G34150 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 34      | AT5G06300 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 34      | AT5G63770 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 38      | AT3G11410 | gain_medium_d1_d2 | other_d1_d5       | g1      | 2                  |
+| TOC1                                                              | 42      | AT1G35140 | gain_medium_d1_d2 | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 42      | AT3G19680 | gain_medium_d1_d2 | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 42      | AT3G50060 | gain_medium_d1_d2 | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 42      | AT5G45340 | gain_medium_d1_d2 | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 42      | AT5G62520 | gain_medium_d1_d2 | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 44      | AT2G40000 | gain_high_d1_d2   | other_d1_d5       | g2      | 2                  |
+| TOC1                                                              | 58      | AT3G27050 | other_d1_d2       | lose_medium_d1_d5 | g4      | 2                  |
+| LUX                                                               | 9       | AT1G09950 | gain_medium_d1_d2 | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 9       | AT1G64890 | gain_medium_d1_d2 | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 9       | AT1G80120 | gain_medium_d1_d2 | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 9       | AT5G11110 | gain_medium_d1_d2 | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 10      | AT1G29640 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT1G79770 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT3G16150 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT3G27170 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT3G47420 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT3G50560 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT4G26850 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 10      | AT5G62220 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 11      | AT1G08380 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT1G55670 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT1G79040 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT2G40960 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT2G41312 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT3G46370 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT4G05180 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT4G27710 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT5G01530 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT5G03230 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT5G64040 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 11      | AT5G67390 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 3                  |
+| LUX                                                               | 20      | AT4G24415 | gain_high_d1_d2   | other_d1_d5       | g2      | 3                  |
+| LUX                                                               | 20      | AT4G27410 | gain_high_d1_d2   | other_d1_d5       | g2      | 3                  |
+| LUX                                                               | 22      | AT1G04520 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT1G21140 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT2G15020 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT2G16500 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT2G24100 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT2G43340 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT3G02380 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT4G30180 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT4G38960 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT5G18670 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 22      | AT5G65030 | gain_medium_d1_d2 | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 24      | AT1G22370 | other_d1_d2       | lose_medium_d1_d5 | g1      | 3                  |
+| LUX                                                               | 24      | AT4G01130 | other_d1_d2       | lose_medium_d1_d5 | g1      | 3                  |
+| LUX                                                               | 25      | AT2G39920 | other_d1_d2       | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 25      | AT4G33985 | other_d1_d2       | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 25      | AT4G34950 | other_d1_d2       | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 25      | AT5G57630 | other_d1_d2       | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 29      | AT1G37130 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 3                  |
+| LUX                                                               | 29      | AT2G41310 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 3                  |
+| LUX                                                               | 29      | AT3G15760 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 3                  |
+| LUX                                                               | 29      | AT5G23060 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 3                  |
+| LUX                                                               | 29      | AT5G16030 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 3                  |
+| LUX                                                               | 31      | AT1G80820 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 31      | AT4G11350 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 31      | AT5G52570 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 31      | AT5G59480 | gain_high_d1_d2   | other_d1_d5       | g3      | 3                  |
+| LUX                                                               | 38      | AT3G62990 | gain_medium_d1_d2 | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 38      | AT5G35970 | gain_medium_d1_d2 | other_d1_d5       | g1      | 3                  |
+| LUX                                                               | 42      | AT1G24530 | gain_medium_d1_d2 | other_d1_d5       | g2      | 3                  |
+| LUX                                                               | 44      | AT5G15845 | gain_high_d1_d2   | other_d1_d5       | g2      | 3                  |
+| LUX                                                               | 52      | AT2G40085 | other_d1_d2       | lose_medium_d1_d5 | g1      | 3                  |
+| LUX                                                               | 65      | AT4G34610 | gain_high_d1_d2   | gain_medium_d1_d5 | g2      | 3                  |
+| LUX                                                               | 67      | AT3G56940 | lose_medium_d1_d2 | lose_medium_d1_d5 | g4      | 3                  |
+| LUX                                                               | 71      | AT4G16370 | other_d1_d2       | lose_high_d1_d5   | g2      | 3                  |
+| LHY and CCA1                                                      | 9       | AT1G10090 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT1G51090 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT1G69870 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT1G71000 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT3G25870 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT3G61580 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT4G27820 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT4G29190 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT4G39260 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT5G05410 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT5G17760 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 9       | AT5G61810 | gain_medium_d1_d2 | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 20      | AT3G27380 | gain_high_d1_d2   | other_d1_d5       | g2      | 4                  |
+| LHY and CCA1                                                      | 20      | AT3G60520 | gain_high_d1_d2   | other_d1_d5       | g2      | 4                  |
+| LHY and CCA1                                                      | 24      | AT1G21680 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 24      | AT2G15890 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 24      | AT3G18080 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 24      | AT3G47160 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 24      | AT4G14270 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 24      | AT5G18130 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT1G10760 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT1G17460 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT1G20696 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT2G47870 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT3G11020 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT4G11600 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 25      | AT5G42900 | other_d1_d2       | other_d1_d5       | g1      | 4                  |
+| LHY and CCA1                                                      | 31      | AT5G40790 | gain_high_d1_d2   | other_d1_d5       | g3      | 4                  |
+| LHY and CCA1                                                      | 42      | AT4G03210 | gain_medium_d1_d2 | other_d1_d5       | g2      | 4                  |
+| LHY and CCA1                                                      | 52      | AT1G80480 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 52      | AT2G29630 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 52      | AT3G05130 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 52      | AT5G63810 | other_d1_d2       | lose_medium_d1_d5 | g1      | 4                  |
+| LHY and CCA1                                                      | 56      | AT5G21940 | gain_medium_d1_d2 | lose_medium_d1_d5 | g3      | 4                  |
+| LUX and ELF3                                                      | 9       | AT1G78600 | gain_medium_d1_d2 | other_d1_d5       | g1      | 5                  |
+| LUX and ELF3                                                      | 10      | AT1G55960 | gain_high_d1_d2   | other_d1_d5       | g3      | 5                  |
+| LUX and ELF3                                                      | 10      | AT1G73870 | gain_high_d1_d2   | other_d1_d5       | g3      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G03130 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G15820 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G15825 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G15830 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G21500 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G29910 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G31330 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G52220 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G52230 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT1G67740 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT2G05070 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT2G20250 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT2G30570 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT3G08940 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 11      | AT4G02770 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 5                  |
+| LUX and ELF3                                                      | 22      | AT3G54830 | gain_medium_d1_d2 | other_d1_d5       | g3      | 5                  |
+| LUX and ELF3                                                      | 24      | AT1G20620 | other_d1_d2       | lose_medium_d1_d5 | g1      | 5                  |
+| LUX and ELF3                                                      | 24      | AT1G72630 | other_d1_d2       | lose_medium_d1_d5 | g1      | 5                  |
+| LUX and ELF3                                                      | 24      | AT5G62720 | other_d1_d2       | lose_medium_d1_d5 | g1      | 5                  |
+| LUX and ELF3                                                      | 25      | AT1G69830 | other_d1_d2       | other_d1_d5       | g1      | 5                  |
+| LUX and ELF3                                                      | 29      | AT2G46810 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 5                  |
+| LUX and ELF3                                                      | 29      | AT4G38840 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 5                  |
+| LUX and ELF3                                                      | 29      | AT5G04190 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 5                  |
+| LUX and ELF3                                                      | 31      | AT2G27420 | gain_high_d1_d2   | other_d1_d5       | g3      | 5                  |
+| LUX and ELF3                                                      | 56      | AT4G38850 | gain_medium_d1_d2 | lose_medium_d1_d5 | g3      | 5                  |
+| LUX and ELF3                                                      | 67      | AT1G29920 | lose_medium_d1_d2 | lose_medium_d1_d5 | g4      | 5                  |
+| PRR7                                                              | 10      | AT3G17609 | gain_high_d1_d2   | other_d1_d5       | g3      | 6                  |
+| PRR7                                                              | 10      | AT3G21890 | gain_high_d1_d2   | other_d1_d5       | g3      | 6                  |
+| PRR7                                                              | 10      | AT5G15948 | gain_high_d1_d2   | other_d1_d5       | g3      | 6                  |
+| PRR7                                                              | 10      | AT5G47640 | gain_high_d1_d2   | other_d1_d5       | g3      | 6                  |
+| PRR7                                                              | 20      | AT4G10040 | gain_high_d1_d2   | other_d1_d5       | g2      | 6                  |
+| PRR7                                                              | 24      | AT5G09630 | other_d1_d2       | lose_medium_d1_d5 | g1      | 6                  |
+| PRR7                                                              | 31      | AT1G12370 | gain_high_d1_d2   | other_d1_d5       | g3      | 6                  |
+| PRR7                                                              | 31      | AT5G59720 | gain_high_d1_d2   | other_d1_d5       | g3      | 6                  |
+| PRR7                                                              | 34      | AT1G66725 | gain_high_d1_d2   | other_d1_d5       | g2      | 6                  |
+| PRR7                                                              | 34      | AT1G69572 | gain_high_d1_d2   | other_d1_d5       | g2      | 6                  |
+| PRR7                                                              | 65      | AT5G58760 | gain_high_d1_d2   | gain_medium_d1_d5 | g2      | 6                  |
+| PRR7                                                              | 71      | AT2G30766 | other_d1_d2       | lose_high_d1_d5   | g2      | 6                  |
+| PRR5                                                              | 10      | AT1G64780 | gain_high_d1_d2   | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 10      | AT3G51895 | gain_high_d1_d2   | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 20      | AT1G78070 | gain_high_d1_d2   | other_d1_d5       | g2      | 7                  |
+| PRR5                                                              | 20      | AT2G23120 | gain_high_d1_d2   | other_d1_d5       | g2      | 7                  |
+| PRR5                                                              | 22      | AT2G41250 | gain_medium_d1_d2 | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 22      | AT5G15850 | gain_medium_d1_d2 | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 29      | AT3G09600 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 7                  |
+| PRR5                                                              | 29      | AT4G38860 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 7                  |
+| PRR5                                                              | 31      | AT1G32900 | gain_high_d1_d2   | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 31      | AT1G48100 | gain_high_d1_d2   | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 31      | AT2G22240 | gain_high_d1_d2   | other_d1_d5       | g3      | 7                  |
+| PRR5                                                              | 56      | AT1G69160 | gain_medium_d1_d2 | lose_medium_d1_d5 | g3      | 7                  |
+| LUX and LHY                                                       | 10      | AT5G22390 | gain_high_d1_d2   | other_d1_d5       | g3      | 8                  |
+| LUX and LHY                                                       | 11      | AT3G25760 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 8                  |
+| LUX and LHY                                                       | 11      | AT4G28750 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 8                  |
+| LUX and LHY                                                       | 11      | AT5G66590 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 8                  |
+| LUX and LHY                                                       | 20      | AT2G46270 | gain_high_d1_d2   | other_d1_d5       | g2      | 8                  |
+| LUX and LHY                                                       | 20      | AT4G01120 | gain_high_d1_d2   | other_d1_d5       | g2      | 8                  |
+| LUX and LHY                                                       | 20      | AT5G15970 | gain_high_d1_d2   | other_d1_d5       | g2      | 8                  |
+| LUX and LHY                                                       | 25      | AT5G18540 | other_d1_d2       | other_d1_d5       | g1      | 8                  |
+| LUX and LHY                                                       | 29      | AT1G72030 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 8                  |
+| LUX and LHY                                                       | 29      | AT5G52900 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 8                  |
+| LUX and LHY                                                       | 52      | AT5G60100 | other_d1_d2       | lose_medium_d1_d5 | g1      | 8                  |
+| LUX and LHY                                                       | 67      | AT1G58290 | lose_medium_d1_d2 | lose_medium_d1_d5 | g4      | 8                  |
+| LUX and LHY and CCA1                                              | 9       | AT1G68050 | gain_medium_d1_d2 | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 9       | AT2G22190 | gain_medium_d1_d2 | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 9       | AT4G33467 | gain_medium_d1_d2 | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 10      | AT5G49480 | gain_high_d1_d2   | other_d1_d5       | g3      | 9                  |
+| LUX and LHY and CCA1                                              | 24      | AT4G27440 | other_d1_d2       | lose_medium_d1_d5 | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 25      | AT2G21660 | other_d1_d2       | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 25      | AT5G48250 | other_d1_d2       | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 25      | AT5G54960 | other_d1_d2       | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 31      | AT1G20070 | gain_high_d1_d2   | other_d1_d5       | g3      | 9                  |
+| LUX and LHY and CCA1                                              | 38      | AT3G29575 | gain_medium_d1_d2 | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 38      | AT3G63060 | gain_medium_d1_d2 | other_d1_d5       | g1      | 9                  |
+| LUX and LHY and CCA1                                              | 42      | AT5G67480 | gain_medium_d1_d2 | other_d1_d5       | g2      | 9                  |
+| LUX and TOC1                                                      | 10      | AT1G19490 | gain_high_d1_d2   | other_d1_d5       | g3      | 10                 |
+| LUX and TOC1                                                      | 10      | AT4G12980 | gain_high_d1_d2   | other_d1_d5       | g3      | 10                 |
+| LUX and TOC1                                                      | 20      | AT4G18700 | gain_high_d1_d2   | other_d1_d5       | g2      | 10                 |
+| LUX and TOC1                                                      | 20      | AT4G27940 | gain_high_d1_d2   | other_d1_d5       | g2      | 10                 |
+| LUX and TOC1                                                      | 20      | AT5G01520 | gain_high_d1_d2   | other_d1_d5       | g2      | 10                 |
+| LUX and TOC1                                                      | 34      | AT5G19240 | gain_high_d1_d2   | other_d1_d5       | g2      | 10                 |
+| LUX and TOC1                                                      | 56      | AT5G49700 | gain_medium_d1_d2 | lose_medium_d1_d5 | g3      | 10                 |
+| LUX and TOC1                                                      | 58      | AT1G06570 | other_d1_d2       | lose_medium_d1_d5 | g4      | 10                 |
+| LUX and TOC1                                                      | 58      | AT5G64840 | other_d1_d2       | lose_medium_d1_d5 | g4      | 10                 |
+| CCA1                                                              | 9       | AT1G70640 | gain_medium_d1_d2 | other_d1_d5       | g1      | 11                 |
+| CCA1                                                              | 9       | AT5G17000 | gain_medium_d1_d2 | other_d1_d5       | g1      | 11                 |
+| CCA1                                                              | 10      | AT5G10340 | gain_high_d1_d2   | other_d1_d5       | g3      | 11                 |
+| CCA1                                                              | 10      | AT5G28840 | gain_high_d1_d2   | other_d1_d5       | g3      | 11                 |
+| CCA1                                                              | 20      | AT5G59050 | gain_high_d1_d2   | other_d1_d5       | g2      | 11                 |
+| CCA1                                                              | 24      | AT5G64860 | other_d1_d2       | lose_medium_d1_d5 | g1      | 11                 |
+| CCA1                                                              | 25      | AT1G06460 | other_d1_d2       | other_d1_d5       | g1      | 11                 |
+| CCA1                                                              | 25      | AT4G16146 | other_d1_d2       | other_d1_d5       | g1      | 11                 |
+| LUX and ELF3 and ELF4                                             | 11      | AT2G34420 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 12                 |
+| LUX and ELF3 and ELF4                                             | 11      | AT3G46650 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 12                 |
+| LUX and ELF3 and ELF4                                             | 11      | AT3G54890 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 12                 |
+| LUX and ELF3 and ELF4                                             | 11      | AT3G55240 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 12                 |
+| LUX and ELF3 and ELF4                                             | 38      | AT4G18650 | gain_medium_d1_d2 | other_d1_d5       | g1      | 12                 |
+| LUX and TOC1 and PRR5                                             | 10      | AT1G01520 | gain_high_d1_d2   | other_d1_d5       | g3      | 13                 |
+| LUX and TOC1 and PRR5                                             | 10      | AT3G55580 | gain_high_d1_d2   | other_d1_d5       | g3      | 13                 |
+| LUX and TOC1 and PRR5                                             | 10      | AT5G62130 | gain_high_d1_d2   | other_d1_d5       | g3      | 13                 |
+| LUX and TOC1 and PRR5                                             | 56      | AT1G68440 | gain_medium_d1_d2 | lose_medium_d1_d5 | g3      | 13                 |
+| LHY and TOC1                                                      | 9       | AT4G22590 | gain_medium_d1_d2 | other_d1_d5       | g1      | 14                 |
+| LHY and TOC1                                                      | 10      | AT1G71040 | gain_high_d1_d2   | other_d1_d5       | g3      | 14                 |
+| LHY and TOC1                                                      | 10      | AT5G20190 | gain_high_d1_d2   | other_d1_d5       | g3      | 14                 |
+| LHY and TOC1                                                      | 25      | AT2G38465 | other_d1_d2       | other_d1_d5       | g1      | 14                 |
+| LUX and LHY and ELF3                                              | 11      | AT3G27690 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 15                 |
+| LUX and LHY and ELF3                                              | 11      | AT4G12800 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 15                 |
+| LUX and LHY and ELF3                                              | 22      | AT5G62430 | gain_medium_d1_d2 | other_d1_d5       | g3      | 15                 |
+| LUX and LHY and ELF3                                              | 42      | AT5G19190 | gain_medium_d1_d2 | other_d1_d5       | g2      | 15                 |
+| LHY and TOC1 and CCA1                                             | 9       | AT2G17840 | gain_medium_d1_d2 | other_d1_d5       | g1      | 16                 |
+| LHY and TOC1 and CCA1                                             | 9       | AT3G27210 | gain_medium_d1_d2 | other_d1_d5       | g1      | 16                 |
+| LHY and TOC1 and CCA1                                             | 9       | AT5G58070 | gain_medium_d1_d2 | other_d1_d5       | g1      | 16                 |
+| LHY and TOC1 and CCA1                                             | 38      | AT1G73390 | gain_medium_d1_d2 | other_d1_d5       | g1      | 16                 |
+| LUX and LHY and CCA1 and PRR7                                     | 24      | AT3G15840 | other_d1_d2       | lose_medium_d1_d5 | g1      | 17                 |
+| LUX and LHY and CCA1 and PRR7                                     | 42      | AT4G03400 | gain_medium_d1_d2 | other_d1_d5       | g2      | 17                 |
+| LUX and LHY and CCA1 and PRR7                                     | 44      | AT5G37260 | gain_high_d1_d2   | other_d1_d5       | g2      | 17                 |
+| LUX and LHY and CCA1 and PRR7                                     | 52      | AT3G10410 | other_d1_d2       | lose_medium_d1_d5 | g1      | 17                 |
+| LUX and TOC1 and ELF3 and PRR7 and PRR5 and ELF4                  | 10      | AT3G12320 | gain_high_d1_d2   | other_d1_d5       | g3      | 18                 |
+| LUX and TOC1 and ELF3 and PRR7 and PRR5 and ELF4                  | 11      | AT3G59060 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 18                 |
+| LUX and TOC1 and ELF3 and PRR7 and PRR5 and ELF4                  | 58      | AT1G06040 | other_d1_d2       | lose_medium_d1_d5 | g4      | 18                 |
+| LUX and ELF3 and PRR5 and ELF4                                    | 31      | AT3G47500 | gain_high_d1_d2   | other_d1_d5       | g3      | 19                 |
+| LUX and ELF3 and PRR5 and ELF4                                    | 31      | AT5G06980 | gain_high_d1_d2   | other_d1_d5       | g3      | 19                 |
+| LUX and ELF3 and PRR5 and ELF4                                    | 58      | AT5G57660 | other_d1_d2       | lose_medium_d1_d5 | g4      | 19                 |
+| LUX and LHY and TOC1                                              | 9       | AT2G40080 | gain_medium_d1_d2 | other_d1_d5       | g1      | 20                 |
+| LUX and LHY and TOC1                                              | 34      | AT3G56880 | gain_high_d1_d2   | other_d1_d5       | g2      | 20                 |
+| LUX and LHY and TOC1                                              | 34      | AT5G59820 | gain_high_d1_d2   | other_d1_d5       | g2      | 20                 |
+| LUX and LHY and ELF3 and ELF4                                     | 11      | AT2G34430 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 21                 |
+| LUX and LHY and ELF3 and ELF4                                     | 11      | AT3G47470 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 21                 |
+| LUX and LHY and ELF3 and ELF4                                     | 22      | AT1G26790 | gain_medium_d1_d2 | other_d1_d5       | g3      | 21                 |
+| LUX and LHY and CCA1 and ELF3 and PRR7 and PRR5                   | 9       | AT4G25480 | gain_medium_d1_d2 | other_d1_d5       | g1      | 22                 |
+| LUX and LHY and CCA1 and ELF3 and PRR7 and PRR5                   | 22      | AT5G17300 | gain_medium_d1_d2 | other_d1_d5       | g3      | 22                 |
+| LUX and LHY and CCA1 and ELF3 and PRR7 and PRR5                   | 38      | AT1G18330 | gain_medium_d1_d2 | other_d1_d5       | g1      | 22                 |
+| ELF3                                                              | 9       | AT5G37440 | gain_medium_d1_d2 | other_d1_d5       | g1      | 23                 |
+| ELF3                                                              | 11      | AT1G30380 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 23                 |
+| ELF3                                                              | 67      | AT1G44446 | lose_medium_d1_d2 | lose_medium_d1_d5 | g4      | 23                 |
+| TOC1 and PRR7                                                     | 10      | AT5G11260 | gain_high_d1_d2   | other_d1_d5       | g3      | 24                 |
+| TOC1 and PRR7                                                     | 22      | AT3G02470 | gain_medium_d1_d2 | other_d1_d5       | g3      | 24                 |
+| LUX and TOC1 and ELF3                                             | 31      | AT5G41590 | gain_high_d1_d2   | other_d1_d5       | g3      | 25                 |
+| LUX and TOC1 and ELF3                                             | 67      | AT5G13630 | lose_medium_d1_d2 | lose_medium_d1_d5 | g4      | 25                 |
+| PRR7 and PRR5                                                     | 9       | AT3G62690 | gain_medium_d1_d2 | other_d1_d5       | g1      | 26                 |
+| PRR7 and PRR5                                                     | 10      | AT2G24540 | gain_high_d1_d2   | other_d1_d5       | g3      | 26                 |
+| LUX and ELF3 and PRR5                                             | 31      | AT5G24120 | gain_high_d1_d2   | other_d1_d5       | g3      | 27                 |
+| LUX and ELF3 and PRR5                                             | 72      | AT2G47180 | gain_medium_d1_d2 | lose_high_d1_d5   | g3      | 27                 |
+| LHY and TOC1 and PRR7                                             | 20      | AT2G34720 | gain_high_d1_d2   | other_d1_d5       | g2      | 28                 |
+| LHY and TOC1 and PRR7                                             | 42      | AT5G01810 | gain_medium_d1_d2 | other_d1_d5       | g2      | 28                 |
+| LUX and LHY and ELF3 and PRR7 and PRR5 and ELF4                   | 10      | AT1G69570 | gain_high_d1_d2   | other_d1_d5       | g3      | 29                 |
+| LUX and LHY and ELF3 and PRR7 and PRR5 and ELF4                   | 67      | AT3G54500 | lose_medium_d1_d2 | lose_medium_d1_d5 | g4      | 29                 |
+| LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and PRR5 and ELF4 | 10      | AT5G54470 | gain_high_d1_d2   | other_d1_d5       | g3      | 30                 |
+| LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and PRR5 and ELF4 | 11      | AT2G43010 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 30                 |
+| LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and PRR5          | 20      | AT4G25490 | gain_high_d1_d2   | other_d1_d5       | g2      | 31                 |
+| LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and PRR5          | 34      | AT4G25470 | gain_high_d1_d2   | other_d1_d5       | g2      | 31                 |
+| LUX and LHY and CCA1 and ELF3                                     | 9       | AT4G27950 | gain_medium_d1_d2 | other_d1_d5       | g1      | 32                 |
+| LUX and LHY and CCA1 and ELF3                                     | 11      | AT1G29930 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 32                 |
+| LUX and TOC1 and CCA1                                             | 9       | AT1G29395 | gain_medium_d1_d2 | other_d1_d5       | g1      | 33                 |
+| LUX and TOC1 and CCA1                                             | 25      | AT5G61380 | other_d1_d2       | other_d1_d5       | g1      | 33                 |
+| LUX and CCA1 and ELF3                                             | 24      | AT1G67265 | other_d1_d2       | lose_medium_d1_d5 | g1      | 34                 |
+| LUX and CCA1 and ELF3                                             | 24      | AT4G32340 | other_d1_d2       | lose_medium_d1_d5 | g1      | 34                 |
+| LUX and TOC1 and ELF3 and PRR7 and ELF4                           | 25      | AT3G46640 | other_d1_d2       | other_d1_d5       | g1      | 35                 |
+| LUX and TOC1 and ELF3 and PRR7                                    | 11      | AT2G46820 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 36                 |
+| LUX and TOC1 and PRR7                                             | 22      | AT1G62180 | gain_medium_d1_d2 | other_d1_d5       | g3      | 37                 |
+| LUX and TOC1 and PRR7 and PRR5                                    | 22      | AT2G31380 | gain_medium_d1_d2 | other_d1_d5       | g3      | 38                 |
+| TOC1 and PRR7 and PRR5                                            | 20      | AT4G39800 | gain_high_d1_d2   | other_d1_d5       | g2      | 39                 |
+| LUX and TOC1 and ELF3 and PRR5                                    | 20      | AT1G09350 | gain_high_d1_d2   | other_d1_d5       | g2      | 40                 |
+| TOC1 and PRR5                                                     | 10      | AT5G23730 | gain_high_d1_d2   | other_d1_d5       | g3      | 41                 |
+| LUX and ELF3 and PRR7 and ELF4                                    | 11      | AT5G54270 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 42                 |
+| LUX and ELF3 and PRR7                                             | 11      | AT4G10340 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 43                 |
+| LUX and PRR7                                                      | 58      | AT5G67030 | other_d1_d2       | lose_medium_d1_d5 | g4      | 44                 |
+| LUX and ELF3 and PRR7 and PRR5                                    | 22      | AT5G39660 | gain_medium_d1_d2 | other_d1_d5       | g3      | 45                 |
+| LUX and PRR7 and PRR5                                             | 44      | AT5G59730 | gain_high_d1_d2   | other_d1_d5       | g2      | 46                 |
+| LUX and LHY and TOC1 and ELF3 and PRR7 and PRR5 and ELF4          | 31      | AT2G46790 | gain_high_d1_d2   | other_d1_d5       | g3      | 47                 |
+| LHY and TOC1 and PRR7 and PRR5                                    | 22      | AT1G01060 | gain_medium_d1_d2 | other_d1_d5       | g3      | 48                 |
+| LUX and LHY and TOC1 and PRR5                                     | 29      | AT2G30520 | lose_medium_d1_d2 | lose_high_d1_d5   | g2      | 49                 |
+| LHY and PRR7                                                      | 10      | AT1G60190 | gain_high_d1_d2   | other_d1_d5       | g3      | 50                 |
+| LHY and PRR7 and PRR5                                             | 10      | AT5G15950 | gain_high_d1_d2   | other_d1_d5       | g3      | 51                 |
+| LUX and LHY and TOC1 and CCA1 and ELF3 and PRR7 and ELF4          | 31      | AT4G27310 | gain_high_d1_d2   | other_d1_d5       | g3      | 52                 |
+| LHY and TOC1 and CCA1 and PRR7 and PRR5                           | 10      | AT5G01820 | gain_high_d1_d2   | other_d1_d5       | g3      | 53                 |
+| LUX and LHY and TOC1 and CCA1 and ELF3                            | 9       | AT2G40340 | gain_medium_d1_d2 | other_d1_d5       | g1      | 54                 |
+| LUX and LHY and TOC1 and CCA1                                     | 20      | AT5G03210 | gain_high_d1_d2   | other_d1_d5       | g2      | 55                 |
+| LHY and CCA1 and PRR7                                             | 10      | AT1G05870 | gain_high_d1_d2   | other_d1_d5       | g3      | 56                 |
+| LHY and CCA1 and PRR5                                             | 22      | AT1G75180 | gain_medium_d1_d2 | other_d1_d5       | g3      | 57                 |
+| LHY and CCA1 and ELF3                                             | 11      | AT2G05100 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 58                 |
+| ELF3 and ELF4                                                     | 11      | AT1G61520 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 59                 |
+| LUX and TOC1 and CCA1 and ELF3 and PRR7 and PRR5                  | 10      | AT2G46830 | gain_high_d1_d2   | other_d1_d5       | g3      | 60                 |
+| LUX and TOC1 and CCA1 and ELF3 and PRR5 and ELF4                  | 20      | AT1G73480 | gain_high_d1_d2   | other_d1_d5       | g2      | 61                 |
+| TOC1 and CCA1                                                     | 10      | AT3G48240 | gain_high_d1_d2   | other_d1_d5       | g3      | 62                 |
+| LUX and CCA1 and ELF3 and ELF4                                    | 11      | AT5G45820 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 63                 |
+: Membership of UpSet columns {#tbl-UpSet plot columns}
+
+
 ## Quarto
 
 Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
