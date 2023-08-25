@@ -10,11 +10,11 @@ library(ggbiplot)
 library(ggrepel)
 library(circlize)
 library(UpSetR)
-
 library(devtools)
 install_github("jokergoo/ComplexHeatmap")
 library(ComplexHeatmap)
 library(ComplexUpset)
+library(igraph)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
@@ -4621,10 +4621,113 @@ upset_column_makeup <- upset_ggplot_prep %>%
 # 18 Bipartite Network----
 
 TF_bip4_c8 <- read_csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv")
+TF_bip4_c8_matrix <- as.matrix(TF_bip4_c8)
+
+bip4Ig_c8 <- graph_from_incidence_matrix(TF_bip4_c8_matrix, weighted = TRUE)
+
+edge_attr(bip4Ig_c8)$weight.scale <- ifelse(edge_attr(bip4Ig_c8)$weight <=3, 1, edge_attr(bip4Ig_c8)$weight)
+edge_attr(bip4Ig_c8)$weight.scale.sparse <- ifelse(edge_attr(bip4Ig_c8)$weight <=6, 0, edge_attr(bip4Ig_c8)$weight)
+edge_attr(bip4Ig_c8)$weight.scale.sparse.med <- ifelse(edge_attr(bip4Ig_c8)$weight <=4, 0, edge_attr(bip4Ig_c8)$weight)
+
+edge_attr(bip4Ig_c8)$weight.sparse <- ifelse(edge_attr(bip4Ig_c8)$weight <=6, 0, 1)
+edge_attr(bip4Ig_c8)$weight.sparse.med <- ifelse(edge_attr(bip4Ig_c8)$weight <=4, 0, 1)
+
+vertex_attr(bip4Ig_c8)$color<-rep("#bf5b17", length(V(bip4Ig_c8)))
+vertex_attr(bip4Ig_c8)$color[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip4Ig_c8)$color.sparse<-ifelse(igraph::degree(bip4Ig_c8) <=7,"#f4a582", "#ca0020")
+vertex_attr(bip4Ig_c8)$color.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip4Ig_c8)$color.sparse.med<-rep("#ffffbf", length(V(bip4Ig_c8)))
+vertex_attr(bip4Ig_c8)$color.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip4Ig_c8)$shape<-rep("square", length(V(bip4Ig_c8)))
+vertex_attr(bip4Ig_c8)$shape[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-"circle"
+
+vertex_attr(bip4Ig_c8)$shape.sparse<-ifelse(igraph::degree(bip4Ig_c8) <=6, "none", "square")
+vertex_attr(bip4Ig_c8)$shape.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-"circle"
+
+vertex_attr(bip4Ig_c8)$shape.sparse.med<-ifelse(igraph::degree(bip4Ig_c8) <=4, "none", "square")
+vertex_attr(bip4Ig_c8)$shape.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-"circle"
+
+# TF node size based on:
+# summary of clock ChIP targets in the TF network:
+# LHY: TF_adams_IJ : 362 obs.
+# CCA1: TF_nagel_unique_IJ: 584 obs.
+# TOC1: TF_huang_unique_IJ: 322 obs.
+# PRR5: TF_nakamichi_IJ: 57 obs.
+# PRR7: TF_liu_unique_IJ: 69 obs.
+# LUX: TF_ezer_LUX_unique_IJ: 436 obs.
+# ELF3: TF_ezer_ELF3_unique_IJ: 129 obs.
+# ELF4: TF_ezer_ELF4_unique_IJ: 30 obs.
+
+# size based on 0.1* no. of targets listed above c(36, 58, 32, 6, 7, 44, 13, 3)
+# size based on 0.1* no. of targets listed above for LHY, CCA1, TOC1 and LUX  and 0.2* no. of targets for PRR5, PRR7, ELF3 and ELF4 c(36, 58, 32, 12, 14, 44, 26, 6)
 
 
+vertex_attr(bip4Ig_c8)$size <- ifelse(igraph::degree(bip4Ig_c8) <=3, 0.4*igraph::degree(bip4Ig_c8), igraph::degree(bip4Ig_c8))
+vertex_attr(bip4Ig_c8)$size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(36, 58, 32, 12, 14, 44, 26, 6)
 
+vertex_attr(bip4Ig_c8)$size.equal <- ifelse(igraph::degree(bip4Ig_c8) <=3, 0.4*igraph::degree(bip4Ig_c8), igraph::degree(bip4Ig_c8))
+vertex_attr(bip4Ig_c8)$size.equal[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(25, 25, 25, 25, 25, 25, 25, 25)
 
+vertex_attr(bip4Ig_c8)$label <- ifelse(vertex_attr(bip4Ig_c8)$size>=6, vertex_attr(bip4Ig_c8)$name, NA)
+vertex_attr(bip4Ig_c8)$label[grep(pattern = "TRUE", vertex_attr(bip4Ig_c8)$type)]<- NA
+
+vertex_attr(bip4Ig_c8)$label.equal <- ifelse(vertex_attr(bip4Ig_c8)$size>=4, vertex_attr(bip4Ig_c8)$name, NA)
+vertex_attr(bip4Ig_c8)$label.equal[grep(pattern = "TRUE", vertex_attr(bip4Ig_c8)$type)]<- NA
+
+V(bip4Ig_c8)$label[[1210]]<- "1"
+V(bip4Ig_c8)$label[[1211]]<- "2"
+V(bip4Ig_c8)$label[[1212]]<- "3"
+V(bip4Ig_c8)$label[[1213]]<- "4"
+V(bip4Ig_c8)$label[[1235]]<- "5"
+V(bip4Ig_c8)$label[[1236]]<- "6"
+V(bip4Ig_c8)$label[[1245]]<- "7"
+V(bip4Ig_c8)$label[[1246]]<- "8"
+V(bip4Ig_c8)$label[[1247]]<- "9"
+V(bip4Ig_c8)$label[[1248]]<- "10"
+
+vertex_attr(bip4Ig_c8)$label.size <- ifelse(igraph::degree(bip4Ig_c8) <=4, 0.8, 0.6)
+vertex_attr(bip4Ig_c8)$label.size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(1.5,1.5,0.8,0.7,0.8,1.2,0.8,0.4)
+
+vertex_attr(bip4Ig_c8)$label.size.equal <- ifelse(igraph::degree(bip4Ig_c8) <=4, 0.8, 0.6)
+vertex_attr(bip4Ig_c8)$label.size.equal[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8)
+
+vertex_attr(bip4Ig_c8)$label.colour <- ifelse(igraph::degree(bip4Ig_c8) <=4, "#bf5b17", "white")
+vertex_attr(bip4Ig_c8)$label.colour[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
+
+vertex_attr(bip4Ig_c8)$label.colour.sparse <- ifelse(igraph::degree(bip4Ig_c8) <=7, "gray20", "white")
+vertex_attr(bip4Ig_c8)$label.colour.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
+
+vertex_attr(bip4Ig_c8)$label.colour.sparse.med <- ifelse(igraph::degree(bip4Ig_c8) <=8, "gray20", "white")
+vertex_attr(bip4Ig_c8)$label.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
+
+vertex_attr(bip4Ig_c8)$label.position <- ifelse(igraph::degree(bip4Ig_c8) <=4, 0.8, 0)
+vertex_attr(bip4Ig_c8)$label.position[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- 0
+
+vertex_attr(bip4Ig_c8)$label.position.sparse <- ifelse(igraph::degree(bip4Ig_c8) <=7, 0.8, 0)
+vertex_attr(bip4Ig_c8)$label.position.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- 0
+
+vertex_attr(bip4Ig_c8)$label.position.sparse.med <- ifelse(igraph::degree(bip4Ig_c8) >=8, 0, 0)
+vertex_attr(bip4Ig_c8)$label.position.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- 0
+
+vertex_attr(bip4Ig_c8)$frame.colour.sparse.med <- ifelse(igraph::degree(bip4Ig_c8) >=6, "white", "gray20")
+vertex_attr(bip4Ig_c8)$frame.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- "gray20"
+
+vertex_attr(bip4Ig_c8)$label.font <- ifelse(igraph::degree(bip4Ig_c8) <=4, 2, 1)
+
+# vertex_attr(bip4Ig_c8)$label.font
+
+# vertex_attr(bip4Ig_c8)
+
+# edge_attr(bip4Ig_c8)
+
+l_c8<-layout_with_dh(bip4Ig_c8)
+
+l_c8 <- layout.norm(l_c8, ymin=-1, ymax=1, xmin=-1, xmax=1)
+
+plot(bip4Ig_c8, vertex.label=(vertex_attr(bip4Ig_c8)$label), vertex.label.family ='Helvetica', vertex.label.color=(vertex_attr(bip4Ig_c8)$label.colour), vertex.label.cex=(vertex_attr(bip4Ig_c8)$label.size), vertex.label.dist=(vertex_attr(bip4Ig_c8)$label.position), vertex.label.font=(vertex_attr(bip4Ig_c8)$label.font), vertex.size=(vertex_attr(bip4Ig_c8)$size), vertex.shape=(vertex_attr(bip4Ig_c8)$shape), vertex.color=vertex_attr(bip4Ig_c8)$color, edge.width=(edge_attr(bip4Ig_c8)$weight.scale)/4, edge.color="grey50", edge.curved = 0.3, rescale= F, layout=l_c8*1.45)
 
 data <- data.frame(
   entry = paste0("Entry.", 1:10),
