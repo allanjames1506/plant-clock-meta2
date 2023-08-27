@@ -4620,35 +4620,70 @@ upset_column_makeup <- upset_ggplot_prep %>%
 
 # 18 Bipartite Network----
 
+nodes2 <- read.csv("./00_raw_data/Dataset2-Media-User-Example-NODES.csv", header=T, as.is=T)
+
+links2 <- read.csv("./00_raw_data/Dataset2-Media-User-Example-EDGES.csv", header=T, row.names=1)
+
+head(nodes2)
+
+head(links2)
+
 TF_bip4_c8 <- read_csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv")
+TF_bip4_c8_alt <- read.csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv", header=T, row.names=1)
+
+
 TF_bip4_c8_matrix <- as.matrix(TF_bip4_c8)
+TF_bip4_c8_matrix_alt <- as.matrix(TF_bip4_c8_alt)
+
+dim(TF_bip4_c8_matrix)
+dim(TF_bip4_c8_matrix_alt)
 
 bip4Ig_c8 <- graph_from_incidence_matrix(TF_bip4_c8_matrix, weighted = TRUE)
+bip4Ig_c8_alt <- graph_from_incidence_matrix(TF_bip4_c8_matrix_alt, weighted = TRUE)
 
-edge_attr(bip4Ig_c8)$weight.scale <- ifelse(edge_attr(bip4Ig_c8)$weight <=3, 1, edge_attr(bip4Ig_c8)$weight)
-edge_attr(bip4Ig_c8)$weight.scale.sparse <- ifelse(edge_attr(bip4Ig_c8)$weight <=6, 0, edge_attr(bip4Ig_c8)$weight)
-edge_attr(bip4Ig_c8)$weight.scale.sparse.med <- ifelse(edge_attr(bip4Ig_c8)$weight <=4, 0, edge_attr(bip4Ig_c8)$weight)
+?graph_from_incidence_matrix
 
-edge_attr(bip4Ig_c8)$weight.sparse <- ifelse(edge_attr(bip4Ig_c8)$weight <=6, 0, 1)
-edge_attr(bip4Ig_c8)$weight.sparse.med <- ifelse(edge_attr(bip4Ig_c8)$weight <=4, 0, 1)
+bip4Ig_c8[]
+bip4Ig_c8_alt[]
 
-vertex_attr(bip4Ig_c8)$color<-rep("#bf5b17", length(V(bip4Ig_c8)))
-vertex_attr(bip4Ig_c8)$color[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+class(bip4Ig_c8)
+class(bip4Ig_c8_alt)
 
-vertex_attr(bip4Ig_c8)$color.sparse<-ifelse(igraph::degree(bip4Ig_c8) <=7,"#f4a582", "#ca0020")
-vertex_attr(bip4Ig_c8)$color.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+bip4Ig_c8
+bip4Ig_c8_alt
 
-vertex_attr(bip4Ig_c8)$color.sparse.med<-rep("#ffffbf", length(V(bip4Ig_c8)))
-vertex_attr(bip4Ig_c8)$color.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+E(bip4Ig_c8)
+E(bip4Ig_c8_alt)
 
-vertex_attr(bip4Ig_c8)$shape<-rep("square", length(V(bip4Ig_c8)))
-vertex_attr(bip4Ig_c8)$shape[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-"circle"
+V(bip4Ig_c8)
+V(bip4Ig_c8_alt)
 
-vertex_attr(bip4Ig_c8)$shape.sparse<-ifelse(igraph::degree(bip4Ig_c8) <=6, "none", "square")
-vertex_attr(bip4Ig_c8)$shape.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-"circle"
+edge_attr(bip4Ig_c8_alt$weight)
 
-vertex_attr(bip4Ig_c8)$shape.sparse.med<-ifelse(igraph::degree(bip4Ig_c8) <=4, "none", "square")
-vertex_attr(bip4Ig_c8)$shape.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<-"circle"
+edge_attr(bip4Ig_c8_alt)$weight.scale <- ifelse(edge_attr(bip4Ig_c8_alt)$weight <=3, 1, edge_attr(bip4Ig_c8_alt)$weight)
+edge_attr(bip4Ig_c8_alt)$weight.scale.sparse <- ifelse(edge_attr(bip4Ig_c8_alt)$weight <=6, 0, edge_attr(bip4Ig_c8_alt)$weight)
+edge_attr(bip4Ig_c8_alt)$weight.scale.sparse.med <- ifelse(edge_attr(bip4Ig_c8_alt)$weight <=4, 0, edge_attr(bip4Ig_c8_alt)$weight)
+
+edge_attr(bip4Ig_c8_alt)$weight.sparse <- ifelse(edge_attr(bip4Ig_c8_alt)$weight <=6, 0, 1)
+edge_attr(bip4Ig_c8_alt)$weight.sparse.med <- ifelse(edge_attr(bip4Ig_c8_alt)$weight <=4, 0, 1)
+
+vertex_attr(bip4Ig_c8_alt)$color<-rep("#bf5b17", length(V(bip4Ig_c8_alt)))
+vertex_attr(bip4Ig_c8_alt)$color[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip4Ig_c8_alt)$color.sparse<-ifelse(igraph::degree(bip4Ig_c8_alt) <=7,"#f4a582", "#ca0020")
+vertex_attr(bip4Ig_c8_alt)$color.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip4Ig_c8_alt)$color.sparse.med<-rep("#ffffbf", length(V(bip4Ig_c8_alt)))
+vertex_attr(bip4Ig_c8_alt)$color.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip4Ig_c8_alt)$shape<-rep("square", length(V(bip4Ig_c8_alt)))
+vertex_attr(bip4Ig_c8_alt)$shape[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<-"circle"
+
+vertex_attr(bip4Ig_c8_alt)$shape.sparse<-ifelse(igraph::degree(bip4Ig_c8_alt) <=6, "none", "square")
+vertex_attr(bip4Ig_c8_alt)$shape.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<-"circle"
+
+vertex_attr(bip4Ig_c8_alt)$shape.sparse.med<-ifelse(igraph::degree(bip4Ig_c8_alt) <=4, "none", "square")
+vertex_attr(bip4Ig_c8_alt)$shape.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<-"circle"
 
 # TF node size based on:
 # summary of clock ChIP targets in the TF network:
@@ -4665,57 +4700,57 @@ vertex_attr(bip4Ig_c8)$shape.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4
 # size based on 0.1* no. of targets listed above for LHY, CCA1, TOC1 and LUX  and 0.2* no. of targets for PRR5, PRR7, ELF3 and ELF4 c(36, 58, 32, 12, 14, 44, 26, 6)
 
 
-vertex_attr(bip4Ig_c8)$size <- ifelse(igraph::degree(bip4Ig_c8) <=3, 0.4*igraph::degree(bip4Ig_c8), igraph::degree(bip4Ig_c8))
-vertex_attr(bip4Ig_c8)$size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(36, 58, 32, 12, 14, 44, 26, 6)
+vertex_attr(bip4Ig_c8_alt)$size <- ifelse(igraph::degree(bip4Ig_c8_alt) <=3, 0.4*igraph::degree(bip4Ig_c8_alt), igraph::degree(bip4Ig_c8_alt))
+vertex_attr(bip4Ig_c8_alt)$size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c(36, 58, 32, 12, 14, 44, 26, 6)
 
-vertex_attr(bip4Ig_c8)$size.equal <- ifelse(igraph::degree(bip4Ig_c8) <=3, 0.4*igraph::degree(bip4Ig_c8), igraph::degree(bip4Ig_c8))
-vertex_attr(bip4Ig_c8)$size.equal[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(25, 25, 25, 25, 25, 25, 25, 25)
+vertex_attr(bip4Ig_c8_alt)$size.equal <- ifelse(igraph::degree(bip4Ig_c8_alt) <=3, 0.4*igraph::degree(bip4Ig_c8_alt), igraph::degree(bip4Ig_c8_alt))
+vertex_attr(bip4Ig_c8_alt)$size.equal[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c(25, 25, 25, 25, 25, 25, 25, 25)
 
-vertex_attr(bip4Ig_c8)$label <- ifelse(vertex_attr(bip4Ig_c8)$size>=6, vertex_attr(bip4Ig_c8)$name, NA)
-vertex_attr(bip4Ig_c8)$label[grep(pattern = "TRUE", vertex_attr(bip4Ig_c8)$type)]<- NA
+vertex_attr(bip4Ig_c8_alt)$label <- ifelse(vertex_attr(bip4Ig_c8_alt)$size>=6, vertex_attr(bip4Ig_c8_alt)$name, NA)
+vertex_attr(bip4Ig_c8_alt)$label[grep(pattern = "TRUE", vertex_attr(bip4Ig_c8_alt)$type)]<- NA
 
-vertex_attr(bip4Ig_c8)$label.equal <- ifelse(vertex_attr(bip4Ig_c8)$size>=4, vertex_attr(bip4Ig_c8)$name, NA)
-vertex_attr(bip4Ig_c8)$label.equal[grep(pattern = "TRUE", vertex_attr(bip4Ig_c8)$type)]<- NA
+vertex_attr(bip4Ig_c8_alt)$label.equal <- ifelse(vertex_attr(bip4Ig_c8_alt)$size>=4, vertex_attr(bip4Ig_c8_alt)$name, NA)
+vertex_attr(bip4Ig_c8_alt)$label.equal[grep(pattern = "TRUE", vertex_attr(bip4Ig_c8_alt)$type)]<- NA
 
-V(bip4Ig_c8)$label[[1210]]<- "1"
-V(bip4Ig_c8)$label[[1211]]<- "2"
-V(bip4Ig_c8)$label[[1212]]<- "3"
-V(bip4Ig_c8)$label[[1213]]<- "4"
-V(bip4Ig_c8)$label[[1235]]<- "5"
-V(bip4Ig_c8)$label[[1236]]<- "6"
-V(bip4Ig_c8)$label[[1245]]<- "7"
-V(bip4Ig_c8)$label[[1246]]<- "8"
-V(bip4Ig_c8)$label[[1247]]<- "9"
-V(bip4Ig_c8)$label[[1248]]<- "10"
+V(bip4Ig_c8_alt)$label[[1210]]<- "1"
+V(bip4Ig_c8_alt)$label[[1211]]<- "2"
+V(bip4Ig_c8_alt)$label[[1212]]<- "3"
+V(bip4Ig_c8_alt)$label[[1213]]<- "4"
+V(bip4Ig_c8_alt)$label[[1235]]<- "5"
+V(bip4Ig_c8_alt)$label[[1236]]<- "6"
+V(bip4Ig_c8_alt)$label[[1245]]<- "7"
+V(bip4Ig_c8_alt)$label[[1246]]<- "8"
+V(bip4Ig_c8_alt)$label[[1247]]<- "9"
+V(bip4Ig_c8_alt)$label[[1248]]<- "10"
 
-vertex_attr(bip4Ig_c8)$label.size <- ifelse(igraph::degree(bip4Ig_c8) <=4, 0.8, 0.6)
-vertex_attr(bip4Ig_c8)$label.size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(1.5,1.5,0.8,0.7,0.8,1.2,0.8,0.4)
+vertex_attr(bip4Ig_c8_alt)$label.size <- ifelse(igraph::degree(bip4Ig_c8_alt) <=4, 0.8, 0.6)
+vertex_attr(bip4Ig_c8_alt)$label.size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c(1.5,1.5,0.8,0.7,0.8,1.2,0.8,0.4)
 
-vertex_attr(bip4Ig_c8)$label.size.equal <- ifelse(igraph::degree(bip4Ig_c8) <=4, 0.8, 0.6)
-vertex_attr(bip4Ig_c8)$label.size.equal[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c(0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8)
+vertex_attr(bip4Ig_c8_alt)$label.size.equal <- ifelse(igraph::degree(bip4Ig_c8_alt) <=4, 0.8, 0.6)
+vertex_attr(bip4Ig_c8_alt)$label.size.equal[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c(0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8)
 
-vertex_attr(bip4Ig_c8)$label.colour <- ifelse(igraph::degree(bip4Ig_c8) <=4, "#bf5b17", "white")
-vertex_attr(bip4Ig_c8)$label.colour[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
+vertex_attr(bip4Ig_c8_alt)$label.colour <- ifelse(igraph::degree(bip4Ig_c8_alt) <=4, "#bf5b17", "white")
+vertex_attr(bip4Ig_c8_alt)$label.colour[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
 
-vertex_attr(bip4Ig_c8)$label.colour.sparse <- ifelse(igraph::degree(bip4Ig_c8) <=7, "gray20", "white")
-vertex_attr(bip4Ig_c8)$label.colour.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
+vertex_attr(bip4Ig_c8_alt)$label.colour.sparse <- ifelse(igraph::degree(bip4Ig_c8_alt) <=7, "gray20", "white")
+vertex_attr(bip4Ig_c8_alt)$label.colour.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
 
-vertex_attr(bip4Ig_c8)$label.colour.sparse.med <- ifelse(igraph::degree(bip4Ig_c8) <=8, "gray20", "white")
-vertex_attr(bip4Ig_c8)$label.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
+vertex_attr(bip4Ig_c8_alt)$label.colour.sparse.med <- ifelse(igraph::degree(bip4Ig_c8_alt) <=8, "gray20", "white")
+vertex_attr(bip4Ig_c8_alt)$label.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
 
-vertex_attr(bip4Ig_c8)$label.position <- ifelse(igraph::degree(bip4Ig_c8) <=4, 0.8, 0)
-vertex_attr(bip4Ig_c8)$label.position[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- 0
+vertex_attr(bip4Ig_c8_alt)$label.position <- ifelse(igraph::degree(bip4Ig_c8_alt) <=4, 0.8, 0)
+vertex_attr(bip4Ig_c8_alt)$label.position[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- 0
 
-vertex_attr(bip4Ig_c8)$label.position.sparse <- ifelse(igraph::degree(bip4Ig_c8) <=7, 0.8, 0)
-vertex_attr(bip4Ig_c8)$label.position.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- 0
+vertex_attr(bip4Ig_c8_alt)$label.position.sparse <- ifelse(igraph::degree(bip4Ig_c8_alt) <=7, 0.8, 0)
+vertex_attr(bip4Ig_c8_alt)$label.position.sparse[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- 0
 
-vertex_attr(bip4Ig_c8)$label.position.sparse.med <- ifelse(igraph::degree(bip4Ig_c8) >=8, 0, 0)
-vertex_attr(bip4Ig_c8)$label.position.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- 0
+vertex_attr(bip4Ig_c8_alt)$label.position.sparse.med <- ifelse(igraph::degree(bip4Ig_c8_alt) >=8, 0, 0)
+vertex_attr(bip4Ig_c8_alt)$label.position.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- 0
 
-vertex_attr(bip4Ig_c8)$frame.colour.sparse.med <- ifelse(igraph::degree(bip4Ig_c8) >=6, "white", "gray20")
-vertex_attr(bip4Ig_c8)$frame.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8)$type)]<- "gray20"
+vertex_attr(bip4Ig_c8_alt)$frame.colour.sparse.med <- ifelse(igraph::degree(bip4Ig_c8_alt) >=6, "white", "gray20")
+vertex_attr(bip4Ig_c8_alt)$frame.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- "gray20"
 
-vertex_attr(bip4Ig_c8)$label.font <- ifelse(igraph::degree(bip4Ig_c8) <=4, 2, 1)
+vertex_attr(bip4Ig_c8_alt)$label.font <- ifelse(igraph::degree(bip4Ig_c8_alt) <=4, 2, 1)
 
 # vertex_attr(bip4Ig_c8)$label.font
 
@@ -4723,11 +4758,11 @@ vertex_attr(bip4Ig_c8)$label.font <- ifelse(igraph::degree(bip4Ig_c8) <=4, 2, 1)
 
 # edge_attr(bip4Ig_c8)
 
-l_c8<-layout_with_dh(bip4Ig_c8)
+l_c8<-layout_with_dh(bip4Ig_c8_alt)
 
 l_c8 <- layout.norm(l_c8, ymin=-1, ymax=1, xmin=-1, xmax=1)
 
-plot(bip4Ig_c8, vertex.label=(vertex_attr(bip4Ig_c8)$label), vertex.label.family ='Helvetica', vertex.label.color=(vertex_attr(bip4Ig_c8)$label.colour), vertex.label.cex=(vertex_attr(bip4Ig_c8)$label.size), vertex.label.dist=(vertex_attr(bip4Ig_c8)$label.position), vertex.label.font=(vertex_attr(bip4Ig_c8)$label.font), vertex.size=(vertex_attr(bip4Ig_c8)$size), vertex.shape=(vertex_attr(bip4Ig_c8)$shape), vertex.color=vertex_attr(bip4Ig_c8)$color, edge.width=(edge_attr(bip4Ig_c8)$weight.scale)/4, edge.color="grey50", edge.curved = 0.3, rescale= F, layout=l_c8*1.45)
+plot(bip4Ig_c8_alt, vertex.label=(vertex_attr(bip4Ig_c8_alt)$label), vertex.label.family ='Helvetica', vertex.label.color=(vertex_attr(bip4Ig_c8_alt)$label.colour), vertex.label.cex=(vertex_attr(bip4Ig_c8_alt)$label.size), vertex.label.dist=(vertex_attr(bip4Ig_c8_alt)$label.position), vertex.label.font=(vertex_attr(bip4Ig_c8_alt)$label.font), vertex.size=(vertex_attr(bip4Ig_c8_alt)$size), vertex.shape=(vertex_attr(bip4Ig_c8_alt)$shape), vertex.color=vertex_attr(bip4Ig_c8_alt)$color, edge.width=(edge_attr(bip4Ig_c8_alt)$weight.scale)/4, edge.color="grey50", edge.curved = 0.3, rescale= F, layout=l_c8*1.45)
 
 data <- data.frame(
   entry = paste0("Entry.", 1:10),
@@ -4735,6 +4770,38 @@ data <- data.frame(
   "B" = c(1,0,0,0,1,1,1,1,1,0),
   "C" = c(1,1,1,1,0,0,1,0,1,1)
 )
+
+upset_ggplot_prep_AGI <- upset_ggplot_prep %>%
+  ungroup() %>% 
+  select(gene_ID)
+
+sets_trimmed_clock_wide <- sets_trimmed_clock %>%
+  bind_cols(upset_ggplot_prep_AGI) %>% 
+  select(-clock) %>%
+  pivot_longer(cols = LHY:ELF4, names_to = 'ID') %>% 
+  pivot_wider(names_from = 'gene_ID')
+
+rownames(sets_trimmed_clock_wide) <- sets_trimmed_clock_wide$ID
+
+sets_trimmed_clock_wide <- sets_trimmed_clock_wide[, -1]
+
+class(sets_trimmed_clock_wide)
+class(TF_bip4_c8_alt)
+
+rownames(sets_trimmed_clock_wide)
+rownames(TF_bip4_c8_alt)
+
+colnames(sets_trimmed_clock_wide)
+colnames(TF_bip4_c8_alt)
+
+sets_trimmed_clock_wide <- sets_trimmed_clock_wide %>% 
+  pivot_longer(cols = LHY:ELF4, names_to = 'gene_ID') %>% 
+  pivot_wider(names_from = 'ID')
+
+sets_trimmed_clock_wide <- as.data.frame(sets_trimmed_clock_wide)
+
+#names_from = rater, values_from = v1:vZZ
+  
 
 data
 data_with_intersection <- data %>%
