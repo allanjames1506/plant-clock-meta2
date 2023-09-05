@@ -119,7 +119,7 @@ day1_vs_day2_150 <- full_join(day1_output, day2_output, by = "cluster") %>%
   mutate(cluster_id = as.character(paste(1:74))) %>% 
   relocate(cluster_id)
 
-write_csv(day1_vs_day2_150, './01_tidy_data/day1_vs_day2_150.csv')
+# write_csv(day1_vs_day2_150, './01_tidy_data/day1_vs_day2_150.csv')
 
 # *3.2 compare d1d5----
 
@@ -157,7 +157,7 @@ day1_vs_day5_150 <- full_join(day1_output, day5_output, by = "cluster") %>%
   mutate(cluster_id = as.character(paste(1:74))) %>% 
   relocate(cluster_id)
 
-write_csv(day1_vs_day5_150, './01_tidy_data/day1_vs_day5_150.csv')
+# write_csv(day1_vs_day5_150, './01_tidy_data/day1_vs_day5_150.csv')
 
 # 4 MetaCycle SCATTER PLOTS----
 
@@ -530,70 +530,70 @@ LHY_bind_d1d2 <- bind_rows(LHY_gain_high_d1d2, LHY_gain_medium_d1d2, LHY_lose_hi
 
 names(LHY_bind_d1d2)[3] <- "LHY"
 
-write_csv(LHY_bind_d1d2, './01_tidy_data/LHY_targets_d1d2.csv')
+# write_csv(LHY_bind_d1d2, './01_tidy_data/LHY_targets_d1d2.csv')
 
 # CCA1-Nagel amp_gain_high (69 obs) + CCA1-Nagel amp_gain_medium (151 obs) + CCA1-Nagel amp_lose_high (97 obs) + CCA1-Nagel amp_lose_medium (33 obs) + CCA1-Nagel amp_other (183 obs): total equals 533 obs
 CCA1_nagel_bind_d1d2 <- bind_rows(CCA1_nagel_gain_high_d1d2, CCA1_nagel_gain_medium_d1d2, CCA1_nagel_lose_high_d1d2, CCA1_nagel_lose_medium_d1d2, CCA1_nagel_other_d1d2)
 
 names(CCA1_nagel_bind_d1d2)[3] <- "CCA1 Nagel"
 
-write_csv(CCA1_nagel_bind_d1d2, './01_tidy_data/CCA1_nagel_bind_d1d2.csv')
+# write_csv(CCA1_nagel_bind_d1d2, './01_tidy_data/CCA1_nagel_bind_d1d2.csv')
 
 # CCA1-Kamioka amp_gain_high (37 obs) + CCA1-Kamioka amp_gain_medium (59 obs) + CCA1-Kamioka amp_lose_high (24 obs) + CCA1-Kamioka amp_lose_medium (14 obs) + CCA1-Kamioka amp_other (68 obs): total equals 202 obs
 CCA1_kamioka_bind_d1d2 <- bind_rows(CCA1_kamioka_gain_high_d1d2, CCA1_kamioka_gain_medium_d1d2, CCA1_kamioka_lose_high_d1d2, CCA1_kamioka_lose_medium_d1d2, CCA1_kamioka_other_d1d2)
 
 names(CCA1_kamioka_bind_d1d2)[3] <- "CCA1 Kamioka"
 
-write_csv(CCA1_kamioka_bind_d1d2, './01_tidy_data/CCA1_kamioka_bind_d1d2.csv')
+# write_csv(CCA1_kamioka_bind_d1d2, './01_tidy_data/CCA1_kamioka_bind_d1d2.csv')
 
 # CCA1-Nagel-Kamioka amp_gain_high (22 obs) + CCA1-Nagel-Kamioka amp_gain_medium (44 obs) + CCA1-Nagel-Kamioka amp_lose_high (10 obs) + CCA1-Nagel-Kamioka amp_lose_medium (7 obs) + CCA1-Nagel-Kamioka amp_other (50 obs): total equals 133 obs
 CCA1_nagel_kamioka_bind_d1d2 <- bind_rows(CCA1_nagel_kamioka_gain_high_d1d2, CCA1_nagel_kamioka_gain_medium_d1d2, CCA1_nagel_kamioka_lose_high_d1d2, CCA1_nagel_kamioka_lose_medium_d1d2, CCA1_nagel_kamioka_other_d1d2)
 
 names(CCA1_nagel_kamioka_bind_d1d2)[3] <- "CCA1 Nagel-Kamioka"
 
-write_csv(CCA1_nagel_kamioka_bind_d1d2, './01_tidy_data/CCA1_nagel_kamioka_bind_d1d2.csv')
+# write_csv(CCA1_nagel_kamioka_bind_d1d2, './01_tidy_data/CCA1_nagel_kamioka_bind_d1d2.csv')
 
 # TOC1 amp_gain_high (79 obs) + TOC1 amp_gain_medium (73 obs) + TOC1 amp_lose_high (45 obs) + TOC1 amp_lose_medium (30 obs) + TOC1 amp_other (65 obs): total equals 292 obs
 TOC1_bind_d1d2 <- bind_rows(TOC1_gain_high_d1d2, TOC1_gain_medium_d1d2, TOC1_lose_high_d1d2, TOC1_lose_medium_d1d2, TOC1_other_d1d2)
 
 names(TOC1_bind_d1d2)[3] <- "TOC1"
 
-write_csv(TOC1_bind_d1d2, './01_tidy_data/TOC1_bind_d1d2.csv')
+# write_csv(TOC1_bind_d1d2, './01_tidy_data/TOC1_bind_d1d2.csv')
 
 # PRR5 amp_gain_high (30 obs) + PRR5 amp_gain_medium (14 obs) + PRR5 amp_lose_high (2 obs) + PRR5 amp_lose_medium (4 obs) + PRR5 amp_other (6 obs): total equals 56 obs
 PRR5_bind_d1d2 <- bind_rows(PRR5_gain_high_d1d2, PRR5_gain_medium_d1d2, PRR5_lose_high_d1d2, PRR5_lose_medium_d1d2, PRR5_other_d1d2)
 
 names(PRR5_bind_d1d2)[3] <- "PRR5"
 
-write_csv(PRR5_bind_d1d2, './01_tidy_data/PRR5_bind_d1d2.csv')
+# write_csv(PRR5_bind_d1d2, './01_tidy_data/PRR5_bind_d1d2.csv')
 
 # PRR7 amp_gain_high (29 obs) + PRR7 amp_gain_medium (10 obs) + PRR7 amp_lose_high (11 obs) + PRR7 amp_lose_medium (2 obs) + PRR7 amp_other (14 obs): total equals 66 obs
 PRR7_bind_d1d2 <- bind_rows(PRR7_gain_high_d1d2, PRR7_gain_medium_d1d2, PRR7_lose_high_d1d2, PRR7_lose_medium_d1d2, PRR7_other_d1d2)
 
 names(PRR7_bind_d1d2)[3] <- "PRR7"
 
-write_csv(PRR7_bind_d1d2, './01_tidy_data/PRR7_bind_d1d2.csv')
+# write_csv(PRR7_bind_d1d2, './01_tidy_data/PRR7_bind_d1d2.csv')
 
 # LUX amp_gain_high (58 obs) + LUX amp_gain_medium (86 obs) + LUX amp_lose_high (103 obs) + LUX amp_lose_medium (42 obs) + LUX amp_other (103 obs): total equals 392 obs
 LUX_bind_d1d2 <- bind_rows(LUX_gain_high_d1d2, LUX_gain_medium_d1d2, LUX_lose_high_d1d2, LUX_lose_medium_d1d2, LUX_other_d1d2)
 
 names(LUX_bind_d1d2)[3] <- "LUX"
 
-write_csv(LUX_bind_d1d2, './01_tidy_data/LUX_bind_d1d2.csv')
+# write_csv(LUX_bind_d1d2, './01_tidy_data/LUX_bind_d1d2.csv')
 
 # ELF3 amp_gain_high (19 obs) + ELF3 amp_gain_medium (19 obs) + ELF3 amp_lose_high (44 obs) + ELF3 amp_lose_medium (11 obs) + ELF3 amp_other (27 obs): total equals 120 obs
 ELF3_bind_d1d2 <- bind_rows(ELF3_gain_high_d1d2, ELF3_gain_medium_d1d2, ELF3_lose_high_d1d2, ELF3_lose_medium_d1d2, ELF3_other_d1d2)
 
 names(ELF3_bind_d1d2)[3] <- "ELF3"
 
-write_csv(ELF3_bind_d1d2, './01_tidy_data/ELF3_bind_d1d2.csv')
+# write_csv(ELF3_bind_d1d2, './01_tidy_data/ELF3_bind_d1d2.csv')
 
 # ELF4 amp_gain_high (8 obs) + ELF4 amp_gain_medium (3 obs) + ELF4 amp_lose_high (12 obs) + ELF4 amp_lose_medium (2 obs) + ELF4 amp_other (5 obs): total equals 30 obs
 ELF4_bind_d1d2 <- bind_rows(ELF4_gain_high_d1d2, ELF4_gain_medium_d1d2, ELF4_lose_high_d1d2, ELF4_lose_medium_d1d2, ELF4_other_d1d2)
 
 names(ELF4_bind_d1d2)[3] <- "ELF4"
 
-write_csv(ELF4_bind_d1d2, './01_tidy_data/ELF4_bind_d1d2.csv')
+# write_csv(ELF4_bind_d1d2, './01_tidy_data/ELF4_bind_d1d2.csv')
 
 # **9.3.2 d1d5----
 
@@ -603,70 +603,70 @@ LHY_bind_d1d5 <- bind_rows(LHY_gain_high_d1d5, LHY_gain_medium_d1d5, LHY_lose_hi
 
 names(LHY_bind_d1d5)[3] <- "LHY"
 
-write_csv(LHY_bind_d1d5, './01_tidy_data/LHY_bind_d1d5.csv')
+# write_csv(LHY_bind_d1d5, './01_tidy_data/LHY_bind_d1d5.csv')
 
 # CCA1-Nagel amp_gain_high (0 obs) + CCA1-Nagel amp_gain_medium (26 obs) + CCA1-Nagel amp_lose_high (166 obs) + CCA1-Nagel amp_lose_medium (82 obs) + CCA1-Nagel amp_other (210 obs): total equals 484 obs
 CCA1_nagel_bind_d1d5 <- bind_rows(CCA1_nagel_gain_high_d1d5, CCA1_nagel_gain_medium_d1d5, CCA1_nagel_lose_high_d1d5, CCA1_nagel_lose_medium_d1d5, CCA1_nagel_other_d1d5)
 
 names(CCA1_nagel_bind_d1d5)[3] <- "CCA1 Nagel"
 
-write_csv(CCA1_nagel_bind_d1d5, './01_tidy_data/CCA1_nagel_bind_d1d5.csv')
+# write_csv(CCA1_nagel_bind_d1d5, './01_tidy_data/CCA1_nagel_bind_d1d5.csv')
 
 # CCA1-Kamioka amp_gain_high (1 obs) + CCA1-Kamioka amp_gain_medium (6 obs) + CCA1-Kamioka amp_lose_high (53 obs) + CCA1-Kamioka amp_lose_medium (31 obs) + CCA1-Kamioka amp_other (88 obs): total equals 179 obs
 CCA1_kamioka_bind_d1d5 <- bind_rows(CCA1_kamioka_gain_high_d1d5, CCA1_kamioka_gain_medium_d1d5, CCA1_kamioka_lose_high_d1d5, CCA1_kamioka_lose_medium_d1d5, CCA1_kamioka_other_d1d5)
 
 names(CCA1_kamioka_bind_d1d5)[3] <- "CCA1 Kamioka"
 
-write_csv(CCA1_kamioka_bind_d1d5, './01_tidy_data/CCA1_kamioka_bind_d1d5.csv')
+# write_csv(CCA1_kamioka_bind_d1d5, './01_tidy_data/CCA1_kamioka_bind_d1d5.csv')
 
 # CCA1-Nagel-Kamioka amp_gain_high (0 obs) + CCA1-Nagel-Kamioka amp_gain_medium (4 obs) + CCA1-Nagel-Kamioka amp_lose_high (21 obs) + CCA1-Nagel-Kamioka amp_lose_medium (28 obs) + CCA1-Nagel-Kamioka amp_other (64 obs): total equals 117 obs
 CCA1_nagel_kamioka_bind_d1d5 <- bind_rows(CCA1_nagel_kamioka_gain_high_d1d5, CCA1_nagel_kamioka_gain_medium_d1d5, CCA1_nagel_kamioka_lose_high_d1d5, CCA1_nagel_kamioka_lose_medium_d1d5, CCA1_nagel_kamioka_other_d1d5)
 
 names(CCA1_nagel_kamioka_bind_d1d5)[3] <- "CCA1 Nagel-Kamioka"
 
-write_csv(CCA1_nagel_kamioka_bind_d1d5, './01_tidy_data/CCA1_nagel_kamioka_bind_d1d5.csv')
+# write_csv(CCA1_nagel_kamioka_bind_d1d5, './01_tidy_data/CCA1_nagel_kamioka_bind_d1d5.csv')
 
 # TOC1 amp_gain_high (0 obs) + TOC1 amp_gain_medium (13 obs) + TOC1 amp_lose_high (95 obs) + TOC1 amp_lose_medium (30 obs) + TOC1 amp_other (110 obs): total equals 248 obs
 TOC1_bind_d1d5 <- bind_rows(TOC1_gain_high_d1d5, TOC1_gain_medium_d1d5, TOC1_lose_high_d1d5, TOC1_lose_medium_d1d5, TOC1_other_d1d5)
 
 names(TOC1_bind_d1d5)[3] <- "TOC1"
 
-write_csv(TOC1_bind_d1d5, './01_tidy_data/TOC1_bind_d1d5.csv')
+# write_csv(TOC1_bind_d1d5, './01_tidy_data/TOC1_bind_d1d5.csv')
 
 # PRR5 amp_gain_high (0 obs) + PRR5 amp_gain_medium (1 obs) + PRR5 amp_lose_high (6 obs) + PRR5 amp_lose_medium (5 obs) + PRR5 amp_other (31 obs): total equals 43 obs
 PRR5_bind_d1d5 <- bind_rows(PRR5_gain_high_d1d5, PRR5_gain_medium_d1d5, PRR5_lose_high_d1d5, PRR5_lose_medium_d1d5, PRR5_other_d1d5)
 
 names(PRR5_bind_d1d5)[3] <- "PRR5"
 
-write_csv(PRR5_bind_d1d5, './01_tidy_data/PRR5_bind_d1d5.csv')
+# write_csv(PRR5_bind_d1d5, './01_tidy_data/PRR5_bind_d1d5.csv')
 
 # PRR7 amp_gain_high (0 obs) + PRR7 amp_gain_medium (3 obs) + PRR7 amp_lose_high (18 obs) + PRR7 amp_lose_medium (6 obs) + PRR7 amp_other (33 obs): total equals 60 obs
 PRR7_bind_d1d5 <- bind_rows(PRR7_gain_high_d1d5, PRR7_gain_medium_d1d5, PRR7_lose_high_d1d5, PRR7_lose_medium_d1d5, PRR7_other_d1d5)
 
 names(PRR7_bind_d1d5)[3] <- "PRR7"
 
-write_csv(PRR7_bind_d1d5, './01_tidy_data/PRR7_bind_d1d5.csv')
+# write_csv(PRR7_bind_d1d5, './01_tidy_data/PRR7_bind_d1d5.csv')
 
 # LUX amp_gain_high (3 obs) + LUX amp_gain_medium (21 obs) + LUX amp_lose_high (181 obs) + LUX amp_lose_medium (43 obs) + LUX amp_other (116 obs): total equals 364 obs
 LUX_bind_d1d5 <- bind_rows(LUX_gain_high_d1d5, LUX_gain_medium_d1d5, LUX_lose_high_d1d5, LUX_lose_medium_d1d5, LUX_other_d1d5)
 
 names(LUX_bind_d1d5)[3] <- "LUX"
 
-write_csv(LUX_bind_d1d5, './01_tidy_data/LUX_bind_d1d5.csv')
+# write_csv(LUX_bind_d1d5, './01_tidy_data/LUX_bind_d1d5.csv')
 
 # ELF3 amp_gain_high (0 obs) + ELF3 amp_gain_medium (7 obs) + ELF3 amp_lose_high (59 obs) + ELF3 amp_lose_medium (16 obs) + ELF3 amp_other (31 obs): total equals 113 obs
 ELF3_bind_d1d5 <- bind_rows(ELF3_gain_high_d1d5, ELF3_gain_medium_d1d5, ELF3_lose_high_d1d5, ELF3_lose_medium_d1d5, ELF3_other_d1d5)
 
 names(ELF3_bind_d1d5)[3] <- "ELF3"
 
-write_csv(ELF3_bind_d1d5, './01_tidy_data/ELF3_bind_d1d5.csv')
+# write_csv(ELF3_bind_d1d5, './01_tidy_data/ELF3_bind_d1d5.csv')
 
 # ELF4 amp_gain_high (0 obs) + ELF4 amp_gain_medium (0 obs) + ELF4 amp_lose_high (14 obs) + ELF4 amp_lose_medium (3 obs) + ELF4 amp_other (10 obs): total equals 27 obs
 ELF4_bind_d1d5 <- bind_rows(ELF4_gain_high_d1d5, ELF4_gain_medium_d1d5, ELF4_lose_high_d1d5, ELF4_lose_medium_d1d5, ELF4_other_d1d5)
 
 names(ELF4_bind_d1d5)[3] <- "ELF4"
 
-write_csv(ELF4_bind_d1d5, './01_tidy_data/ELF4_bind_d1d5.csv')
+# write_csv(ELF4_bind_d1d5, './01_tidy_data/ELF4_bind_d1d5.csv')
 
 # 10 SUMMARISE TARGETS----
 
@@ -1483,8 +1483,8 @@ myGeneSets <- list(TF_network_LHY = TF_adams_merge$gene_ID,
                    TF_network_ELF4 = TF_ezer_ELF4_merge$gene_ID)
 
 # fromList: a function to convert a list of named vectors to a data frame compatible with UpSetR
-sets <- fromList(myGeneSets) %>% 
-  write_csv('./00_raw_data/sets.csv')
+sets <- fromList(myGeneSets) 
+#%>% write_csv('./00_raw_data/sets.csv')
 
 UpSet <- UpSetR::upset(sets, 
                        nsets=8, 
@@ -1538,8 +1538,8 @@ myGeneSets_trimmed <- list(LHY = TF_adams_merge_trimmed$gene_ID,
                            ELF3 = TF_ezer_ELF3_merge_trimmed$gene_ID,
                            ELF4 = TF_ezer_ELF4_merge_trimmed$gene_ID) 
 
-sets_trimmed <- fromList(myGeneSets_trimmed) %>% 
-  write_csv('./00_raw_data/sets_trimmed.csv')
+sets_trimmed <- fromList(myGeneSets_trimmed) 
+#%>% write_csv('./00_raw_data/sets_trimmed.csv')
 
 UpSet_trimmed <- UpSetR::upset(sets_trimmed, 
                                nsets=8, 
@@ -4615,8 +4615,8 @@ upset_column_makeup <- upset_ggplot_prep %>%
                                         clock == 'TOC1 and CCA1' ~ 62,
                                         clock == 'LUX and CCA1 and ELF3 and ELF4' ~ 63,
                                         TRUE ~ NA)) %>% 
-  arrange(upset_column_order) %>% 
-  write_csv('./01_tidy_data/upset_column_makeup.csv')
+  arrange(upset_column_order) 
+#%>% write_csv('./01_tidy_data/upset_column_makeup.csv')
 
 # 18 Bipartite Network----
 
@@ -4628,34 +4628,31 @@ head(nodes2)
 
 head(links2)
 
-TF_bip4_c8 <- read_csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv")
+#TF_bip4_c8 <- read_csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv")
 TF_bip4_c8_alt <- read.csv("./00_raw_data/TF_net_EDGES_Bip_connectivity.csv", header=T, row.names=1)
 
-
-TF_bip4_c8_matrix <- as.matrix(TF_bip4_c8)
+#TF_bip4_c8_matrix <- as.matrix(TF_bip4_c8)
 TF_bip4_c8_matrix_alt <- as.matrix(TF_bip4_c8_alt)
 
-dim(TF_bip4_c8_matrix)
+#dim(TF_bip4_c8_matrix)
 dim(TF_bip4_c8_matrix_alt)
 
-bip4Ig_c8 <- graph_from_incidence_matrix(TF_bip4_c8_matrix, weighted = TRUE)
+#bip4Ig_c8 <- graph_from_incidence_matrix(TF_bip4_c8_matrix, weighted = TRUE)
 bip4Ig_c8_alt <- graph_from_incidence_matrix(TF_bip4_c8_matrix_alt, weighted = TRUE)
 
-?graph_from_incidence_matrix
-
-bip4Ig_c8[]
+#bip4Ig_c8[]
 bip4Ig_c8_alt[]
 
-class(bip4Ig_c8)
+#class(bip4Ig_c8)
 class(bip4Ig_c8_alt)
 
-bip4Ig_c8
+#bip4Ig_c8
 bip4Ig_c8_alt
 
-E(bip4Ig_c8)
+#E(bip4Ig_c8)
 E(bip4Ig_c8_alt)
 
-V(bip4Ig_c8)
+#V(bip4Ig_c8)
 V(bip4Ig_c8_alt)
 
 edge_attr(bip4Ig_c8_alt$weight)
@@ -4698,7 +4695,6 @@ vertex_attr(bip4Ig_c8_alt)$shape.sparse.med[grep(pattern = "FALSE", vertex_attr(
 
 # size based on 0.1* no. of targets listed above c(36, 58, 32, 6, 7, 44, 13, 3)
 # size based on 0.1* no. of targets listed above for LHY, CCA1, TOC1 and LUX  and 0.2* no. of targets for PRR5, PRR7, ELF3 and ELF4 c(36, 58, 32, 12, 14, 44, 26, 6)
-
 
 vertex_attr(bip4Ig_c8_alt)$size <- ifelse(igraph::degree(bip4Ig_c8_alt) <=3, 0.4*igraph::degree(bip4Ig_c8_alt), igraph::degree(bip4Ig_c8_alt))
 vertex_attr(bip4Ig_c8_alt)$size[grep(pattern = "FALSE", vertex_attr(bip4Ig_c8_alt)$type)]<- c(36, 58, 32, 12, 14, 44, 26, 6)
@@ -4781,39 +4777,85 @@ sets_trimmed_clock_wide <- sets_trimmed_clock %>%
   pivot_longer(cols = LHY:ELF4, names_to = 'ID') %>% 
   pivot_wider(names_from = 'gene_ID')
 
-rownames(sets_trimmed_clock_wide) <- sets_trimmed_clock_wide$ID
+sets_trimmed_clock_wide_weighted <- sets_trimmed_clock_wide %>% 
+  select(-1) %>% 
+  map_dfc(~(case_when(. >0 ~ sum(.), TRUE ~ .)), broom::tidy, .id = "variable") 
 
-sets_trimmed_clock_wide <- sets_trimmed_clock_wide[, -1]
+col1 <- sets_trimmed_clock_wide %>% 
+  select(1)
 
-class(sets_trimmed_clock_wide)
+sets_trimmed_clock_wide_weighted_id_column <- col1 %>% 
+  bind_cols(sets_trimmed_clock_wide_weighted)
+
+sets_trimmed_clock_wide_weighted_id_column_df <- as.data.frame(sets_trimmed_clock_wide_weighted_id_column[, -1])
+
+rownames(sets_trimmed_clock_wide_weighted_id_column_df) <- sets_trimmed_clock_wide_weighted_id_column$ID
+
+m <- as.matrix(kirp.mut[, -1])
+rownames(m) <- kirp.mut$sample_id
+
+class(sets_trimmed_clock_wide_weighted_id_column_df)
 class(TF_bip4_c8_alt)
 
-rownames(sets_trimmed_clock_wide)
+rownames(sets_trimmed_clock_wide_weighted_id_column_df)
 rownames(TF_bip4_c8_alt)
 
-colnames(sets_trimmed_clock_wide)
+colnames(sets_trimmed_clock_wide_weighted_id_column_df)
 colnames(TF_bip4_c8_alt)
 
-sets_trimmed_clock_wide <- sets_trimmed_clock_wide %>% 
-  pivot_longer(cols = LHY:ELF4, names_to = 'gene_ID') %>% 
-  pivot_wider(names_from = 'ID')
+bip_sets_trimmed_clock_wide_weighted_id_column_df <- graph_from_incidence_matrix(sets_trimmed_clock_wide_weighted_id_column_df, weighted = TRUE)
 
-sets_trimmed_clock_wide <- as.data.frame(sets_trimmed_clock_wide)
+#bip4Ig_c8[]
+bip_sets_trimmed_clock_wide_weighted_id_column_df[]
 
-#names_from = rater, values_from = v1:vZZ
+#class(bip4Ig_c8)
+class(bip_sets_trimmed_clock_wide_weighted_id_column_df)
+
+#bip4Ig_c8
+bip_sets_trimmed_clock_wide
+
+#E(bip4Ig_c8)
+E(bip_sets_trimmed_clock_wide_weighted_id_column_df)
+
+#V(bip4Ig_c8)
+V(bip_sets_trimmed_clock_wide_weighted_id_column_df)
+
+edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.scale <- ifelse(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight <=3, 1, edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight)
+edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.scale.sparse <- ifelse(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight <=6, 0, edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight)
+edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.scale.sparse.med <- ifelse(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight <=4, 0, edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight)
+
+edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.sparse <- ifelse(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight <=6, 0, 1)
+edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.sparse.med <- ifelse(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight <=4, 0, 1)
+
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color<-rep("#bf5b17", length(V(bip_sets_trimmed_clock_wide_weighted_id_column_df)))
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse<-ifelse(igraph::degree(bip_sets_trimmed_clock_wide_weighted_id_column_df) <=7,"#f4a582", "#ca0020")
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse.med<-rep("#ffffbf", length(V(bip_sets_trimmed_clock_wide_weighted_id_column_df)))
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse.med[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<-c("#7fc97f", "#7fc97f", "#beaed4", "#ffff99", "#ffff99", "#386cb0", "#386cb0", "#386cb0")
+
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape<-rep("square", length(V(bip_sets_trimmed_clock_wide_weighted_id_column_df)))
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<-"circle"
+
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape.sparse<-ifelse(igraph::degree(bip_sets_trimmed_clock_wide_weighted_id_column_df) <=6, "none", "square")
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape.sparse[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<-"circle"
+
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape.sparse.med<-ifelse(igraph::degree(bip_sets_trimmed_clock_wide_weighted_id_column_df) <=4, "none", "square")
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape.sparse.med[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<-"circle"
+
+# TF node size based on:
+# summary of clock ChIP targets in the TF network (trimmed):
+# LHY: TF_adams_merge_trimmed : 182 obs.
+# CCA1: TF_kamioka_nagel_merge_trimmed: 86 obs.
+# TOC1: TF_huang_merge_trimmed: 117 obs.
+# PRR5: TF_nakamichi_merge_trimmed: 49 obs.
+# PRR7: TF_liu_merge_trimmed: 52 obs.
+# LUX: TF_ezer_LUX_merge_trimmed: 188 obs.
+# ELF3: TF_ezer_ELF3_merge_trimmed: 81 obs.
+# ELF4: TF_ezer_ELF4_merge_trimmed: 25 obs.
   
+# size based on 0.2* no. of targets listed above c(36.4, 17.2, 23.4, 9.8, 10.4, 37.6, 16.2, 5)
 
-data
-data_with_intersection <- data %>%
-  unite(col = "intersection", -c("entry"), sep = "")
 
-data_with_intersection %>%
-  dplyr::group_by(intersection) %>%
-  dplyr::summarise(n = n()) %>%
-  dplyr::arrange(desc(n))
-
-data_with_intersection %>%
-  dplyr::group_by(intersection) %>%
-  dplyr::summarise(list = list(entry)) %>%
-  dplyr::mutate(list = setNames(list, intersection)) %>%
-  pull(list)
