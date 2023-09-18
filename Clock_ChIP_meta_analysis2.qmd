@@ -335,7 +335,7 @@ some text here
 :::
 
 | clock                                                             | cluster | gene_ID   | type_d1d2         | type_d1d5         | heatmap | upset_column_order |
-|-------------------------------------------------------------------|---------|-----------|-------------------|-------------------|---------|--------------------|
+|---------------------|---------|---------|---------|---------|---------|---------|
 | LHY                                                               | 9       | AT1G20030 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
 | LHY                                                               | 9       | AT1G20440 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
 | LHY                                                               | 9       | AT1G20693 | gain_medium_d1_d2 | other_d1_d5       | g1      | 1                  |
@@ -756,8 +756,24 @@ some text here
 | LUX and TOC1 and CCA1 and ELF3 and PRR5 and ELF4                  | 20      | AT1G73480 | gain_high_d1_d2   | other_d1_d5       | g2      | 61                 |
 | TOC1 and CCA1                                                     | 10      | AT3G48240 | gain_high_d1_d2   | other_d1_d5       | g3      | 62                 |
 | LUX and CCA1 and ELF3 and ELF4                                    | 11      | AT5G45820 | lose_high_d1_d2   | lose_high_d1_d5   | g4      | 63                 |
+
 : Membership of UpSet columns {#tbl-UpSet plot columns}
 
+some text here
+
+::: panel-tabset
+#### Full network: full iGraph network
+
+![](./03_plots/full_igraph)
+
+#### Sparse network: sparse iGraph network
+
+![](./03_plots/sparse_igraph)
+
+#### Sparse betweenness network: sparse betweenness iGraph network
+
+![](./03_plots/betweenness_igraph)
+:::
 
 ## Quarto
 
