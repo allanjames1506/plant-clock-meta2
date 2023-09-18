@@ -4793,6 +4793,10 @@ vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.size.full[g
 vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.med <- ifelse(igraph::degree(bip_sets_trimmed_clock_wide_weighted_id_column_df) <=8, "gray20", "white")
 vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.med[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<- c("white", "gray20", "white", "gray20", "white", "white", "white", "gray20")
 
+# betweenness
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.bet <- ifelse(igraph::degree(bip_sets_trimmed_clock_wide_weighted_id_column_df) <=8, "white", "gray20")
+vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.bet[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<- c("white", "white", "white", "white", "white", "white", "white", "white")
+
 # full
 vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour <- ifelse(igraph::degree(bip_sets_trimmed_clock_wide_weighted_id_column_df) <=3, "#bf5b17", "white")
 vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour[grep(pattern = "FALSE", vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$type)]<- c("gray20", "gray20", "gray20", "gray20", "gray20", "white", "white", "white")
@@ -4882,20 +4886,31 @@ dev.off()
 
 # betweenness sparse network
 ceb <- cluster_edge_betweenness(bip_sets_trimmed_clock_wide_weighted_id_column_df)
+length(ceb)
+membership(ceb)
+modularity(ceb)
 # dendPlot(ceb, mode="hclust")
 clp <- cluster_label_prop(bip_sets_trimmed_clock_wide_weighted_id_column_df)
 cfg <- cluster_fast_greedy(as.undirected(bip_sets_trimmed_clock_wide_weighted_id_column_df))
 
-plot(ceb, bip_sets_trimmed_clock_wide_weighted_id_column_df,
+plot(ceb, bip_sets_trimmed_clock_wide_weighted_id_column_df, layout=coords)
+plot(bip_sets_trimmed_clock_wide_weighted_id_column_df, vertex.color=colours[V(bip_sets_trimmed_clock_wide_weighted_id_column_df)$community])
+
+V(bip_sets_trimmed_clock_wide_weighted_id_column_df)$community <- ceb$membership
+colours <- adjustcolor( c("#1a9850", "#4575b4", "#f46d43", "#542788"))
+
+plot(bip_sets_trimmed_clock_wide_weighted_id_column_df,
      vertex.label=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label),
      vertex.label.family ='Helvetica', 
-     vertex.label.color=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.med), 
+     vertex.label.color=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.bet), 
      vertex.label.cex=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.size), 
      vertex.label.dist=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.position.sparse.med), 
      vertex.label.font=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.font),
      vertex.size=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$size), 
      vertex.shape=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape.sparse.med), 
-     vertex.color=vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse.med, 
+     #vertex.color=vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse.med,
+     vertex.color=colours[V(bip_sets_trimmed_clock_wide_weighted_id_column_df)$community],
+     #vertex.color=membership(ceb),
      vertex.frame.color=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$frame.colour.sparse.med), 
      edge.width=(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.scale.sparse.med)/8, 
      edge.color="grey50", 
