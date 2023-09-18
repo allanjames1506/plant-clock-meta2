@@ -15,6 +15,8 @@ install_github("jokergoo/ComplexHeatmap")
 library(ComplexHeatmap)
 library(ComplexUpset)
 library(igraph)
+library(ndtv)
+library(animation)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
@@ -4653,13 +4655,10 @@ sets_trimmed_clock_wide_weighted_id_column_df <- as.data.frame(sets_trimmed_cloc
 rownames(sets_trimmed_clock_wide_weighted_id_column_df) <- sets_trimmed_clock_wide_weighted_id_column$ID
 
 class(sets_trimmed_clock_wide_weighted_id_column_df)
-class(TF_bip4_c8_alt)
 
 rownames(sets_trimmed_clock_wide_weighted_id_column_df)
-rownames(TF_bip4_c8_alt)
 
 colnames(sets_trimmed_clock_wide_weighted_id_column_df)
-colnames(TF_bip4_c8_alt)
 
 bip_sets_trimmed_clock_wide_weighted_id_column_df <- graph_from_incidence_matrix(sets_trimmed_clock_wide_weighted_id_column_df, weighted = TRUE)
 
@@ -4899,6 +4898,8 @@ plot(bip_sets_trimmed_clock_wide_weighted_id_column_df, vertex.color=colours[V(b
 V(bip_sets_trimmed_clock_wide_weighted_id_column_df)$community <- ceb$membership
 colours <- adjustcolor( c("#1a9850", "#4575b4", "#f46d43", "#542788"))
 
+png("./03_plots/betweenness_igraph.png", width=2100, height=2600, res=300)
+par(mar = c(5.1, 1.5, 1.5, 1.5))
 plot(bip_sets_trimmed_clock_wide_weighted_id_column_df,
      vertex.label=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label),
      vertex.label.family ='Helvetica', 
@@ -4919,6 +4920,41 @@ plot(bip_sets_trimmed_clock_wide_weighted_id_column_df,
      rescale= F, 
      layout=l_c8*3)
 
+legend("bottom", inset = c(0, -0.12), c("a = BBX29", "b = PIF4", "c = CBF1", "d = PRR9", "e = BBX28", "f = CBF2", "g = CBF3", "h = CDF5", "i = RVE1", "j = RVE7", "k = LNK2", "l = CCA1", "m = MAGL4", "n = LNK3", "o = PIF5", "p = BBX24", "q = DREB2C", "r = CIPK14", "s = LUX"), title= as.expression(bquote(bold("Targets"))), cex=0.8, bty="o", xpd = TRUE, ncol=5, y.intersp = 1.1, x.intersp = 0.01)
+legend(x=0.1, y=-0.65, legend = c("P5 = PRR5", "P7 = PRR7", "E4 = ELF4"), col = c('grey30', 'grey30', 'grey30'), pch = c(21, 21, 21), pt.bg = c('#f46d43', '#f46d43', '#542788'), cex = 1.5)
+dev.off()
+
+# K-core decomposition
+# kc <- coreness(bip_sets_trimmed_clock_wide_weighted_id_column_df, mode="all")
+# 
+# plot(bip_sets_trimmed_clock_wide_weighted_id_column_df,
+#      vertex.label=kc,
+#      #vertex.label=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label),
+#      vertex.label.family ='Helvetica', 
+#      vertex.label.color=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.colour.sparse.bet), 
+#      vertex.label.cex=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.size), 
+#      vertex.label.dist=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.position.sparse.med), 
+#      vertex.label.font=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$label.font),
+#      vertex.size=kc*6,
+#      #vertex.size=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$size), 
+#      vertex.shape=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$shape.sparse.med), 
+#      #vertex.color=vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$color.sparse.med,
+#      vertex.color=colours[kc],
+#      #vertex.color=colours[V(bip_sets_trimmed_clock_wide_weighted_id_column_df)$community],
+#      #vertex.color=membership(ceb),
+#      vertex.frame.color=(vertex_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$frame.colour.sparse.med), 
+#      edge.width=(edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.scale.sparse.med)/8, 
+#      edge.color="grey50", 
+#      edge.curved = 0.3, 
+#      edge.lty = (edge_attr(bip_sets_trimmed_clock_wide_weighted_id_column_df)$weight.sparse.med),  
+#      rescale= F, 
+#      layout=l_c8*3)
+
+ani.options("convert")
+
+ani.options(convert="/usr/local/Cellar/imagemagick/7.1.1-16/convert.exe")
+
+/usr/local/Cellar/imagemagick/7.1.1-16
 
 par('mar')
 dev.set(dev.next())
