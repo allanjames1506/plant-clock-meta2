@@ -27,9 +27,11 @@ library(stringr)
 
 ## Introduction
 
+Circadian clocks have evolved in most organisms as a response to the daily rotation of the Earth and the imposition of alterations in light:dark and temperature. While temperature changes associated with daily light:dark cycles are inevitable in the main, temperature in nature fluctuates rapidly and dynamically across timescales. Temperature influences plant development, growth, fitness and survival across plant life history, from the extensive gene expression changes in seeds in response to cold through to the requirement for smany plant species to experience the chill of winter to permit flowering in the spring ^4,5^.
+
 The circadian clock is a molecular timekeeping system that provides organisms with a mechanism to adapt to 24-h day/night cycles. The clock activates biological processes at specific times of the day, such as preparing for colder temperatures in the evening.
 
-In Arabidopsis thaliana, transcription and translation feedback loops among clock-associated genes are required to maintain circadian clock functionality. There are now a number of 'Chromatin immunoprecipitation followed by deep sequencing' (ChIP-seq) datasets related to the circadian clock in Arabidopsis blah blah blah [@calixto2018a].
+In Arabidopsis thaliana, transcription and translation feedback loops among clock-associated genes are required to maintain circadian clock functionality. There are now a number of 'Chromatin immunoprecipitation followed by deep sequencing' (ChIP-seq) datasets related to the circadian clock in Arabidopsis blah blah blah [@calixto2018a]. [@Thomashow2010]
 
 ## TF-network clusters
 
