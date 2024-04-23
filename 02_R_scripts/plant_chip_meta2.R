@@ -20,6 +20,50 @@ library(animation)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
+LHY_temp_time_series <- read_csv("./00_raw_data/LHY_TPM.csv")
+
+LHY_temp_time_series_gene <- read_csv("./00_raw_data/LHY_TPM_gene.csv") %>% 
+  pivot_longer(cols = starts_with("TPM_")) %>% 
+  mutate(gene_id = factor(gene_id, levels = c('CCA1', 'LHY', 'TOC1', 'PRR5', 'PRR7', 'LUX', 'ELF3', 'ELF4')),
+         name = case_when(name == 'TPM_gene' ~ 'total gene expression',
+                          name == 'TPM_splice' ~ 'productive mRNA expression',
+                          TRUE ~ name),
+         name = factor(name, levels = c('total gene expression', 'productive mRNA expression')))
+
+levels(LHY_temp_time_series_gene$gene_id)
+
+ggplot(data=test_data_long_tidyr,
+       aes(x=date, y=value, colour=name)) +
+  geom_line()
+
+# values=c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc"
+
+strip <- strip_themed(background_y = elem_list_rect(fill = c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc")),
+                      text_y = elem_list_text(colour = c("white", "black", "white", "black", "black", "white", "white", "black"),
+                                              face = c("bold", "bold", "bold", "bold", "bold", "bold", "bold", "bold")),
+                      by_layer_y = FALSE,
+                      text_x = elem_list_text(face = c("bold", "bold", "bold")))
+
+clock_plot <- ggplot(LHY_temp_time_series_gene, aes(x=hr, y=value, group = name)) + 
+  #geom_point() +
+  geom_line(aes(colour = name, size = name)) +
+  scale_colour_manual(values=c("grey70", 'black')) +
+  scale_size_manual(values=c(2.5, 1)) +
+  #scale_alpha_discrete(limits = c("TPM_gene","TPM_splice"), range = c(0.1, 0.9), guide = FALSE) +
+  scale_x_continuous(breaks = seq(0, 24, 3)) +
+  theme_linedraw() +
+  theme(panel.grid.minor = element_blank(),
+        legend.position = 'top',
+        legend.box.background = element_rect(color = "black"),
+        legend.title=element_blank()) +
+  facet_grid2(gene_id ~ day, scales = "free", strip = strip) +
+  labs(y = "TPM", x = "hr (after dusk)")
+
+clock_plot
+
+ggsave('./03_plots/clock_plot.png', dpi = 300, height = 9, width = 6, units = 'in')
+
+
 # 2 CLUSTER GROUP PROFILES - WebPlotDigitizer----
 
 # gather and join together all the WebPlotDigitizer files for each cluster group
@@ -56,6 +100,16 @@ clusters_aggregated_day5_df <- data.frame(t(clusters_aggregated_day5[, -1])) %>%
   mutate(clusters = paste0("cluster_", 1:74)) %>% 
   relocate(clusters) %>% 
   write_csv('./01_tidy_data/clusters_aggregated_day5.csv')
+
+# *2.1 Selected clusters plotted ----
+
+clusters_aggregated_pivot_longer <- clusters_aggregated %>% 
+  pivot_longer(cols = starts_with ('cluster'),
+               names_to = "cluster", 
+               values_to = "z_score")
+
+cluster10_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_10')
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
@@ -1489,7 +1543,8 @@ sets <- fromList(myGeneSets)
 #%>% write_csv('./00_raw_data/sets.csv')
 
 UpSet <- UpSetR::upset(sets, 
-                       nsets=8, 
+                       nsets=8,
+                       nintersects = NA, 
                        number.angles = 30, 
                        order.by = "freq", 
                        matrix.color='grey40', 
@@ -1499,7 +1554,7 @@ UpSet <- UpSetR::upset(sets,
                        sets.bar.color = c("#542788", "#a6d96a", "#4575b4", "#1a9850", "#636363", "#f46d43", "#fdae61", "#cccccc"), 
                        text.scale = c(1.3, 1.3, 1, 1, 1, 0.75))
 
-png("./03_plots/UpSet.png", width = 6, height = 6, units = 'in', res = 300)
+png("./03_plots/UpSet_all_columns.png", width = 12, height = 6, units = 'in', res = 300)
 
 UpSet
 
@@ -1543,7 +1598,8 @@ myGeneSets_trimmed <- list(LHY = TF_adams_merge_trimmed$gene_ID,
 sets_trimmed <- fromList(myGeneSets_trimmed) 
 #%>% write_csv('./00_raw_data/sets_trimmed.csv')
 
-UpSet_trimmed <- UpSetR::upset(sets_trimmed, 
+UpSet_trimmed <- UpSetR::upset(sets_trimmed,
+                               nintersects = NA,
                                nsets=8, 
                                number.angles = 30, 
                                order.by = "freq", 
@@ -1554,7 +1610,7 @@ UpSet_trimmed <- UpSetR::upset(sets_trimmed,
                                sets.bar.color = c("#542788", "#a6d96a", "#4575b4", "#1a9850", "#636363", "#f46d43", "#fdae61", "#cccccc"), 
                                text.scale = c(1.3, 1.3, 1, 1, 1, 0.9))
 
-png("./03_plots/UpSet_trimmed.png", width = 8, height = 6, units = 'in', res = 300)
+png("./03_plots/UpSet_trimmed_all_columns.png", width = 12, height = 6, units = 'in', res = 300)
 
 UpSet_trimmed
 
