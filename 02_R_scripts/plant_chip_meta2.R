@@ -17,6 +17,8 @@ library(ComplexUpset)
 library(igraph)
 library(ndtv)
 library(animation)
+library(ggbreak)
+library(patchwork)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
@@ -57,7 +59,7 @@ clock_plot <- ggplot(LHY_temp_time_series_gene, aes(x=hr, y=value, group = name)
         legend.box.background = element_rect(color = "black"),
         legend.title=element_blank()) +
   facet_grid2(gene_id ~ day, scales = "free", strip = strip) +
-  labs(y = "TPM", x = "hr (after dusk)")
+  labs(y = "TPM", x = "hr (after dusk)") 
 
 clock_plot
 
@@ -109,7 +111,216 @@ clusters_aggregated_pivot_longer <- clusters_aggregated %>%
                values_to = "z_score")
 
 cluster10_z_plot <- clusters_aggregated_pivot_longer %>% 
-  filter(cluster == 'cluster_10')
+  filter(cluster == 'cluster_10') %>%
+  mutate(id = case_when(id == 1 ~ 0,
+                        id == 2 ~ 3,
+                        id == 3 ~ 6,
+                        id == 4 ~ 9,
+                        id == 5 ~ 12,
+                        id == 6 ~ 15,
+                        id == 7 ~ 18,
+                        id == 8 ~ 21,
+                        id == 9 ~ 24,
+                        id == 10 ~ 27,
+                        id == 11 ~ 30,
+                        id == 12 ~ 33,
+                        id == 13 ~ 36,
+                        id == 14 ~ 39,
+                        id == 15 ~ 42,
+                        id == 16 ~ 45,
+                        id == 17 ~ 48,
+                        id == 18 ~ 96,
+                        id == 19 ~ 99,
+                        id == 20 ~ 102,
+                        id == 21 ~ 105,
+                        id == 22 ~ 108,
+                        id == 23 ~ 111,
+                        id == 24 ~ 114,
+                        id == 25 ~ 117,
+                        id == 26 ~ 120)) %>% 
+  ggplot(aes(x=id, y=z_score)) +
+  geom_line() +
+  geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_point() +
+  theme_linedraw() +
+  xlim(-1, 122) +
+  scale_x_break(c(48, 96)) +
+  scale_x_continuous(breaks = seq(0, 120, 6)) +
+  scale_y_continuous(breaks = seq(-1, 2.5, 0.5)) +
+  theme(axis.text.x.top = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.line.x.top = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+  labs(title = "Cluster 10", y = "mean Z-score", x = "hr") +
+  annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
+           alpha = 0.2, fill = "grey50") +
+  annotate("text", x = 4, y = 2.2, label = "day 1") +
+  annotate("text", x = 29, y = 2.2, label = "day 2") +
+  annotate("text", x = 100, y = 2.2, label = "day 5")
+
+cluster10_z_plot
+
+cluster11_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_11') %>%
+  mutate(id = case_when(id == 1 ~ 0,
+                        id == 2 ~ 3,
+                        id == 3 ~ 6,
+                        id == 4 ~ 9,
+                        id == 5 ~ 12,
+                        id == 6 ~ 15,
+                        id == 7 ~ 18,
+                        id == 8 ~ 21,
+                        id == 9 ~ 24,
+                        id == 10 ~ 27,
+                        id == 11 ~ 30,
+                        id == 12 ~ 33,
+                        id == 13 ~ 36,
+                        id == 14 ~ 39,
+                        id == 15 ~ 42,
+                        id == 16 ~ 45,
+                        id == 17 ~ 48,
+                        id == 18 ~ 96,
+                        id == 19 ~ 99,
+                        id == 20 ~ 102,
+                        id == 21 ~ 105,
+                        id == 22 ~ 108,
+                        id == 23 ~ 111,
+                        id == 24 ~ 114,
+                        id == 25 ~ 117,
+                        id == 26 ~ 120)) %>% 
+  ggplot(aes(x=id, y=z_score)) +
+  geom_line() +
+  geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_point() +
+  theme_linedraw() +
+  xlim(-1, 122) +
+  scale_x_break(c(48, 96)) +
+  scale_x_continuous(breaks = seq(0, 120, 6)) +
+  scale_y_continuous(breaks = seq(-1, 2.5, 0.5)) +
+  theme(axis.text.x.top = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.line.x.top = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+  labs(title = "Cluster 11", y = "mean Z-score", x = "hr") +
+  annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
+           alpha = 0.2, fill = "grey50") +
+  annotate("text", x = 4, y = 2.4, label = "day 1") +
+  annotate("text", x = 29, y = 2.4, label = "day 2") +
+  annotate("text", x = 100, y = 2.4, label = "day 5")
+
+cluster11_z_plot
+
+cluster17_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_17') %>%
+  mutate(id = case_when(id == 1 ~ 0,
+                        id == 2 ~ 3,
+                        id == 3 ~ 6,
+                        id == 4 ~ 9,
+                        id == 5 ~ 12,
+                        id == 6 ~ 15,
+                        id == 7 ~ 18,
+                        id == 8 ~ 21,
+                        id == 9 ~ 24,
+                        id == 10 ~ 27,
+                        id == 11 ~ 30,
+                        id == 12 ~ 33,
+                        id == 13 ~ 36,
+                        id == 14 ~ 39,
+                        id == 15 ~ 42,
+                        id == 16 ~ 45,
+                        id == 17 ~ 48,
+                        id == 18 ~ 96,
+                        id == 19 ~ 99,
+                        id == 20 ~ 102,
+                        id == 21 ~ 105,
+                        id == 22 ~ 108,
+                        id == 23 ~ 111,
+                        id == 24 ~ 114,
+                        id == 25 ~ 117,
+                        id == 26 ~ 120)) %>% 
+  ggplot(aes(x=id, y=z_score)) +
+  geom_line() +
+  geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_point() +
+  theme_linedraw() +
+  xlim(-1, 122) +
+  scale_x_break(c(48, 96)) +
+  scale_x_continuous(breaks = seq(0, 120, 6)) +
+  scale_y_continuous(breaks = seq(-1, 2.5, 0.5)) +
+  theme(axis.text.x.top = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.line.x.top = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+  labs(title = "Cluster 17", y = "mean Z-score", x = "hr") +
+  annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
+           alpha = 0.2, fill = "grey50") +
+  annotate("text", x = 4, y = 2.4, label = "day 1") +
+  annotate("text", x = 29, y = 2.4, label = "day 2") +
+  annotate("text", x = 100, y = 2.4, label = "day 5")
+
+cluster17_z_plot
+
+cluster20_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_20') %>%
+  mutate(id = case_when(id == 1 ~ 0,
+                        id == 2 ~ 3,
+                        id == 3 ~ 6,
+                        id == 4 ~ 9,
+                        id == 5 ~ 12,
+                        id == 6 ~ 15,
+                        id == 7 ~ 18,
+                        id == 8 ~ 21,
+                        id == 9 ~ 24,
+                        id == 10 ~ 27,
+                        id == 11 ~ 30,
+                        id == 12 ~ 33,
+                        id == 13 ~ 36,
+                        id == 14 ~ 39,
+                        id == 15 ~ 42,
+                        id == 16 ~ 45,
+                        id == 17 ~ 48,
+                        id == 18 ~ 96,
+                        id == 19 ~ 99,
+                        id == 20 ~ 102,
+                        id == 21 ~ 105,
+                        id == 22 ~ 108,
+                        id == 23 ~ 111,
+                        id == 24 ~ 114,
+                        id == 25 ~ 117,
+                        id == 26 ~ 120)) %>% 
+  ggplot(aes(x=id, y=z_score)) +
+  geom_line() +
+  geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_point() +
+  theme_linedraw() +
+  xlim(-1, 122) +
+  scale_x_break(c(48, 96)) +
+  scale_x_continuous(breaks = seq(0, 120, 6)) +
+  scale_y_continuous(breaks = seq(-1, 2.5, 0.5)) +
+  theme(axis.text.x.top = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.line.x.top = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+  labs(title = "Cluster 20", y = "mean Z-score", x = "hr") +
+  annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
+           alpha = 0.2, fill = "grey50") +
+  annotate("text", x = 4, y = 2.4, label = "day 1") +
+  annotate("text", x = 29, y = 2.4, label = "day 2") +
+  annotate("text", x = 100, y = 2.4, label = "day 5")
+
+cluster20_z_plot
+
+# *2.2 patchwork plot Figure 1----
+packageVersion("patchwork")
+cluster10_z_plot + cluster17_z_plot + patchwork::plot_layout(axis_titles = 'collect') 
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
