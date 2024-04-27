@@ -4,6 +4,7 @@
 
 library(tidyverse)
 library(janitor)
+library(ggh4x)
 library(MetaCycle)
 devtools::install_github("vqv/ggbiplot")
 library(ggbiplot)
@@ -11,9 +12,9 @@ library(ggrepel)
 library(circlize)
 library(UpSetR)
 library(devtools)
-install_github("jokergoo/ComplexHeatmap")
-library(ComplexHeatmap)
-library(ComplexUpset)
+#install_github("jokergoo/ComplexHeatmap")
+#library(ComplexHeatmap)
+#library(ComplexUpset)
 library(igraph)
 library(ndtv)
 library(animation)
@@ -320,7 +321,9 @@ cluster20_z_plot
 
 # *2.2 patchwork plot Figure 1----
 packageVersion("patchwork")
-cluster10_z_plot + cluster17_z_plot + patchwork::plot_layout(axis_titles = 'collect') 
+(cluster11_z_plot + cluster20_z_plot) / (cluster17_z_plot + cluster20_z_plot) 
+
+plot_grid(cluster11_z_plot, cluster20_z_plot, cluster17_z_plot, labels = 'AUTO')
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
