@@ -60,7 +60,9 @@ clock_plot <- ggplot(LHY_temp_time_series_gene, aes(x=hr, y=value, group = name)
         legend.box.background = element_rect(color = "black"),
         legend.title=element_blank()) +
   facet_grid2(gene_id ~ day, scales = "free", strip = strip) +
-  labs(y = "TPM", x = "hr (after dusk)") 
+  labs(y = "TPM", x = "hr") +
+  annotate("rect", xmin = 0, xmax = 12, ymin = -Inf, ymax = Inf,
+                                                  alpha = 0.2, fill = "grey50")
 
 clock_plot
 
@@ -140,8 +142,8 @@ cluster10_z_plot <- clusters_aggregated_pivot_longer %>%
                         id == 25 ~ 117,
                         id == 26 ~ 120)) %>% 
   ggplot(aes(x=id, y=z_score)) +
-  geom_line() +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_line() +
   geom_point() +
   theme_linedraw() +
   xlim(-1, 122) +
@@ -192,8 +194,8 @@ cluster11_z_plot <- clusters_aggregated_pivot_longer %>%
                         id == 25 ~ 117,
                         id == 26 ~ 120)) %>% 
   ggplot(aes(x=id, y=z_score)) +
-  geom_line() +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_line() +
   geom_point() +
   theme_linedraw() +
   xlim(-1, 122) +
@@ -244,8 +246,8 @@ cluster17_z_plot <- clusters_aggregated_pivot_longer %>%
                         id == 25 ~ 117,
                         id == 26 ~ 120)) %>% 
   ggplot(aes(x=id, y=z_score)) +
-  geom_line() +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_line() +
   geom_point() +
   theme_linedraw() +
   xlim(-1, 122) +
@@ -296,8 +298,8 @@ cluster20_z_plot <- clusters_aggregated_pivot_longer %>%
                         id == 25 ~ 117,
                         id == 26 ~ 120)) %>% 
   ggplot(aes(x=id, y=z_score)) +
-  geom_line() +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_line() +
   geom_point() +
   theme_linedraw() +
   xlim(-1, 122) +
@@ -321,9 +323,23 @@ cluster20_z_plot
 
 # *2.2 patchwork plot Figure 1----
 packageVersion("patchwork")
-(cluster11_z_plot + cluster20_z_plot) / (cluster17_z_plot + cluster20_z_plot) 
 
-plot_grid(cluster11_z_plot, cluster20_z_plot, cluster17_z_plot, labels = 'AUTO')
+# Set theme for annotations
+thm <- theme(plot.title = element_text(face = 2, size = 16))
+
+top_plot <- wrap_elements((cluster10_z_plot + cluster11_z_plot) / (cluster17_z_plot + cluster20_z_plot) + 
+                            plot_annotation(title = "A", theme = thm))
+
+bottom_plot <- wrap_elements(clock_plot + plot_annotation(title = "B", theme = thm)) 
+
+fig_1 <- top_plot / bottom_plot + 
+  plot_layout(heights = unit(c(1, 1.5), c('null', 'null')))
+
+fig_1
+
+ggsave('./03_plots/fig1_plot.png', dpi = 300, height = 15, width = 10, units = 'in')
+
+# plot_grid(cluster11_z_plot, cluster20_z_plot, cluster17_z_plot, labels = 'AUTO')
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
