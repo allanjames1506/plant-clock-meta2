@@ -23,9 +23,7 @@ library(patchwork)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
-LHY_temp_time_series <- read_csv("./00_raw_data/LHY_TPM.csv")
-
-LHY_temp_time_series_gene <- read_csv("./00_raw_data/LHY_TPM_gene.csv") %>% 
+calixto_RNAseq_clock_genes <- read_csv("./00_raw_data/Calixto_RNAseq_clock_genes.csv") %>% 
   pivot_longer(cols = starts_with("TPM_")) %>% 
   mutate(gene_id = factor(gene_id, levels = c('CCA1', 'LHY', 'TOC1', 'PRR5', 'PRR7', 'LUX', 'ELF3', 'ELF4')),
          name = case_when(name == 'TPM_gene' ~ 'total gene expression',
@@ -33,21 +31,13 @@ LHY_temp_time_series_gene <- read_csv("./00_raw_data/LHY_TPM_gene.csv") %>%
                           TRUE ~ name),
          name = factor(name, levels = c('total gene expression', 'productive mRNA expression')))
 
-levels(LHY_temp_time_series_gene$gene_id)
-
-ggplot(data=test_data_long_tidyr,
-       aes(x=date, y=value, colour=name)) +
-  geom_line()
-
-# values=c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc"
-
 strip <- strip_themed(background_y = elem_list_rect(fill = c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc")),
                       text_y = elem_list_text(colour = c("white", "black", "white", "black", "black", "white", "white", "black"),
                                               face = c("bold", "bold", "bold", "bold", "bold", "bold", "bold", "bold")),
                       by_layer_y = FALSE,
                       text_x = elem_list_text(face = c("bold", "bold", "bold")))
 
-clock_plot <- ggplot(LHY_temp_time_series_gene, aes(x=hr, y=value, group = name)) + 
+clock_plot <- ggplot(calixto_RNAseq_clock_genes, aes(x=hr, y=value, group = name)) + 
   #geom_point() +
   geom_line(aes(colour = name, size = name)) +
   scale_colour_manual(values=c("grey70", 'black')) +
@@ -58,7 +48,11 @@ clock_plot <- ggplot(LHY_temp_time_series_gene, aes(x=hr, y=value, group = name)
   theme(panel.grid.minor = element_blank(),
         legend.position = 'top',
         legend.box.background = element_rect(color = "black"),
-        legend.title=element_blank()) +
+        legend.title = element_blank(),
+        strip.text = element_text(size = 18),
+        legend.text = element_text(size = 18),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=18,face="bold")) +
   facet_grid2(gene_id ~ day, scales = "free", strip = strip) +
   labs(y = "TPM", x = "hr") +
   annotate("rect", xmin = 0, xmax = 12, ymin = -Inf, ymax = Inf,
@@ -66,7 +60,7 @@ clock_plot <- ggplot(LHY_temp_time_series_gene, aes(x=hr, y=value, group = name)
 
 clock_plot
 
-ggsave('./03_plots/clock_plot.png', dpi = 300, height = 9, width = 6, units = 'in')
+ggsave('./03_plots/clock_plot2.png', dpi = 300, height = 9, width = 6, units = 'in')
 
 
 # 2 CLUSTER GROUP PROFILES - WebPlotDigitizer----
@@ -111,10 +105,7 @@ clusters_aggregated_day5_df <- data.frame(t(clusters_aggregated_day5[, -1])) %>%
 clusters_aggregated_pivot_longer <- clusters_aggregated %>% 
   pivot_longer(cols = starts_with ('cluster'),
                names_to = "cluster", 
-               values_to = "z_score")
-
-cluster10_z_plot <- clusters_aggregated_pivot_longer %>% 
-  filter(cluster == 'cluster_10') %>%
+               values_to = "z_score") %>%
   mutate(id = case_when(id == 1 ~ 0,
                         id == 2 ~ 3,
                         id == 3 ~ 6,
@@ -140,7 +131,10 @@ cluster10_z_plot <- clusters_aggregated_pivot_longer %>%
                         id == 23 ~ 111,
                         id == 24 ~ 114,
                         id == 25 ~ 117,
-                        id == 26 ~ 120)) %>% 
+                        id == 26 ~ 120))
+
+cluster10_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_10') %>% 
   ggplot(aes(x=id, y=z_score)) +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
   geom_line() +
@@ -155,7 +149,9 @@ cluster10_z_plot <- clusters_aggregated_pivot_longer %>%
         axis.line.x.top = element_blank(),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
-        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold"),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=16,face="bold")) +
   labs(title = "Cluster 10", y = "mean Z-score", x = "hr") +
   annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
            alpha = 0.2, fill = "grey50") +
@@ -166,33 +162,7 @@ cluster10_z_plot <- clusters_aggregated_pivot_longer %>%
 cluster10_z_plot
 
 cluster11_z_plot <- clusters_aggregated_pivot_longer %>% 
-  filter(cluster == 'cluster_11') %>%
-  mutate(id = case_when(id == 1 ~ 0,
-                        id == 2 ~ 3,
-                        id == 3 ~ 6,
-                        id == 4 ~ 9,
-                        id == 5 ~ 12,
-                        id == 6 ~ 15,
-                        id == 7 ~ 18,
-                        id == 8 ~ 21,
-                        id == 9 ~ 24,
-                        id == 10 ~ 27,
-                        id == 11 ~ 30,
-                        id == 12 ~ 33,
-                        id == 13 ~ 36,
-                        id == 14 ~ 39,
-                        id == 15 ~ 42,
-                        id == 16 ~ 45,
-                        id == 17 ~ 48,
-                        id == 18 ~ 96,
-                        id == 19 ~ 99,
-                        id == 20 ~ 102,
-                        id == 21 ~ 105,
-                        id == 22 ~ 108,
-                        id == 23 ~ 111,
-                        id == 24 ~ 114,
-                        id == 25 ~ 117,
-                        id == 26 ~ 120)) %>% 
+  filter(cluster == 'cluster_11') %>%  
   ggplot(aes(x=id, y=z_score)) +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
   geom_line() +
@@ -207,7 +177,9 @@ cluster11_z_plot <- clusters_aggregated_pivot_longer %>%
         axis.line.x.top = element_blank(),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
-        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold"),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=16,face="bold")) +
   labs(title = "Cluster 11", y = "mean Z-score", x = "hr") +
   annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
            alpha = 0.2, fill = "grey50") +
@@ -219,32 +191,6 @@ cluster11_z_plot
 
 cluster17_z_plot <- clusters_aggregated_pivot_longer %>% 
   filter(cluster == 'cluster_17') %>%
-  mutate(id = case_when(id == 1 ~ 0,
-                        id == 2 ~ 3,
-                        id == 3 ~ 6,
-                        id == 4 ~ 9,
-                        id == 5 ~ 12,
-                        id == 6 ~ 15,
-                        id == 7 ~ 18,
-                        id == 8 ~ 21,
-                        id == 9 ~ 24,
-                        id == 10 ~ 27,
-                        id == 11 ~ 30,
-                        id == 12 ~ 33,
-                        id == 13 ~ 36,
-                        id == 14 ~ 39,
-                        id == 15 ~ 42,
-                        id == 16 ~ 45,
-                        id == 17 ~ 48,
-                        id == 18 ~ 96,
-                        id == 19 ~ 99,
-                        id == 20 ~ 102,
-                        id == 21 ~ 105,
-                        id == 22 ~ 108,
-                        id == 23 ~ 111,
-                        id == 24 ~ 114,
-                        id == 25 ~ 117,
-                        id == 26 ~ 120)) %>% 
   ggplot(aes(x=id, y=z_score)) +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
   geom_line() +
@@ -259,7 +205,9 @@ cluster17_z_plot <- clusters_aggregated_pivot_longer %>%
         axis.line.x.top = element_blank(),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
-        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold"),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=16,face="bold")) +
   labs(title = "Cluster 17", y = "mean Z-score", x = "hr") +
   annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
            alpha = 0.2, fill = "grey50") +
@@ -271,32 +219,6 @@ cluster17_z_plot
 
 cluster20_z_plot <- clusters_aggregated_pivot_longer %>% 
   filter(cluster == 'cluster_20') %>%
-  mutate(id = case_when(id == 1 ~ 0,
-                        id == 2 ~ 3,
-                        id == 3 ~ 6,
-                        id == 4 ~ 9,
-                        id == 5 ~ 12,
-                        id == 6 ~ 15,
-                        id == 7 ~ 18,
-                        id == 8 ~ 21,
-                        id == 9 ~ 24,
-                        id == 10 ~ 27,
-                        id == 11 ~ 30,
-                        id == 12 ~ 33,
-                        id == 13 ~ 36,
-                        id == 14 ~ 39,
-                        id == 15 ~ 42,
-                        id == 16 ~ 45,
-                        id == 17 ~ 48,
-                        id == 18 ~ 96,
-                        id == 19 ~ 99,
-                        id == 20 ~ 102,
-                        id == 21 ~ 105,
-                        id == 22 ~ 108,
-                        id == 23 ~ 111,
-                        id == 24 ~ 114,
-                        id == 25 ~ 117,
-                        id == 26 ~ 120)) %>% 
   ggplot(aes(x=id, y=z_score)) +
   geom_vline(xintercept = 24, col = "lightblue", size = 2) +
   geom_line() +
@@ -311,7 +233,9 @@ cluster20_z_plot <- clusters_aggregated_pivot_longer %>%
         axis.line.x.top = element_blank(),
         panel.grid.minor = element_blank(),
         panel.grid.major = element_blank(),
-        plot.title = element_text(hjust=0.5, size = 16, face = "bold")) +
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold"),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=16,face="bold")) +
   labs(title = "Cluster 20", y = "mean Z-score", x = "hr") +
   annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
            alpha = 0.2, fill = "grey50") +
@@ -325,21 +249,19 @@ cluster20_z_plot
 packageVersion("patchwork")
 
 # Set theme for annotations
-thm <- theme(plot.title = element_text(face = 2, size = 16))
+thm <- theme(plot.title = element_text(face = 2, size = 20))
 
-top_plot <- wrap_elements((cluster10_z_plot + cluster11_z_plot) / (cluster17_z_plot + cluster20_z_plot) + 
+fig1_top_plot <- wrap_elements((cluster10_z_plot + cluster11_z_plot) / (cluster17_z_plot + cluster20_z_plot) + 
                             plot_annotation(title = "A", theme = thm))
 
-bottom_plot <- wrap_elements(clock_plot + plot_annotation(title = "B", theme = thm)) 
+fig1_bottom_plot <- wrap_elements(clock_plot + plot_annotation(title = "B", theme = thm)) 
 
-fig_1 <- top_plot / bottom_plot + 
+fig_1 <- fig1_top_plot / fig1_bottom_plot + 
   plot_layout(heights = unit(c(1, 1.5), c('null', 'null')))
 
 fig_1
 
 ggsave('./03_plots/fig1_plot.png', dpi = 300, height = 15, width = 10, units = 'in')
-
-# plot_grid(cluster11_z_plot, cluster20_z_plot, cluster17_z_plot, labels = 'AUTO')
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
@@ -375,10 +297,10 @@ day5_output <- read_csv('./00_raw_data/cluster_days_output_day5/meta2d_clusters_
 # _150 means 1.5 fold up or down difference in amplitude
 day1_vs_day2_150 <- full_join(day1_output, day2_output, by = "cluster") %>% 
   mutate(AMP_change = d2_meta2d_AMP/d1_meta2d_AMP *100) %>% 
-  mutate(pval_flag = case_when(d1_meta2d_pvalue > 0.05 & d2_meta2d_pvalue > 0.05 ~ 'd1_nr_d2_nr', 
-                               d1_meta2d_pvalue <= 0.05 & d2_meta2d_pvalue > 0.05 ~ 'd1_r_d2_nr',
-                               d1_meta2d_pvalue > 0.05 & d2_meta2d_pvalue <= 0.05 ~ 'd1_nr_d2_r',
-                               d1_meta2d_pvalue <= 0.05 & d2_meta2d_pvalue <= 0.05 ~ 'd1_r_d2_r',
+  mutate(pval_flag = case_when(d1_meta2d_pvalue > 0.05 & d2_meta2d_pvalue > 0.05 ~ 'nr-nr', 
+                               d1_meta2d_pvalue <= 0.05 & d2_meta2d_pvalue > 0.05 ~ 'r-nr',
+                               d1_meta2d_pvalue > 0.05 & d2_meta2d_pvalue <= 0.05 ~ 'nr-r',
+                               d1_meta2d_pvalue <= 0.05 & d2_meta2d_pvalue <= 0.05 ~ 'r-r',
                                TRUE ~ 'rhythmic')) %>% 
   mutate(amp_flag = case_when(AMP_change <= 66.6  & AMP_change > 33.3 ~ 'lose_medium',
                               AMP_change <= 33.3 ~ 'lose_high',
@@ -413,10 +335,10 @@ day1_vs_day2_150 <- full_join(day1_output, day2_output, by = "cluster") %>%
 # _150 means 1.5 fold up or down difference in amplitude
 day1_vs_day5_150 <- full_join(day1_output, day5_output, by = "cluster") %>% 
   mutate(AMP_change = d5_meta2d_AMP/d1_meta2d_AMP *100) %>% 
-  mutate(pval_flag = case_when(d1_meta2d_pvalue > 0.05 & d5_meta2d_pvalue > 0.05 ~ 'd1_nr_d5_nr', 
-                               d1_meta2d_pvalue <= 0.05 & d5_meta2d_pvalue > 0.05 ~ 'd1_r_d5_nr',
-                               d1_meta2d_pvalue > 0.05 & d5_meta2d_pvalue <= 0.05 ~ 'd1_nr_d5_r',
-                               d1_meta2d_pvalue <= 0.05 & d5_meta2d_pvalue <= 0.05 ~ 'd1_r_d5_r',
+  mutate(pval_flag = case_when(d1_meta2d_pvalue > 0.05 & d5_meta2d_pvalue > 0.05 ~ 'nr-nr', 
+                               d1_meta2d_pvalue <= 0.05 & d5_meta2d_pvalue > 0.05 ~ 'r-nr',
+                               d1_meta2d_pvalue > 0.05 & d5_meta2d_pvalue <= 0.05 ~ 'nr-r',
+                               d1_meta2d_pvalue <= 0.05 & d5_meta2d_pvalue <= 0.05 ~ 'r-r',
                                TRUE ~ 'rhythmic')) %>% 
   mutate(amp_flag = case_when(AMP_change <= 66.6  & AMP_change > 33.3 ~ 'lose_medium',
                               AMP_change <= 33.3 ~ 'lose_high',
@@ -451,50 +373,168 @@ day1_vs_day5_150 <- full_join(day1_output, day5_output, by = "cluster") %>%
 
 # Scatter plot of the MetaCycle outputs for Amplitude coloured by the amp_flag grouping
 plot_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>% 
-  filter(pval_flag == 'd1_nr_d2_r' | pval_flag == 'd1_r_d2_nr' | pval_flag == 'd1_r_d2_r') %>%
+  #filter(pval_flag == 'd1_nr_d2_r' | pval_flag == 'd1_r_d2_nr' | pval_flag == 'd1_r_d2_r') %>%
   ggplot(aes(x = d1_meta2d_AMP, y = d2_meta2d_AMP, colour = amp_flag, shape = pval_flag)) +
   scale_y_continuous(limits = c(0, 1.6), breaks = c(0, 0.4, 0.8, 1.2, 1.6)) +
   scale_x_continuous(limits = c(0, 1.8), breaks = c(0, 0.4, 0.8, 1.2, 1.6)) +
   geom_point(size = 2.5) +
   ggpubr::theme_pubr() +
-  theme(legend.position = "right", legend.key = element_blank()) +
+  theme(legend.position = "bottom", 
+        legend.key = element_blank(),
+        legend.box.background = element_rect(color = "black"),
+        legend.box.margin = margin(t = 1, l = 1),
+        plot.title = element_text(color = "grey30", face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(color = "grey30", hjust = 0.5),
+        axis.title.y = element_text(angle = 0, vjust = 0.5, face = 'bold'),
+        axis.title.x = element_text(face = 'bold')) +
   scale_colour_brewer(palette = "Set1", labels = c("gain - high", "gain - medium", "lose - high", "lose - medium", "other")) +
-  geom_text_repel(aes(label = cluster_id), show.legend = FALSE) +
+  geom_text_repel(aes(label = cluster_id), 
+                  show.legend = FALSE,
+                  max.overlaps = nrow(day1_vs_day2_150)) +
   labs(colour = "Amplitude", shape = "Rhythm",
-       y= "day 2 Amplitude", x = "day 1 Amplitude") +
-  ggtitle("Day 1 (20C steady state) vs Day 2 (to 4C transient-cooling)",
-          subtitle = "meta2d Amplitude") +
-  theme(plot.title = element_text(color = "grey30"),
-        plot.subtitle = element_text(color = "grey30")
-  )
+       y= "day 2 \namplitude", x = "day 1 amplitude") +
+  ggtitle("Day 1 vs Day 2",
+          subtitle = "transition from 20C to 4C") +
+  guides(colour = guide_legend(order = 1, nrow = 2),
+         shape  = guide_legend(order = 0, nrow = 2))
 
 plot_day1_vs_day2_150_AMP
 
 ggsave('./03_plots/plot_day1_vs_day2_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
 
+amp_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
+  mutate(amp_flag_simplified = case_when(grepl("gain", amp_flag) ~ 'gain',
+                                         grepl("lose", amp_flag) ~ 'lose',
+                                         TRUE ~ 'other')) %>% 
+  group_by(amp_flag_simplified) %>% 
+  summarise(number = n()) %>% 
+  ungroup %>% 
+  mutate(percent = prop.table(number) * 100,
+         condition = 'd1d2')
+
+amp_summary_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
+  mutate(amp_flag_simplified = case_when(grepl("gain", amp_flag) ~ 'gain',
+                                         grepl("lose", amp_flag) ~ 'lose',
+                                         TRUE ~ 'other')) %>% 
+  group_by(amp_flag_simplified) %>% 
+  summarise(number = n()) %>%
+  ungroup %>% 
+  mutate(percent = prop.table(number) * 100,
+         condition = 'd1d5') 
+
+amp_summary_table <- bind_rows(amp_summary_day1_vs_day2_150_AMP, amp_summary_day1_vs_day5_150_AMP) %>% 
+  rename(group = amp_flag_simplified)
+
+amp_percent_graph <- amp_summary_table %>% 
+  ggplot(aes(x = condition, y = percent, fill = factor(group, levels = c('gain', 'lose', 'other')))) + 
+  geom_bar(stat = "identity", width = 0.5) +
+  scale_y_continuous(breaks=seq(0,100,100)) +
+  scale_x_discrete(labels=c('Day 1\n vs\n Day 2', 'Day 1\n vs\n Day 5')) +
+  scale_fill_manual(values = c("darkolivegreen3", "palevioletred", "grey80"), name = "", labels = c("amplitude gain", "amplitude loss", "other pattern")) +
+  geom_text(aes(label=paste0(sprintf("%1.1f", percent),"%")),
+            position=position_stack(vjust=0.5)) +
+  ggpubr::theme_pubr() +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5, face = 'bold'),
+        axis.title.x=element_blank(),
+        #axis.text.x = element_text(face = 'bold'),
+        legend.position = 'top',
+        legend.box.background = element_rect(color = "black", linewidth = 0.75),
+        legend.box.margin = margin(t = 1, l = 1, b = 1, r = 1),
+        legend.text=element_text(size = 12)) +
+  guides(fill = guide_legend(nrow = 3))
+  
+amp_percent_graph
+
+rhy_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
+  mutate(pval_flag_simplified = case_when(pval_flag %in% 'r-r' ~ 'no change',
+                                          pval_flag %in% 'nr-nr' ~ 'no change',
+                                          TRUE ~ pval_flag)) %>% 
+  group_by(pval_flag_simplified) %>% 
+  summarise(number = n()) %>% 
+  ungroup %>% 
+  mutate(percent = prop.table(number) * 100,
+         condition = 'd1d2')
+
+rhy_summary_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
+  mutate(pval_flag_simplified = case_when(pval_flag %in% 'r-r' ~ 'no change',
+                                          pval_flag %in% 'nr-nr' ~ 'no change',
+                                          TRUE ~ pval_flag)) %>%
+  group_by(pval_flag_simplified) %>% 
+  summarise(number = n()) %>%
+  ungroup %>% 
+  mutate(percent = prop.table(number) * 100,
+         condition = 'd1d5') 
+
+rhy_summary_table <- bind_rows(rhy_summary_day1_vs_day2_150_AMP, rhy_summary_day1_vs_day5_150_AMP) %>% 
+  rename(group = pval_flag_simplified)
+
+rhy_percent_graph <- rhy_summary_table %>% 
+  ggplot(aes(x = condition, y = percent, fill = factor(group, levels = c('nr-r','r-nr', 'no change')))) + 
+  geom_bar(stat = "identity", width = 0.5) +
+  scale_y_continuous(breaks=seq(0,100,100), position = "right") +
+  scale_x_discrete(labels=c('Day 1\n vs\n Day 2', 'Day 1\n vs\n Day 5')) +
+  scale_fill_manual(values = c("darkolivegreen3", "palevioletred", "grey80"), name = "", labels = c("non-rhythmic to rhythmic", "rhythmic to non-rhythmic", "no rhythm change")) +
+  geom_text(aes(label=paste0(sprintf("%1.1f", percent),"%")),
+            position=position_stack(vjust=0.5)) +
+  ggpubr::theme_pubr() +
+  theme(axis.title.y.right = element_text(angle = 0, vjust = 0.5, face = 'bold'),
+        axis.title.x = element_blank(),
+        #axis.text.x = element_text(face = 'bold'),
+        legend.position = 'top',
+        legend.box.background = element_rect(color = "black", linewidth = 0.75),
+        legend.box.margin = margin(t = 1, l = 1, b = 1, r = 1),
+        legend.text = element_text(size = 12)) +
+  guides(fill = guide_legend(nrow = 3))
+
+rhy_percent_graph
+
 # *4.2 compare d1d5 amplitude----
 
 plot_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
-  filter(pval_flag == 'd1_nr_d5_r' | pval_flag == 'd1_r_d5_nr' | pval_flag == 'd1_r_d5_r') %>%
+  #filter(pval_flag == 'd1_nr_d5_r' | pval_flag == 'd1_r_d5_nr' | pval_flag == 'd1_r_d5_r') %>%
   ggplot(aes(x = d1_meta2d_AMP, y = d5_meta2d_AMP, colour = amp_flag, shape = pval_flag)) +
-  scale_y_continuous(limits = c(0, 1.6), breaks = c(0, 0.4, 0.8, 1.2, 1.6)) +
+  scale_y_continuous(limits = c(0, 1.6), breaks = c(0, 0.4, 0.8, 1.2, 1.6), position = "right") +
   scale_x_continuous(limits = c(0, 1.8), breaks = c(0, 0.4, 0.8, 1.2, 1.6)) +
   geom_point(size = 2.5) +
   ggpubr::theme_pubr() +
-  theme(legend.position = "right", legend.key = element_blank()) +
+  theme(legend.position = "bottom", 
+        legend.key = element_blank(),
+        legend.box.background = element_rect(color = "black"),
+        legend.box.margin = margin(t = 1, l = 1),
+        plot.title = element_text(color = "grey30", face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(color = "grey30", hjust = 0.5),
+        axis.title.y.right = element_text(angle = 0, vjust = 0.5, face = 'bold'),
+        axis.title.x = element_text(face = 'bold')) +
   scale_colour_brewer(palette = "Set1", labels = c("gain - high", "gain - medium", "lose - high", "lose - medium", "other")) +
-  geom_text_repel(aes(label = cluster_id), show.legend = FALSE) +
+  geom_text_repel(aes(label = cluster_id), 
+                  show.legend = FALSE,
+                  max.overlaps = nrow(day1_vs_day5_150)) +
   labs(colour = "Amplitude", shape = "Rhythm",
-       y= "day 5 Amplitude", x = "day 1 Amplitude") +
-  ggtitle("Day 1 (20C steady state) vs Day 5 (4C steady state)",
-          subtitle = "meta2d Amplitude") +
-  theme(plot.title = element_text(color = "grey30"),
-        plot.subtitle = element_text(color = "grey30")
-  )
+       y= "day 5 \namplitude", x = "day 1 amplitude") +
+  ggtitle("Day 1 vs Day 5",
+          subtitle = "acclimation to 4C") +
+  guides(colour = guide_legend(order = 1, nrow = 2),
+         shape  = guide_legend(order = 0, nrow = 2))
 
 plot_day1_vs_day5_150_AMP
 
 ggsave('./03_plots/plot_day1_vs_day5_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
+
+fig2_top_plot <- wrap_elements(plot_day1_vs_day2_150_AMP + plot_day1_vs_day5_150_AMP + plot_layout(guides = "collect") + plot_layout(axes = "collect") + plot_annotation(title = "A", theme = thm) & theme(legend.position = 'bottom',
+                                                                                                                                                                                                           legend.box.background = element_rect(color = "black", linewidth = 1),
+                                                                                                                                                                                                           legend.box.margin = margin(t = 1, l = 1, b = 1, r = 1),
+                                                                                                                                                                                                           legend.title=element_text(size = 12, face = "bold"),
+                                                                                                                                                                                                           legend.text=element_text(size = 12)))
+
+fig2_bottom_plot <- wrap_elements(amp_percent_graph + rhy_percent_graph + plot_annotation(tag_levels = list(c('B', 'C'))) & theme(plot.tag = element_text(face = 2, size = 20)))
+
+
+fig_2 <- fig2_top_plot / fig2_bottom_plot + 
+  plot_layout(heights = unit(c(0.66, 0.34), c('null', 'null')))
+
+fig_2
+
+ggsave('./03_plots/fig2_plot.png', dpi = 300, height = 15, width = 10, units = 'in')
 
 # 5 CLUSTER IDs for AMP PROFILES----
 get_clusters <- function(df, filter_col, amp_flag_id){
