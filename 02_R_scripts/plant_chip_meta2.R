@@ -718,7 +718,17 @@ TF_ezer_ELF4_merge <- merge_TF_clock(ezer_ELF4, 'ELF4')
 #*8.1 ChIP dataset overlaps table----
 # https://nrennie.rbind.io/blog/getting-started-with-gt-tables/
 
+# read in data and convert to tibble
+
 df_table <- tibble(read_xlsx("./00_raw_data/Clock_ChIP_datasets_in_network.xlsx"))
+
+# wrangle data - rename some columns, and new percent column, and reorder columns slightly
+# final table will have 5 columns 
+# (i) clock component, 
+# (ii) Publication, 
+# (iii) the Dataset used from the publication, 
+# (iv) the epitope used in the ChIP experiment
+# and (v) bar charts showing the overlap of transcripts in the TF network that are also clock targets 
 
 df_table <- df_table %>% 
   rename(Total = 'Number of cis targets',
@@ -728,40 +738,18 @@ df_table <- df_table %>%
          percent = yes_network/Total *100) %>% 
   select(1, 2, 3, 4, 5, 7, 8, 6, 9)
 
-p_data <- df_table %>% 
-  filter(TF == 'TOC1') %>%
-  select(no_network, yes_network, Total, percent) %>%
-  pivot_longer(1:2) %>%
-  mutate(x = 1,
-         name = factor(name, levels = c("no_network", "yes_network")))
+# dding plots to the table
+# used a function which takes two inputs: 
+# (i) the dataframe (df), 
+# (ii) a unique identifier for each row - this is the clock component (protein)
+# the function filters the df to only give the row related to the clock component (protein)
+# the function then converts the dataset into long format (pivot_longer), ready to use with {ggplot2}
+# the output of the function is a single plot, relating to a specific clock component
 
-lower <- filter(p_data, name == "yes_network")$value
-upper <- unique(p_data$Total)
-
-count_data <- df_table %>%
-  filter(TF == 'TOC1') %>% 
-  mutate(x = 1)
-
-#limits = c(0, plyr::round_any(max(p_data$Total), 100, ceiling)),
-
-p_data_plot <- ggplot() +
-  geom_col(data = p_data, aes(x = x, y = value, fill = name)) +
-  geom_text(data = count_data, aes(x = x, y = Total, label = paste0(sprintf("%1.1f", percent),"%")), hjust = -0.1, size = 20, fontface = "bold",
-            position = position_dodge(width = 1), colour = "#355C7D") +
-  scale_fill_manual(values = c("lightgrey", "#355C7D")) +
-  labs(x = "", y = "") +
-  scale_y_continuous(limits = c(0, plyr::round_any(max(p_data$Total)*1.5, 100, ceiling)),
-                     breaks = c(lower, upper),
-                     labels = c(filter(p_data, name == "yes_network")$value, unique(p_data$Total))) +
-  theme_minimal() +
-  coord_flip() +
-  theme(legend.position = "none",
-        panel.grid.major = element_blank(),
-        panel.grid.minor = element_blank(),
-        axis.text.y = element_blank(),
-        axis.text.x = element_text(colour = "#355C7D", size = 60, face = "bold"))
-
-p_data_plot
+# for the plot the limits of the bar are manually specified based on the maximum values in the whole dataframe (not just the selected row)
+# labels are added on the x-axis to show the values 
+# Sometimes the values for dataset total size and the number in the TF network were close together and the labels overlapped
+# the position of the labels were manually adjusted if they were too close together
 
 plot_clock <- function(protein, df){
   # prep data
@@ -807,19 +795,31 @@ plot_clock <- function(protein, df){
           axis.text.x = element_text(colour = "grey30", size = 60, face = "bold"))
 }
 
+# map() from {purrr} was used to create a list of plots, by applying to a list of all clock components (TF)
+
 all_TF <- df_table %>%
   pull(TF)
 
 TF_plots <- purrr::map(.x = all_TF, .f = ~plot_clock(.x, df = df_table))
 
+# mutate() was used to add the list of plots resulting from the previous step as another column
+# also select relevant columns
+
 df_table <- df_table %>%
   mutate(plots = TF_plots) %>%
   select(-TF, -yes_network, -no_network, -Total)
+
+# Making the {gt} table
+# firstly select the non-plot columns
+# add a plot column containing NAs
+# pipe into (gt)
 
 tb_clock <- df_table %>%
   select(-plots, -percent) %>%
   mutate(plots = NA) %>%
   gt() 
+
+# used text_transform() function to add in our plots to the table, using map() from {purrr} to apply ggplot_image()
 
 tb_clock <- tb_clock %>% 
   text_transform(
@@ -830,6 +830,9 @@ tb_clock <- tb_clock %>%
       )
     }
   ) 
+
+# Styling the table
+# used tab_style() to control font colour, font family, sizing etc. of the text contained in the columns of the table
 
 tb_clock <- tb_clock %>% 
   tab_style(
@@ -854,11 +857,15 @@ tb_clock <- tb_clock %>%
     locations = cells_body(plots)
   )
 
+# used cols_label() to edit column names
+
 tb_clock <- tb_clock %>% 
   cols_label(
     'trans factor' = "Clock component",
     plots = "Overlap"
   )
+
+# used cols_width() to edit column widths
 
 tb_clock <- tb_clock %>% 
   cols_width(
@@ -869,9 +876,14 @@ tb_clock <- tb_clock %>%
     plots ~px(370)
   )
 
+# used tab_options() to ensure that the final table will be displayed and saved correctly, 
+# total width of the table set to equal the sum of the column widths that were previously set 
+
 tb_clock <- tb_clock %>% 
   tab_options(table.width = 1035,
               container.width = 1035)
+
+# used tab_style() to set different colours for alternating rows
 
 tb_clock <- tb_clock %>% 
   tab_style(
@@ -879,90 +891,10 @@ tb_clock <- tb_clock %>%
     locations = cells_body(rows = seq(1,9,2))
   )
 
+# Saving the {gt} Table 
+# gtsave() function used to save a static version of the plot
+# *8.2 Table 1, overlap TF network genes with clock targets----
 gtsave(tb_clock,"./03_plots/Table1.png")
-
-
-df_nr <- tibble(read_xlsx("./00_raw_data/100 Most Spoken Languages.xlsx")) %>% 
-  slice_head(n = 10)
-
-df_nr <- df_nr %>%
-  mutate(description =
-           c("English is the most spoken language in the world in terms of total speakers, although only the second most common in terms of native speakers.",
-             "Mandarin Chinese is the only language of Sino-Tibetan origin to make the top ten, and has the highest number of native speakers.",
-             "Hindi is the third most spoken language in the work, and is an official language of India, and Fiji, amongst others.",
-             "Spanish is an Indo-European language, spoken by just over half a billion people worldwide.",
-             "French is an official language of Belgium, Switzerland, Senegal, alongside France and 25 other countries. It is also of Indo-European origin.",
-             "Standard Arabic is the only language of Afro-Asiatic origin in the top ten, and has no native speakers according to www.ethnologue.com.",
-             "Bengali is the official and national language of Bangladesh, with 98% of Bangladeshis using Bengali as their first language.",
-             "Russian is an official language of only four countries: Belarus, Kazakhstan, Kyrgyzstan and Russia; with over a quarter of a billion total speakers.",
-             "Portuguese is spoken by just under a quarter of a billion people, with almost all (around 95%) being native speakers.",
-             "Indonesian is the only Austronesian language to make the top ten"))
-
-glimpse(df_nr)
-
-df_nr <- df_nr %>% 
-  mutate(
-    Total = as.numeric(
-      unlist(lapply(
-        regmatches(`Total Speakers`, gregexpr("[[:digit:]]+", `Total Speakers`)), function(x) str_flatten(x)))),
-    Native = as.numeric(
-      unlist(lapply(
-        regmatches(`Native Speakers`, gregexpr("[[:digit:]]+", `Native Speakers`)), function(x) str_flatten(x)))))
-
-df_nr <- df_nr %>% 
-  mutate(Native = replace_na(Native, 0),
-         Nonnative = Total - Native) %>%
-  select(Rank, Language, description, Total, Native, Nonnative)
-
-p_data_nr <- df_nr %>% 
-  filter(Language == 'English') %>%
-  select(Native, Nonnative, Total) %>%
-  pivot_longer(1:2) %>%
-  mutate(x = 1,
-         name = factor(name, levels = c("Nonnative", "Native")))
-
-plot_lang <- function(lang, df){
-  # prep data
-  p_data <- filter(df, Language == lang) %>%
-    select(Native, Nonnative, Total) %>%
-    pivot_longer(1:2) %>%
-    mutate(x = 1,
-           name = factor(name, levels = c("Nonnative", "Native")))
-  # limits
-  lower <- filter(p_data, name == "Native")$value
-  upper <- unique(p_data$Total)
-  if ((upper - lower) < 100){
-    upper = upper + 50
-    lower = lower - 50
-  }
-  # make plot
-  ggplot(data = p_data,
-         mapping = aes(x = x, y = value, fill = name)) +
-    geom_col() +
-    scale_fill_manual(values = c("lightgrey", "#355C7D")) +
-    labs(x = "", y = "") +
-    scale_y_continuous(limits = c(0, plyr::round_any(max(df$Total), 100, ceiling)),
-                       breaks = c(lower, upper),
-                       labels = c(filter(p_data, name == "Native")$value, unique(p_data$Total))) +
-    theme_minimal() +
-    coord_flip() +
-    theme(legend.position = "none",
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          axis.text.y = element_blank(),
-          axis.text.x = element_text(colour = "#355C7D", size = 60, face = "bold"))
-}
-
-all_lang <- df_nr %>%
-  pull(Language)
-
-lang_plots <- purrr::map(.x = all_lang, .f = ~plot_lang(.x, df = df_nr))
-
-df_nr <- df_nr %>%
-  mutate(plots = lang_plots) %>%
-  select(Rank, Language, description, plots)
-
-
 
 # 9 CLUSTER IDs for MERGED----
 
