@@ -20,6 +20,8 @@ library(ndtv)
 library(animation)
 library(ggbreak)
 library(patchwork)
+library(readxl)
+library(gt)
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
@@ -402,6 +404,41 @@ plot_day1_vs_day2_150_AMP
 
 ggsave('./03_plots/plot_day1_vs_day2_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
 
+# *4.2 compare d1d5 amplitude----
+
+plot_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
+  #filter(pval_flag == 'd1_nr_d5_r' | pval_flag == 'd1_r_d5_nr' | pval_flag == 'd1_r_d5_r') %>%
+  ggplot(aes(x = d1_meta2d_AMP, y = d5_meta2d_AMP, colour = amp_flag, shape = pval_flag)) +
+  scale_y_continuous(limits = c(0, 1.6), breaks = c(0, 0.4, 0.8, 1.2, 1.6), position = "right") +
+  scale_x_continuous(limits = c(0, 1.8), breaks = c(0, 0.4, 0.8, 1.2, 1.6)) +
+  geom_point(size = 2.5) +
+  ggpubr::theme_pubr() +
+  theme(legend.position = "bottom", 
+        legend.key = element_blank(),
+        legend.box.background = element_rect(color = "black"),
+        legend.box.margin = margin(t = 1, l = 1),
+        plot.title = element_text(color = "grey30", face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(color = "grey30", hjust = 0.5),
+        axis.title.y.right = element_text(angle = 0, vjust = 0.5, face = 'bold'),
+        axis.title.x = element_text(face = 'bold')) +
+  scale_colour_brewer(palette = "Set1", labels = c("gain - high", "gain - medium", "lose - high", "lose - medium", "other")) +
+  geom_text_repel(aes(label = cluster_id), 
+                  show.legend = FALSE,
+                  max.overlaps = nrow(day1_vs_day5_150)) +
+  labs(colour = "Amplitude", shape = "Rhythm",
+       y= "day 5 \namplitude", x = "day 1 amplitude") +
+  ggtitle("Day 1 vs Day 5",
+          subtitle = "acclimation to 4C") +
+  guides(colour = guide_legend(order = 1, nrow = 2),
+         shape  = guide_legend(order = 0, nrow = 2))
+
+plot_day1_vs_day5_150_AMP
+
+ggsave('./03_plots/plot_day1_vs_day5_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
+
+# *4.3 Amplitude and Rhythm cluster group summaries----
+# **4.3.1 Amplitude----
+
 amp_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
   mutate(amp_flag_simplified = case_when(grepl("gain", amp_flag) ~ 'gain',
                                          grepl("lose", amp_flag) ~ 'lose',
@@ -442,8 +479,8 @@ amp_percent_graph <- amp_summary_table %>%
         legend.box.margin = margin(t = 1, l = 1, b = 1, r = 1),
         legend.text=element_text(size = 12)) +
   guides(fill = guide_legend(nrow = 3))
-  
-amp_percent_graph
+
+#**4.3.2 Rhythm----
 
 rhy_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
   mutate(pval_flag_simplified = case_when(pval_flag %in% 'r-r' ~ 'no change',
@@ -486,39 +523,7 @@ rhy_percent_graph <- rhy_summary_table %>%
         legend.text = element_text(size = 12)) +
   guides(fill = guide_legend(nrow = 3))
 
-rhy_percent_graph
-
-# *4.2 compare d1d5 amplitude----
-
-plot_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
-  #filter(pval_flag == 'd1_nr_d5_r' | pval_flag == 'd1_r_d5_nr' | pval_flag == 'd1_r_d5_r') %>%
-  ggplot(aes(x = d1_meta2d_AMP, y = d5_meta2d_AMP, colour = amp_flag, shape = pval_flag)) +
-  scale_y_continuous(limits = c(0, 1.6), breaks = c(0, 0.4, 0.8, 1.2, 1.6), position = "right") +
-  scale_x_continuous(limits = c(0, 1.8), breaks = c(0, 0.4, 0.8, 1.2, 1.6)) +
-  geom_point(size = 2.5) +
-  ggpubr::theme_pubr() +
-  theme(legend.position = "bottom", 
-        legend.key = element_blank(),
-        legend.box.background = element_rect(color = "black"),
-        legend.box.margin = margin(t = 1, l = 1),
-        plot.title = element_text(color = "grey30", face = 'bold', hjust = 0.5),
-        plot.subtitle = element_text(color = "grey30", hjust = 0.5),
-        axis.title.y.right = element_text(angle = 0, vjust = 0.5, face = 'bold'),
-        axis.title.x = element_text(face = 'bold')) +
-  scale_colour_brewer(palette = "Set1", labels = c("gain - high", "gain - medium", "lose - high", "lose - medium", "other")) +
-  geom_text_repel(aes(label = cluster_id), 
-                  show.legend = FALSE,
-                  max.overlaps = nrow(day1_vs_day5_150)) +
-  labs(colour = "Amplitude", shape = "Rhythm",
-       y= "day 5 \namplitude", x = "day 1 amplitude") +
-  ggtitle("Day 1 vs Day 5",
-          subtitle = "acclimation to 4C") +
-  guides(colour = guide_legend(order = 1, nrow = 2),
-         shape  = guide_legend(order = 0, nrow = 2))
-
-plot_day1_vs_day5_150_AMP
-
-ggsave('./03_plots/plot_day1_vs_day5_150_AMP.png', dpi = 300, height = 6, width = 6, units = 'in')
+#*4.4 patchwork plot Figure 2----
 
 fig2_top_plot <- wrap_elements(plot_day1_vs_day2_150_AMP + plot_day1_vs_day5_150_AMP + plot_layout(guides = "collect") + plot_layout(axes = "collect") + plot_annotation(title = "A", theme = thm) & theme(legend.position = 'bottom',
                                                                                                                                                                                                            legend.box.background = element_rect(color = "black", linewidth = 1),
@@ -531,8 +536,6 @@ fig2_bottom_plot <- wrap_elements(amp_percent_graph + rhy_percent_graph + plot_a
 
 fig_2 <- fig2_top_plot / fig2_bottom_plot + 
   plot_layout(heights = unit(c(0.66, 0.34), c('null', 'null')))
-
-fig_2
 
 ggsave('./03_plots/fig2_plot.png', dpi = 300, height = 15, width = 10, units = 'in')
 
@@ -711,6 +714,255 @@ TF_liu_merge <- merge_TF_clock(liu, 'PRR7')
 TF_ezer_LUX_merge <- merge_TF_clock(ezer_LUX, 'LUX')
 TF_ezer_ELF3_merge <- merge_TF_clock(ezer_ELF3, 'ELF3')
 TF_ezer_ELF4_merge <- merge_TF_clock(ezer_ELF4, 'ELF4')
+
+#*8.1 ChIP dataset overlaps table----
+# https://nrennie.rbind.io/blog/getting-started-with-gt-tables/
+
+df_table <- tibble(read_xlsx("./00_raw_data/Clock_ChIP_datasets_in_network.xlsx"))
+
+df_table <- df_table %>% 
+  rename(Total = 'Number of cis targets',
+         yes_network = 'Number in the TF network',
+         TF = 'trans factor abbrev') %>% 
+  mutate(no_network = Total - yes_network,
+         percent = yes_network/Total *100) %>% 
+  select(1, 2, 3, 4, 5, 7, 8, 6, 9)
+
+p_data <- df_table %>% 
+  filter(TF == 'TOC1') %>%
+  select(no_network, yes_network, Total, percent) %>%
+  pivot_longer(1:2) %>%
+  mutate(x = 1,
+         name = factor(name, levels = c("no_network", "yes_network")))
+
+lower <- filter(p_data, name == "yes_network")$value
+upper <- unique(p_data$Total)
+
+count_data <- df_table %>%
+  filter(TF == 'TOC1') %>% 
+  mutate(x = 1)
+
+#limits = c(0, plyr::round_any(max(p_data$Total), 100, ceiling)),
+
+p_data_plot <- ggplot() +
+  geom_col(data = p_data, aes(x = x, y = value, fill = name)) +
+  geom_text(data = count_data, aes(x = x, y = Total, label = paste0(sprintf("%1.1f", percent),"%")), hjust = -0.1, size = 20, fontface = "bold",
+            position = position_dodge(width = 1), colour = "#355C7D") +
+  scale_fill_manual(values = c("lightgrey", "#355C7D")) +
+  labs(x = "", y = "") +
+  scale_y_continuous(limits = c(0, plyr::round_any(max(p_data$Total)*1.5, 100, ceiling)),
+                     breaks = c(lower, upper),
+                     labels = c(filter(p_data, name == "yes_network")$value, unique(p_data$Total))) +
+  theme_minimal() +
+  coord_flip() +
+  theme(legend.position = "none",
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        axis.text.y = element_blank(),
+        axis.text.x = element_text(colour = "#355C7D", size = 60, face = "bold"))
+
+p_data_plot
+
+plot_clock <- function(protein, df){
+  # prep data
+  p_data <- filter(df, TF == protein) %>%
+    select(no_network, yes_network, Total) %>%
+    pivot_longer(1:2) %>%
+    mutate(x = 1,
+           name = factor(name, levels = c("no_network", "yes_network")))
+  # count data
+  c_data <- filter(df, TF == protein) %>%  
+    mutate(x = 1) 
+  # limits
+  lower <- filter(p_data, name == "yes_network")$value
+  upper <- unique(p_data$Total)
+  if ((upper - lower) < 100){
+    upper = upper + 50
+    lower = lower - 50
+  }
+  # make plot
+  ggplot() +
+    geom_col(data = p_data,
+             mapping = aes(x = x, y = value, fill = name)) +
+    geom_text(data = c_data, 
+              mapping = aes(x = x, y = Total, 
+                            label = paste0(sprintf("%1.1f", percent),"%")), 
+              hjust = -0.1, 
+              size = 28, 
+              fontface = "bold",
+              position = position_dodge(width = 1), colour = "grey30") +
+    scale_fill_manual(values = c("lightgrey", "grey30")) +
+    labs(x = "", y = "") +
+    scale_y_continuous(limits = c(0, plyr::round_any(max(df$Total)*1.25, 100, ceiling)),
+                       breaks = c(lower, upper),
+                       labels = c(filter(p_data, name == "yes_network")$value, unique(p_data$Total))) +
+    scale_x_continuous(breaks = upper,
+                       labels = paste0(sprintf("%1.1f", lower/upper*100),"%")) +
+    theme_minimal() +
+    coord_flip() +
+    theme(legend.position = "none",
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(colour = "grey30", size = 60, face = "bold"))
+}
+
+all_TF <- df_table %>%
+  pull(TF)
+
+TF_plots <- purrr::map(.x = all_TF, .f = ~plot_clock(.x, df = df_table))
+
+df_table <- df_table %>%
+  mutate(plots = TF_plots) %>%
+  select(-TF, -yes_network, -no_network, -Total)
+
+tb_clock <- df_table %>%
+  select(-plots, -percent) %>%
+  mutate(plots = NA) %>%
+  gt() 
+
+tb_clock <- tb_clock %>% 
+  text_transform(
+    locations = cells_body(columns=plots),
+    fn = function(x){
+      purrr::map(
+        df_table$plots, ggplot_image, height = px(80), aspect_ratio = 4
+      )
+    }
+  ) 
+
+tb_clock <- tb_clock %>% 
+  tab_style(
+    style = list(
+      cell_text(
+        align = "center",
+        size='medium',
+        color='grey30',
+        weight="bold")),
+    locations = cells_body('trans factor')
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(
+        align = "center")),
+    locations = cells_column_labels('trans factor')
+  ) %>%
+  tab_style(
+    style = list(
+      cell_text(
+        align = "left")),
+    locations = cells_body(plots)
+  )
+
+tb_clock <- tb_clock %>% 
+  cols_label(
+    'trans factor' = "Clock component",
+    plots = "Overlap"
+  )
+
+tb_clock <- tb_clock %>% 
+  cols_width(
+    'trans factor' ~ px(240),
+    Publication ~ px(175),
+    Dataset ~ px(125),
+    Epitope ~ px(125),
+    plots ~px(370)
+  )
+
+tb_clock <- tb_clock %>% 
+  tab_options(table.width = 1035,
+              container.width = 1035)
+
+tb_clock <- tb_clock %>% 
+  tab_style(
+    style = list(cell_fill(color = "#e4edf4")),
+    locations = cells_body(rows = seq(1,9,2))
+  )
+
+gtsave(tb_clock,"./03_plots/Table1.png")
+
+
+df_nr <- tibble(read_xlsx("./00_raw_data/100 Most Spoken Languages.xlsx")) %>% 
+  slice_head(n = 10)
+
+df_nr <- df_nr %>%
+  mutate(description =
+           c("English is the most spoken language in the world in terms of total speakers, although only the second most common in terms of native speakers.",
+             "Mandarin Chinese is the only language of Sino-Tibetan origin to make the top ten, and has the highest number of native speakers.",
+             "Hindi is the third most spoken language in the work, and is an official language of India, and Fiji, amongst others.",
+             "Spanish is an Indo-European language, spoken by just over half a billion people worldwide.",
+             "French is an official language of Belgium, Switzerland, Senegal, alongside France and 25 other countries. It is also of Indo-European origin.",
+             "Standard Arabic is the only language of Afro-Asiatic origin in the top ten, and has no native speakers according to www.ethnologue.com.",
+             "Bengali is the official and national language of Bangladesh, with 98% of Bangladeshis using Bengali as their first language.",
+             "Russian is an official language of only four countries: Belarus, Kazakhstan, Kyrgyzstan and Russia; with over a quarter of a billion total speakers.",
+             "Portuguese is spoken by just under a quarter of a billion people, with almost all (around 95%) being native speakers.",
+             "Indonesian is the only Austronesian language to make the top ten"))
+
+glimpse(df_nr)
+
+df_nr <- df_nr %>% 
+  mutate(
+    Total = as.numeric(
+      unlist(lapply(
+        regmatches(`Total Speakers`, gregexpr("[[:digit:]]+", `Total Speakers`)), function(x) str_flatten(x)))),
+    Native = as.numeric(
+      unlist(lapply(
+        regmatches(`Native Speakers`, gregexpr("[[:digit:]]+", `Native Speakers`)), function(x) str_flatten(x)))))
+
+df_nr <- df_nr %>% 
+  mutate(Native = replace_na(Native, 0),
+         Nonnative = Total - Native) %>%
+  select(Rank, Language, description, Total, Native, Nonnative)
+
+p_data_nr <- df_nr %>% 
+  filter(Language == 'English') %>%
+  select(Native, Nonnative, Total) %>%
+  pivot_longer(1:2) %>%
+  mutate(x = 1,
+         name = factor(name, levels = c("Nonnative", "Native")))
+
+plot_lang <- function(lang, df){
+  # prep data
+  p_data <- filter(df, Language == lang) %>%
+    select(Native, Nonnative, Total) %>%
+    pivot_longer(1:2) %>%
+    mutate(x = 1,
+           name = factor(name, levels = c("Nonnative", "Native")))
+  # limits
+  lower <- filter(p_data, name == "Native")$value
+  upper <- unique(p_data$Total)
+  if ((upper - lower) < 100){
+    upper = upper + 50
+    lower = lower - 50
+  }
+  # make plot
+  ggplot(data = p_data,
+         mapping = aes(x = x, y = value, fill = name)) +
+    geom_col() +
+    scale_fill_manual(values = c("lightgrey", "#355C7D")) +
+    labs(x = "", y = "") +
+    scale_y_continuous(limits = c(0, plyr::round_any(max(df$Total), 100, ceiling)),
+                       breaks = c(lower, upper),
+                       labels = c(filter(p_data, name == "Native")$value, unique(p_data$Total))) +
+    theme_minimal() +
+    coord_flip() +
+    theme(legend.position = "none",
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
+          axis.text.y = element_blank(),
+          axis.text.x = element_text(colour = "#355C7D", size = 60, face = "bold"))
+}
+
+all_lang <- df_nr %>%
+  pull(Language)
+
+lang_plots <- purrr::map(.x = all_lang, .f = ~plot_lang(.x, df = df_nr))
+
+df_nr <- df_nr %>%
+  mutate(plots = lang_plots) %>%
+  select(Rank, Language, description, plots)
+
+
 
 # 9 CLUSTER IDs for MERGED----
 
