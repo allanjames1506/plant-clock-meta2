@@ -444,7 +444,7 @@ amp_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
                                          grepl("lose", amp_flag) ~ 'lose',
                                          TRUE ~ 'other')) %>% 
   group_by(amp_flag_simplified) %>% 
-  summarise(number = n()) %>% 
+  dplyr::summarise(number = n()) %>% 
   ungroup %>% 
   mutate(percent = prop.table(number) * 100,
          condition = 'd1d2')
@@ -454,13 +454,13 @@ amp_summary_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
                                          grepl("lose", amp_flag) ~ 'lose',
                                          TRUE ~ 'other')) %>% 
   group_by(amp_flag_simplified) %>% 
-  summarise(number = n()) %>%
+  dplyr::summarise(number = n()) %>%
   ungroup %>% 
   mutate(percent = prop.table(number) * 100,
          condition = 'd1d5') 
 
 amp_summary_table <- bind_rows(amp_summary_day1_vs_day2_150_AMP, amp_summary_day1_vs_day5_150_AMP) %>% 
-  rename(group = amp_flag_simplified)
+  dplyr::rename(group = amp_flag_simplified)
 
 amp_percent_graph <- amp_summary_table %>% 
   ggplot(aes(x = condition, y = percent, fill = factor(group, levels = c('gain', 'lose', 'other')))) + 
@@ -480,6 +480,8 @@ amp_percent_graph <- amp_summary_table %>%
         legend.text=element_text(size = 12)) +
   guides(fill = guide_legend(nrow = 3))
 
+amp_percent_graph
+
 #**4.3.2 Rhythm----
 
 rhy_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
@@ -487,7 +489,7 @@ rhy_summary_day1_vs_day2_150_AMP <- day1_vs_day2_150 %>%
                                           pval_flag %in% 'nr-nr' ~ 'no change',
                                           TRUE ~ pval_flag)) %>% 
   group_by(pval_flag_simplified) %>% 
-  summarise(number = n()) %>% 
+  dplyr::summarise(number = n()) %>% 
   ungroup %>% 
   mutate(percent = prop.table(number) * 100,
          condition = 'd1d2')
@@ -497,13 +499,13 @@ rhy_summary_day1_vs_day5_150_AMP <- day1_vs_day5_150 %>%
                                           pval_flag %in% 'nr-nr' ~ 'no change',
                                           TRUE ~ pval_flag)) %>%
   group_by(pval_flag_simplified) %>% 
-  summarise(number = n()) %>%
+  dplyr::summarise(number = n()) %>%
   ungroup %>% 
   mutate(percent = prop.table(number) * 100,
          condition = 'd1d5') 
 
 rhy_summary_table <- bind_rows(rhy_summary_day1_vs_day2_150_AMP, rhy_summary_day1_vs_day5_150_AMP) %>% 
-  rename(group = pval_flag_simplified)
+  dplyr::rename(group = pval_flag_simplified)
 
 rhy_percent_graph <- rhy_summary_table %>% 
   ggplot(aes(x = condition, y = percent, fill = factor(group, levels = c('nr-r','r-nr', 'no change')))) + 
@@ -522,6 +524,8 @@ rhy_percent_graph <- rhy_summary_table %>%
         legend.box.margin = margin(t = 1, l = 1, b = 1, r = 1),
         legend.text = element_text(size = 12)) +
   guides(fill = guide_legend(nrow = 3))
+
+rhy_percent_graph
 
 #*4.4 patchwork plot Figure 2----
 
@@ -731,7 +735,7 @@ df_table <- tibble(read_xlsx("./00_raw_data/Clock_ChIP_datasets_in_network.xlsx"
 # and (v) bar charts showing the overlap of transcripts in the TF network that are also clock targets 
 
 df_table <- df_table %>% 
-  rename(Total = 'Number of cis targets',
+  dplyr::rename(Total = 'Number of cis targets',
          yes_network = 'Number in the TF network',
          TF = 'trans factor abbrev') %>% 
   mutate(no_network = Total - yes_network,
@@ -890,6 +894,8 @@ tb_clock <- tb_clock %>%
     style = list(cell_fill(color = "#e4edf4")),
     locations = cells_body(rows = seq(1,9,2))
   )
+
+tb_clock
 
 # Saving the {gt} Table 
 # gtsave() function used to save a static version of the plot
@@ -1235,15 +1241,20 @@ plot_clock_d1d2 <- clock_d1_d2 %>%
   scale_fill_manual(values = c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'), labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high')) +
   geom_bar(position = 'stack', stat = 'identity') +
   ggpubr::theme_pubr() +
-  theme(legend.position = "right") +
-  theme(axis.text.x=element_text(angle=30, hjust=1, vjust=1)) +
-  labs(fill = 'Amplitude', y = 'Proportion (%)', x = '') +
-  ggtitle("Amplitude patterns for clock targets",
-          subtitle = "Compare day 1 (20C steady state) with day 2 (to 4C transient-cooling)") 
+  theme(legend.position = "right", 
+        legend.box.background = element_rect(color = "black"),
+        legend.box.margin = margin(t = 1, l = 1),
+        plot.title = element_text(color = "grey30", face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(color = "grey30", hjust = 0.5),
+        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
+        axis.title.y = element_text(angle = 0, vjust = 0.5, face = 'bold')) +
+  labs(fill = 'Amplitude', y = 'percent', x = '') +
+  ggtitle("Day 1 vs Day 2",
+          subtitle = "transition from 20C to 4C") 
 
 plot_clock_d1d2
 
-ggsave('./03_plots/plot_clock_d1d2.png', dpi = 300, height = 6, width = 6, units = 'in')
+ggsave('./03_plots/plot_clock_d1d2.png', dpi = 300, height = 6, width = 4, units = 'in')
 
 # **10.3.2 d1d5----
 
@@ -1251,15 +1262,20 @@ plot_clock_d1d5 <- clock_d1_d5 %>%
   mutate(type = factor(type, levels = c('gain_high_d1_d5', 'gain_medium_d1_d5', 'other_d1_d5', 'lose_medium_d1_d5', 'lose_high_d1_d5')),
          clock = factor(clock, levels = c('CCA1', 'LHY', 'TOC1', 'PRR5', 'PRR7', 'LUX', 'ELF3', 'ELF4'))) %>% 
   ggplot(aes(x = clock, y = freq, fill = type)) +
-  scale_y_continuous(limits = c(0, 100), breaks = c(0, 20, 40, 60, 80, 100)) +
+  scale_y_continuous(limits = c(0, 100), breaks = c(0, 20, 40, 60, 80, 100), position = "right") +
   scale_fill_manual(values = c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'), labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high')) +
   geom_bar(position = 'stack', stat = 'identity') +
   ggpubr::theme_pubr() +
-  theme(legend.position = "right") +
-  theme(axis.text.x=element_text(angle=30, hjust=1, vjust=1)) +
-  labs(fill = 'Amplitude', y = 'Proportion (%)', x = '') +
-  ggtitle("Amplitude patterns for clock targets",
-          subtitle = "Compare day 1 (20C steady state) with Day 5 (4C steady state)") 
+  theme(legend.position = "right", 
+        legend.box.background = element_rect(color = "black"),
+        legend.box.margin = margin(t = 1, l = 1),
+        plot.title = element_text(color = "grey30", face = 'bold', hjust = 0.5),
+        plot.subtitle = element_text(color = "grey30", hjust = 0.5),
+        axis.text.x=element_text(angle=30, hjust=1, vjust=1),
+        axis.title.y.right = element_text(angle = 0, vjust = 0.5, face = 'bold')) +
+  labs(fill = 'Amplitude', y = 'percent', x = '') +
+  ggtitle("Day 1 vs Day 5",
+          subtitle = "acclimation to 4C") 
 
 plot_clock_d1d5
 
@@ -1358,13 +1374,16 @@ circbar_d1d2_to_add$group <- rep(levels(circbar_d1d2$group), each=circbar_d1d2_e
 
 circbar_d1d2 <- rbind(circbar_d1d2, circbar_d1d2_to_add)
 
-circbar_d1d2_gc <- circbar_d1d2 %>% arrange(group, cluster)
+circbar_d1d2_gc <- circbar_d1d2 %>% dplyr::arrange(group, cluster)
 
 circbar_d1d2_gs <- circbar_d1d2_gc %>% arrange(group, sum)
 
 circbar_d1d2_gs$id <- rep( seq(1, nrow(circbar_d1d2_gs)/circbar_d1d2_nOBsType) , each=circbar_d1d2_nOBsType)
 
-circbar_d1d2_gs$name <- factor(circbar_d1d2_gs$name, levels = c("CCA1", "LHY", "TOC1", "PRR5", "PRR7", "LUX", "ELF3", "ELF4"))
+#circbar_d1d2_gs$name <- factor(circbar_d1d2_gs$name, levels = c("CCA1", "LHY", "TOC1", "PRR5", "PRR7", "LUX", "ELF3", "ELF4"))
+
+circbar_d1d2_gs <- circbar_d1d2_gs %>% 
+  mutate(name = factor(name, levels = c("CCA1", "LHY", "TOC1", "PRR5", "PRR7", "LUX", "ELF3", "ELF4")))
 
 # Get the name and the y position of each label
 label_data_circbar_d1d2<- circbar_d1d2_gs %>% dplyr::group_by(id, cluster) %>% dplyr::summarize(tot=sum(number))
@@ -1395,7 +1414,8 @@ circbar_d1d2_plot <- ggplot(circbar_d1d2_gs) +
   
   # Add the stacked bar
   geom_bar(aes(x=as.factor(id), y=number, fill=name), stat="identity", alpha=0.75) +
-  scale_fill_manual (values=c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc")) +
+  scale_fill_manual (values=c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc"),
+                     breaks = c('CCA1', 'LHY', 'TOC1', 'PRR5', 'PRR7', 'LUX', 'ELF3', 'ELF4')) +
   
   # Add a val=150/100/50/0 lines
   geom_segment(data= grid_data_circbar_d1d2, aes(x = end, y = 0, xend = start, yend = 0), colour = "grey30", alpha=0.5, size=0.3 , inherit.aes = FALSE ) +
@@ -1407,25 +1427,25 @@ circbar_d1d2_plot <- ggplot(circbar_d1d2_gs) +
   ggplot2::annotate("text", x = rep(max(circbar_d1d2_gs$id),4), y = c(0, 50, 100, 150), label = c("0", "50", "100", "150") , color="grey30", size=5 , angle=0, fontface="bold", hjust=1) +
   ylim(-150,max(20+label_data_circbar_d1d2$tot, na.rm=T)) +
   theme_minimal() +
-  theme(legend.position=c(0.25,0.8),
-        legend.text = element_text(color = "black", size = 9),
+  theme(legend.position = c(0.15,0.8),
+        legend.text = element_text(color = "black", size = 12),
         legend.title= element_blank(),
         axis.text = element_blank(),
         axis.title = element_blank(),
         panel.grid = element_blank(),
-        plot.margin = unit(rep(-1,4), "cm")) +
+        plot.margin = unit(rep(-1, 4), "cm")) +
   coord_polar() +
   
   # Add labels on top of each bar
   geom_text(data=label_data_circbar_d1d2, aes(x=id, y=tot+5, label=cluster, hjust=hjust), color="black", fontface="bold",alpha=0.6, size=4, angle= label_data_circbar_d1d2$angle, inherit.aes = FALSE ) +
   
   # Add base line information
-  geom_segment(data=base_data_circbar_d1d2, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE )  +
-  geom_text(data=base_data_circbar_d1d2, aes(x = title, y = -15, label=group), hjust=c(1,1,0.5,0,0), vjust=c(0,0,-1,0,1), colour = "black", alpha=0.8, size=4, fontface="bold", inherit.aes = FALSE)
+  geom_segment(data=base_data_circbar_d1d2, aes(x = start, y = -5, xend = end, yend = -5), colour = "black", alpha=0.8, size=0.6 , inherit.aes = FALSE ) +
+  geom_text(data=base_data_circbar_d1d2, aes(x = title, y = -15, label=group), hjust=c(1,1,0.5,0,0), vjust=c(0,0,-1,0,1), colour = "black", alpha=0.8, size=4, fontface="bold", inherit.aes = FALSE) 
 
-circbar_d1d2_plot
+circbar_d1d2_plot 
 
-ggsave(circbar_d1d2_plot, file="./03_plots/circbar_d1d2_plot.png", width=8, height=8, units="in",dpi=200)
+ggsave(circbar_d1d2_plot, file="./03_plots/circbar_d1d2_plot.png", width=8, height=8, units="in",dpi=300)
 
 # *11.2 d1d5----
 
@@ -1526,7 +1546,8 @@ circbar_d1d5_plot <- ggplot(circbar_d1d5_gs) +
   
   # Add the stacked bar
   geom_bar(aes(x=as.factor(id), y=number, fill=name), stat="identity", alpha=0.75) +
-  scale_fill_manual (values=c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc")) +
+  scale_fill_manual (values=c("#1a9850", "#a6d96a", "#4575b4", "#fdae61", "#f46d43", "#542788", "#636363", "#cccccc"),
+                     breaks = c('CCA1', 'LHY', 'TOC1', 'PRR5', 'PRR7', 'LUX', 'ELF3', 'ELF4')) +
   
   # Add a val=150/100/50/0 lines
   geom_segment(data= grid_data_circbar_d1d5, aes(x = end, y = 0, xend = start, yend = 0), colour = "grey30", alpha=0.5, size=0.3 , inherit.aes = FALSE ) +
@@ -1538,7 +1559,7 @@ circbar_d1d5_plot <- ggplot(circbar_d1d5_gs) +
   ggplot2::annotate("text", x = rep(max(circbar_d1d5_gs$id),4), y = c(0, 50, 100, 150), label = c("0", "50", "100", "150") , color="grey30", size=5 , angle=0, fontface="bold", hjust=1) +
   ylim(-150,max(20+label_data_circbar_d1d5$tot, na.rm=T)) +
   theme_minimal() +
-  theme(legend.position=c(0.25,0.8),
+  theme(legend.position = c(0.25,0.8),
         legend.text = element_text(color = "black", size = 9),
         legend.title= element_blank(),
         axis.text = element_blank(),
@@ -1557,6 +1578,22 @@ circbar_d1d5_plot <- ggplot(circbar_d1d5_gs) +
 circbar_d1d5_plot
 
 ggsave(circbar_d1d5_plot, file="./03_plots/circbar_d1d5_plot.png", width=8, height=8, units="in",dpi=200)
+
+#*11.3 patchwork plot Figure 3----
+
+fig3_top_plot <- wrap_elements(plot_clock_d1d2 + plot_clock_d1d5 + plot_layout(guides = "collect") & theme(legend.position = 'bottom',
+                                                                                                           legend.box.background = element_rect(color = "black", linewidth = 1),
+                                                                                                           legend.box.margin = margin(t = 1, l = 1, b = 1, r = 1),
+                                                                                                           legend.title=element_text(size = 12, face = "bold"),
+                                                                                                           legend.text=element_text(size = 12)))
+
+fig_3 <- fig3_top_plot / circbar_d1d2_plot + plot_annotation(tag_levels = 'A') +
+  plot_layout(heights = unit(c(0.4, 0.6), c('null', 'null'))) & 
+  theme(plot.tag = element_text(face = 2, size = 20))
+
+fig_3
+
+ggsave('./03_plots/fig3_plot.png', dpi = 300, height = 12, width = 8, units = 'in')
 
 # 12 ODDS RATIOS----
 
