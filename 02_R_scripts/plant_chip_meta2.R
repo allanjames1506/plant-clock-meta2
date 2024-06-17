@@ -1248,7 +1248,7 @@ plot_clock_d1d2 <- clock_d1_d2 %>%
         plot.subtitle = element_text(color = "grey30", hjust = 0.5),
         axis.text.x=element_text(angle=30, hjust=1, vjust=1),
         axis.title.y = element_text(angle = 0, vjust = 0.5, face = 'bold')) +
-  labs(fill = 'Amplitude', y = 'percent', x = '') +
+  labs(fill = 'Amplitude', y = '%', x = '') +
   ggtitle("Day 1 vs Day 2",
           subtitle = "transition from 20C to 4C") 
 
@@ -1273,7 +1273,7 @@ plot_clock_d1d5 <- clock_d1_d5 %>%
         plot.subtitle = element_text(color = "grey30", hjust = 0.5),
         axis.text.x=element_text(angle=30, hjust=1, vjust=1),
         axis.title.y.right = element_text(angle = 0, vjust = 0.5, face = 'bold')) +
-  labs(fill = 'Amplitude', y = 'percent', x = '') +
+  labs(fill = 'Amplitude', y = '%', x = '') +
   ggtitle("Day 1 vs Day 5",
           subtitle = "acclimation to 4C") 
 
@@ -1588,7 +1588,7 @@ fig3_top_plot <- wrap_elements(plot_clock_d1d2 + plot_clock_d1d5 + plot_layout(g
                                                                                                            legend.text=element_text(size = 12)))
 
 fig_3 <- fig3_top_plot / circbar_d1d2_plot + plot_annotation(tag_levels = 'A') +
-  plot_layout(heights = unit(c(0.4, 0.6), c('null', 'null'))) & 
+  plot_layout(heights = unit(c(0.34, 0.66), c('null', 'null'))) & 
   theme(plot.tag = element_text(face = 2, size = 20))
 
 fig_3
