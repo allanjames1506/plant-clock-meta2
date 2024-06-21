@@ -1870,7 +1870,9 @@ odds_d1d2_trimmed_matrix <- as.matrix(odds_d1d2_trimmed_matrix)
 
 rownames(odds_d1d2_trimmed_matrix) <- c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72)
 
-row_ha_hmap_d1d2_trimmed = rowAnnotation(context = odds_d1d2_trimmed$group, size = anno_barplot(odds_d1d2_trimmed$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+tile_names <- c('d1 vs d2', 'd1 vs d5')
+
+row_ha_hmap_d1d2_trimmed = rowAnnotation('d1 vs d2' = odds_d1d2_trimmed$group, 'd1 vs d5' = odds_d1d5_trimmed$group, size = anno_barplot(odds_d1d2_trimmed$cluster_size), col = list('d1 vs d2' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26"), 'd1 vs d5' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
 
 png(file="./03_plots/heatmap_d1d2_trimmed.png", width = 200, height = 200, units='mm', res = 300)
 
@@ -1911,6 +1913,25 @@ draw(m_d1d2_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lg
 decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
 dev.off()
+
+grob = grid.grabExpr(draw(Heatmap(...)))
+
+grob1 = grid.grabExpr(draw(m_d1d2_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list))
+
+grob1
+
+ha_t <- HeatmapAnnotation(df=ann,col=colours1,name="Cancer or control", show_annotation_name = FALSE, annotation_legend_param = list(title = "Cancer or control"), show_legend = FALSE)
+
+ht = draw(hm)
+
+column_order<-unlist(column_order(ht))
+
+m = matrix(nrow = 0, ncol = 46)
+
+ht_a = Heatmap(m, top_annotation = ha_t, column_split = split_cell,column_order = column_order,
+               column_gap=unit(c(5,2), "mm")) 
+ht_a = draw(ht_a)
+gb<-grid.grabExpr(draw(ht_a))
 
 # *13.2 d1d5----
 
@@ -2016,6 +2037,10 @@ decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit
 
 dev.off()
 
+grob2 = grid.grabExpr(draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list))
+
+grob2
+grid.arrange(grob1, grob2, ncol=1)
 # 14 UpSetR PLOTS----
 
 # *14.1 full----
