@@ -1799,6 +1799,8 @@ odds_d1d2_matrix<-as.matrix(odds_d1d2_matrix)
 
 rownames(odds_d1d2_matrix) <- 1:74
 
+tile_names <- c('d1 vs d2', 'd1 vs d5')
+
 col_fun = colorRamp2(c(0,15,30), c('white','blue','red'))
 
 col_fun2 = colorRamp2(c(0,15,35), c('#FFFFFFFF','#9ecae1','#3182bd'))
@@ -1806,7 +1808,7 @@ col_fun2 = colorRamp2(c(0,15,35), c('#FFFFFFFF','#9ecae1','#3182bd'))
 col_fun(seq(-5,5))
 col_fun2(seq(-5,5))
 
-row_ha_hmap_d1d2_full = rowAnnotation(context = odds_d1d2$group, size = anno_barplot(odds_d1d2$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+row_ha_hmap_d1d2_full = rowAnnotation('d1 vs d2' = odds_d1d2$group, 'd1 vs d5' = odds_d1d5$group, size = anno_barplot(odds_d1d2$cluster_size), col = list('d1 vs d2' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26"), 'd1 vs d5' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), gap = unit(2, "mm"), show_legend = FALSE)
 
 png(file="./03_plots/heatmap_d1d2_full.png", width = 200, height = 300, units='mm', res = 300)
 
@@ -1845,7 +1847,7 @@ lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium"
 
 draw(m_d1d2, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
 
-decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
+decorate_annotation("size", {grid.text("cluster \nsize", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
 dev.off()
 
@@ -1870,9 +1872,7 @@ odds_d1d2_trimmed_matrix <- as.matrix(odds_d1d2_trimmed_matrix)
 
 rownames(odds_d1d2_trimmed_matrix) <- c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72)
 
-tile_names <- c('d1 vs d2', 'd1 vs d5')
-
-row_ha_hmap_d1d2_trimmed = rowAnnotation('d1 vs d2' = odds_d1d2_trimmed$group, 'd1 vs d5' = odds_d1d5_trimmed$group, size = anno_barplot(odds_d1d2_trimmed$cluster_size), col = list('d1 vs d2' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26"), 'd1 vs d5' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+row_ha_hmap_d1d2_trimmed = rowAnnotation('d1 vs d2' = odds_d1d2_trimmed$group, 'd1 vs d5' = odds_d1d5_trimmed$group, size = anno_barplot(odds_d1d2_trimmed$cluster_size), col = list('d1 vs d2' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26"), 'd1 vs d5' = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), gap = unit(2, "mm"), show_legend = FALSE)
 
 png(file="./03_plots/heatmap_d1d2_trimmed.png", width = 200, height = 200, units='mm', res = 300)
 
@@ -1898,10 +1898,10 @@ m_d1d2_trimmed = Heatmap(odds_d1d2_trimmed_matrix,
                          column_km_repeats = 100,
                          column_dend_height = unit(2, "cm"),
                          column_gap = unit(5, "mm"), 
-                         left_annotation = rowAnnotation(foo = anno_block(gp = gpar(fill = c(8,8,8,8)), 
-                                                                          labels = c("g1", "g2", "g3", "g4"),
+                         left_annotation = rowAnnotation(foo = anno_block(gp = gpar(fill = c(8,8,8)), 
+                                                                          labels = c("g1", "g2", "g3"),
                                                                           labels_gp = gpar(col = "black", fontsize = 10))), 
-                         row_km=4, 
+                         row_km=3, 
                          row_km_repeats = 100,
                          cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d2_trimmed_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d2_trimmed_matrix[i, j]), x, y, gp = gpar(fontsize =11, col='black', fontface = 'bold'))})
 
@@ -1910,7 +1910,7 @@ lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium"
 
 draw(m_d1d2_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
 
-decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
+decorate_annotation("size", {grid.text("cluster \nsize", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
 
 dev.off()
 
@@ -1933,126 +1933,126 @@ ht_a = Heatmap(m, top_annotation = ha_t, column_split = split_cell,column_order 
 ht_a = draw(ht_a)
 gb<-grid.grabExpr(draw(ht_a))
 
-# *13.2 d1d5----
-
-# **13.2.1 full----
-
-odds_d1d5_matrix <- odds_d1d5 %>%
-  dplyr::select(4:11)
-
-odds_d1d5_matrix<-as.matrix(odds_d1d5_matrix)
-
-rownames(odds_d1d5_matrix) <- 1:74
-
-row_ha_hmap_d1d5_full = rowAnnotation(context = odds_d1d5$group, size = anno_barplot(odds_d1d5$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
-
-png(file="./03_plots/heatmap_d1d5_full.png", width = 200, height = 300, units='mm', res = 300)
-
-m_d1d5 = Heatmap(odds_d1d5_matrix,
-                 name='Odds Ratio', 
-                 heatmap_legend_param = list(legend_direction = "horizontal", 
-                                             title_gp = gpar(fontsize = 10), 
-                                             legend_width = unit(5, "cm"), at = c(0, 5, 10, 15, 20, 25, 30), 
-                                             labels = c(0, 5, 10, 15, 20, 25, 30), 
-                                             title = "Odds Ratio", 
-                                             legend_height = unit(4, "cm"), 
-                                             title_position = "topleft", border="gray40"), 
-                 column_names_rot = 45, 
-                 column_title = NULL, 
-                 rect_gp = gpar(col = "gray40", lwd = 1), 
-                 col=col_fun2,
-                 right_annotation = row_ha_hmap_d1d5_full,
-                 row_title=NULL, 
-                 row_dend_width = unit(4, "cm"), 
-                 row_names_gp = gpar(fontsize = 8), 
-                 row_gap = unit(2, "mm"), 
-                 column_km=6, 
-                 column_km_repeats = 100,
-                 column_dend_height = unit(2, "cm"),
-                 column_gap = unit(5, "mm"), 
-                 left_annotation = rowAnnotation(foo = anno_block(gp = gpar(fill = c(8,8,8,8)), 
-                                                                  labels = c("g1", "g2", "g3", "g4"),
-                                                                  labels_gp = gpar(col = "black", fontsize = 10))), 
-                 row_km=4, 
-                 row_km_repeats = 100, 
-                 cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d5_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d5_matrix[i, j]), x, y, gp = gpar(fontsize =8, col='black'))})
-
-lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium", "Lose High"), title="cluster context", type = "points", pch=15, title_gp = gpar(fontsize = 10), size=unit(5,"mm"), border="black", legend_gp=gpar(col=c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'))))
-
-draw(m_d1d5, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
-
-decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
-
-dev.off()
-
-# **13.2.2 trimmed----
-odds_d1d5_trimmed <- odds_d1d5 %>%
-  filter_at(vars(LHY:ELF4), any_vars(.>5)) 
-
-odds_d1d5_trimmed_matrix <- odds_d1d5_trimmed %>%
-  dplyr::select(4:11)
-
-odds_d1d5_trimmed_matrix <- as.matrix(odds_d1d5_trimmed_matrix)
-
-rownames(odds_d1d5_trimmed_matrix) <- c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72)
-
-row_ha_hmap_d1d5_trimmed = rowAnnotation(context = odds_d1d5_trimmed$group, size = anno_barplot(odds_d1d5_trimmed$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
-
-png(file="./03_plots/heatmap_d1d5_trimmed.png", width = 200, height = 200, units='mm', res = 300)
-
-m_d1d5_trimmed = Heatmap(odds_d1d5_trimmed_matrix,
-                         name='Odds Ratio',
-                         heatmap_legend_param = list(legend_direction = "horizontal", 
-                                                     title_gp = gpar(fontsize = 10), 
-                                                     legend_width = unit(5, "cm"), at = c(0, 5, 10, 15, 20, 25, 30, 35), 
-                                                     labels = c(0, 5, 10, 15, 20, 25, 30, 35), 
-                                                     title = "Odds Ratio",
-                                                     legend_height = unit(4, "cm"), 
-                                                     title_position = "topleft", border="gray40"), 
-                         column_names_rot = 45, 
-                         column_title = NULL, 
-                         rect_gp = gpar(col = "gray40", lwd = 1), 
-                         col=col_fun2,
-                         right_annotation = row_ha_hmap_d1d5_trimmed,
-                         row_title=NULL, 
-                         row_dend_width = unit(4, "cm"),
-                         row_names_gp = gpar(fontsize = 10), 
-                         row_gap = unit(2, "mm"), 
-                         column_km=6, 
-                         column_km_repeats = 100,
-                         column_dend_height = unit(2, "cm"),
-                         column_gap = unit(5, "mm"), 
-                         left_annotation = rowAnnotation(foo = anno_block(gp = gpar(fill = c(8,8,8,8)), 
-                                                                          labels = c("g1", "g2", "g3", "g4"),
-                                                                          labels_gp = gpar(col = "black", fontsize = 10))), 
-                         row_km=4, 
-                         row_km_repeats = 100,
-                         cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d5_trimmed_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d5_trimmed_matrix[i, j]), x, y, gp = gpar(fontsize =11, col='black', fontface = 'bold'))})
-
-lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium", "Lose High"), title="cluster context", type = "points", pch=15, title_gp = gpar(fontsize = 10), size=unit(5,"mm"), border="black", legend_gp=gpar(col=c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'))))
-
-draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
-
-decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
-
-dev.off()
-
-grob2 = grid.grabExpr(draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list))
-
-grob2
-grid.arrange(grob1, grob2, ncol=1)
+# # *13.2 d1d5----
+# 
+# # **13.2.1 full----
+# 
+# odds_d1d5_matrix <- odds_d1d5 %>%
+#   dplyr::select(4:11)
+# 
+# odds_d1d5_matrix<-as.matrix(odds_d1d5_matrix)
+# 
+# rownames(odds_d1d5_matrix) <- 1:74
+# 
+# row_ha_hmap_d1d5_full = rowAnnotation(context = odds_d1d5$group, size = anno_barplot(odds_d1d5$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+# 
+# png(file="./03_plots/heatmap_d1d5_full.png", width = 200, height = 300, units='mm', res = 300)
+# 
+# m_d1d5 = Heatmap(odds_d1d5_matrix,
+#                  name='Odds Ratio', 
+#                  heatmap_legend_param = list(legend_direction = "horizontal", 
+#                                              title_gp = gpar(fontsize = 10), 
+#                                              legend_width = unit(5, "cm"), at = c(0, 5, 10, 15, 20, 25, 30), 
+#                                              labels = c(0, 5, 10, 15, 20, 25, 30), 
+#                                              title = "Odds Ratio", 
+#                                              legend_height = unit(4, "cm"), 
+#                                              title_position = "topleft", border="gray40"), 
+#                  column_names_rot = 45, 
+#                  column_title = NULL, 
+#                  rect_gp = gpar(col = "gray40", lwd = 1), 
+#                  col=col_fun2,
+#                  right_annotation = row_ha_hmap_d1d5_full,
+#                  row_title=NULL, 
+#                  row_dend_width = unit(4, "cm"), 
+#                  row_names_gp = gpar(fontsize = 8), 
+#                  row_gap = unit(2, "mm"), 
+#                  column_km=6, 
+#                  column_km_repeats = 100,
+#                  column_dend_height = unit(2, "cm"),
+#                  column_gap = unit(5, "mm"), 
+#                  left_annotation = rowAnnotation(foo = anno_block(gp = gpar(fill = c(8,8,8,8)), 
+#                                                                   labels = c("g1", "g2", "g3", "g4"),
+#                                                                   labels_gp = gpar(col = "black", fontsize = 10))), 
+#                  row_km=4, 
+#                  row_km_repeats = 100, 
+#                  cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d5_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d5_matrix[i, j]), x, y, gp = gpar(fontsize =8, col='black'))})
+# 
+# lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium", "Lose High"), title="cluster context", type = "points", pch=15, title_gp = gpar(fontsize = 10), size=unit(5,"mm"), border="black", legend_gp=gpar(col=c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'))))
+# 
+# draw(m_d1d5, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
+# 
+# decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
+# 
+# dev.off()
+# 
+# # **13.2.2 trimmed----
+# odds_d1d5_trimmed <- odds_d1d5 %>%
+#   filter_at(vars(LHY:ELF4), any_vars(.>5)) 
+# 
+# odds_d1d5_trimmed_matrix <- odds_d1d5_trimmed %>%
+#   dplyr::select(4:11)
+# 
+# odds_d1d5_trimmed_matrix <- as.matrix(odds_d1d5_trimmed_matrix)
+# 
+# rownames(odds_d1d5_trimmed_matrix) <- c(9, 10, 11, 20, 22, 24, 25, 29, 31, 34, 38, 42, 44, 52, 56, 58, 65, 67, 71, 72)
+# 
+# row_ha_hmap_d1d5_trimmed = rowAnnotation(context = odds_d1d5_trimmed$group, size = anno_barplot(odds_d1d5_trimmed$cluster_size), col = list(context = c("gain high" = "#31a354", "gain medium" = "#74c476", "other" = "#cccccc", "lose medium" = "#fb6a4a", "lose high" = "#de2d26")), show_legend = FALSE)
+# 
+# png(file="./03_plots/heatmap_d1d5_trimmed.png", width = 200, height = 200, units='mm', res = 300)
+# 
+# m_d1d5_trimmed = Heatmap(odds_d1d5_trimmed_matrix,
+#                          name='Odds Ratio',
+#                          heatmap_legend_param = list(legend_direction = "horizontal", 
+#                                                      title_gp = gpar(fontsize = 10), 
+#                                                      legend_width = unit(5, "cm"), at = c(0, 5, 10, 15, 20, 25, 30, 35), 
+#                                                      labels = c(0, 5, 10, 15, 20, 25, 30, 35), 
+#                                                      title = "Odds Ratio",
+#                                                      legend_height = unit(4, "cm"), 
+#                                                      title_position = "topleft", border="gray40"), 
+#                          column_names_rot = 45, 
+#                          column_title = NULL, 
+#                          rect_gp = gpar(col = "gray40", lwd = 1), 
+#                          col=col_fun2,
+#                          right_annotation = row_ha_hmap_d1d5_trimmed,
+#                          row_title=NULL, 
+#                          row_dend_width = unit(4, "cm"),
+#                          row_names_gp = gpar(fontsize = 10), 
+#                          row_gap = unit(2, "mm"), 
+#                          column_km=6, 
+#                          column_km_repeats = 100,
+#                          column_dend_height = unit(2, "cm"),
+#                          column_gap = unit(5, "mm"), 
+#                          left_annotation = rowAnnotation(foo = anno_block(gp = gpar(fill = c(8,8,8,8)), 
+#                                                                           labels = c("g1", "g2", "g3", "g4"),
+#                                                                           labels_gp = gpar(col = "black", fontsize = 10))), 
+#                          row_km=4, 
+#                          row_km_repeats = 100,
+#                          cell_fun = function(j, i, x, y, width, height, fill) {if(odds_d1d5_trimmed_matrix[i, j] > 5) grid.text(sprintf("%.1f", odds_d1d5_trimmed_matrix[i, j]), x, y, gp = gpar(fontsize =11, col='black', fontface = 'bold'))})
+# 
+# lgd_list=list(Legend(labels=c("Gain High", "Gain Medium", "Other", "Lose Medium", "Lose High"), title="cluster context", type = "points", pch=15, title_gp = gpar(fontsize = 10), size=unit(5,"mm"), border="black", legend_gp=gpar(col=c('#31a354', '#74c476', '#cccccc', '#fb6a4a', '#de2d26'))))
+# 
+# draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list)
+# 
+# decorate_annotation("size", {grid.text("cluster size", y = unit(1, "npc") + unit(2, "mm"), just = "bottom", gp = gpar(fontsize = 10))})
+# 
+# dev.off()
+# 
+# grob2 = grid.grabExpr(draw(m_d1d5_trimmed, heatmap_legend_side = "bottom", annotation_legend_list = lgd_list))
+# 
+# grob2
+# grid.arrange(grob1, grob2, ncol=1)
 # 14 UpSetR PLOTS----
 
 # *14.1 full----
 
-myGeneSets <- list(TF_network_LHY = TF_adams_merge$gene_ID,
-                   TF_network_CCA1 = TF_kamioka_nagel_merge$gene_ID,
-                   TF_network_TOC1 = TF_huang_merge$gene_ID,
-                   TF_network_PRR5 = TF_nakamichi_merge$gene_ID,
-                   TF_network_PRR7 = TF_liu_merge$gene_ID,
-                   TF_network_LUX = TF_ezer_LUX_merge$gene_ID,
-                   TF_network_ELF3 = TF_ezer_ELF3_merge$gene_ID,
-                   TF_network_ELF4 = TF_ezer_ELF4_merge$gene_ID)
+myGeneSets <- list(LHY = TF_adams_merge$gene_ID,
+                   CCA1 = TF_kamioka_nagel_merge$gene_ID,
+                   TOC1 = TF_huang_merge$gene_ID,
+                   PRR5 = TF_nakamichi_merge$gene_ID,
+                   PRR7 = TF_liu_merge$gene_ID,
+                   LUX = TF_ezer_LUX_merge$gene_ID,
+                   ELF3 = TF_ezer_ELF3_merge$gene_ID,
+                   ELF4 = TF_ezer_ELF4_merge$gene_ID)
 
 # fromList: a function to convert a list of named vectors to a data frame compatible with UpSetR
 sets <- fromList(myGeneSets) 
@@ -2061,20 +2061,24 @@ sets <- fromList(myGeneSets)
 UpSet <- UpSetR::upset(sets, 
                        nsets=8,
                        nintersects = NA, 
-                       number.angles = 30, 
+                       number.angles = 0, 
                        order.by = "freq", 
                        matrix.color='grey40', 
                        point.size = 2.5, 
-                       sets.x.label = "Clock ChIP targets", 
+                       sets.x.label = "Clock ChIP targets",
+                       set_size.show = TRUE,
+                       set_size.numbers_size = 6,
+                       set_size.scale_max = 600, 
                        mainbar.y.label = "Gene Set Intersections", 
                        sets.bar.color = c("#542788", "#a6d96a", "#4575b4", "#1a9850", "#636363", "#f46d43", "#fdae61", "#cccccc"), 
-                       text.scale = c(1.3, 1.3, 1, 1, 1, 0.75))
+                       text.scale = c(2, 2, 1.4, 1.4, 1.8, 1.2))
 
 png("./03_plots/UpSet_all_columns.png", width = 12, height = 6, units = 'in', res = 300)
 
 UpSet
 
 dev.off()
+
 
 # *14.2 trimmed----
 
@@ -2117,20 +2121,38 @@ sets_trimmed <- fromList(myGeneSets_trimmed)
 UpSet_trimmed <- UpSetR::upset(sets_trimmed,
                                nintersects = NA,
                                nsets=8, 
-                               number.angles = 30, 
+                               number.angles = 0, 
                                order.by = "freq", 
                                matrix.color='grey40', 
                                point.size = 2.5, 
-                               sets.x.label = "Clock ChIP targets", 
+                               sets.x.label = "Clock ChIP targets",
+                               set_size.show = TRUE,
+                               set_size.numbers_size = 6,
+                               set_size.scale_max = 300,
                                mainbar.y.label = "Gene Set Intersections", 
                                sets.bar.color = c("#542788", "#a6d96a", "#4575b4", "#1a9850", "#636363", "#f46d43", "#fdae61", "#cccccc"), 
-                               text.scale = c(1.3, 1.3, 1, 1, 1, 0.9))
+                               text.scale = c(2, 2, 1.4, 1.4, 1.8, 1.2))
 
 png("./03_plots/UpSet_trimmed_all_columns.png", width = 12, height = 6, units = 'in', res = 300)
 
 UpSet_trimmed
 
 dev.off()
+
+# *14.3 cowplot Suppl Fig S4----
+UpSet_c <- cowplot::plot_grid(NULL, UpSet$Main_bar, UpSet$Sizes, UpSet$Matrix,
+                              nrow=2, align = 'hv', rel_heights = c(2,1),
+                              rel_widths = c(1,4))
+
+UpSet_trimmed_c <- cowplot::plot_grid(NULL, UpSet_trimmed$Main_bar, UpSet_trimmed$Sizes, UpSet_trimmed$Matrix,
+                                      nrow=2, align='hv', rel_heights = c(2,1),
+                                      rel_widths = c(1,4))
+
+
+UpSet_plots <- plot_grid(UpSet_c, UpSet_trimmed_c, labels = "AUTO", ncol = 1, label_size = 24)
+
+ggsave2("./03_plots/UpSet_cowplots.png", UpSet_plots, dpi = 300, height = 12, width = 12, units = 'in')
+
 
 # 15 UpSetR COLUMN IDENTITIES----
 
