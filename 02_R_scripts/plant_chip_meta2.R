@@ -2,8 +2,13 @@
 
 # 1 LIBRARIES----
 
-library(tidyverse)
+#library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(stringr)
 library(janitor)
+library(purrr)
 library(ggh4x)
 library(MetaCycle)
 devtools::install_github("vqv/ggbiplot")
@@ -14,14 +19,16 @@ library(UpSetR)
 library(devtools)
 #install_github("jokergoo/ComplexHeatmap")
 #library(ComplexHeatmap)
-#library(ComplexUpset)
+library(ComplexUpset)
 library(igraph)
 library(ndtv)
 library(animation)
 library(ggbreak)
 library(patchwork)
 library(readxl)
+library(readr)
 library(gt)
+
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
 
@@ -253,8 +260,8 @@ packageVersion("patchwork")
 # Set theme for annotations
 thm <- theme(plot.title = element_text(face = 2, size = 20))
 
-fig1_top_plot <- wrap_elements((cluster10_z_plot + cluster11_z_plot) / (cluster17_z_plot + cluster20_z_plot) + 
-                            plot_annotation(title = "A", theme = thm))
+fig1_top_plot <- wrap_elements((cluster10_z_plot + cluster11_z_plot) / (cluster17_z_plot + cluster20_z_plot)) 
+#+ plot_annotation(title = "A", theme = thm))
 
 fig1_bottom_plot <- wrap_elements(clock_plot + plot_annotation(title = "B", theme = thm)) 
 
@@ -263,7 +270,7 @@ fig_1 <- fig1_top_plot / fig1_bottom_plot +
 
 fig_1
 
-ggsave('./03_plots/fig1_plot.png', dpi = 300, height = 15, width = 10, units = 'in')
+ggsave('./03_plots/fig1_top_plot.png', dpi = 300, height = 8, width = 10, units = 'in')
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
@@ -2024,8 +2031,7 @@ UpSet_trimmed_c <- cowplot::plot_grid(NULL, UpSet_trimmed$Main_bar, UpSet_trimme
 
 UpSet_plots <- plot_grid(UpSet_c, UpSet_trimmed_c, labels = "AUTO", ncol = 1, label_size = 24)
 
-ggsave2("./03_plots/UpSet_cowplots.png", UpSet_plots, dpi = 300, height = 12, width = 12, units = 'in')
-
+ggsave2("./03_plots/UpSet_cowplots.png", UpSet_plots, dpi = 300, height = 18, width = 12, units = 'in')
 
 # 15 UpSetR COLUMN IDENTITIES----
 
@@ -4976,9 +4982,11 @@ upset_ggplot_prep[clock_components] = upset_ggplot_prep[clock_components] == 1
 
 # https://krassowski.github.io/complex-upset/
 
+# **17.4.1 not trimmed (intersection size >= 1)----
+
 upset_ggplot <- upset(upset_ggplot_prep, 
                       clock_components,
-                      annotations = list('Day1 vs Day2' = (ggplot(mapping=aes(fill=type_d1d2)) +
+                      annotations = list('Day1 vs Day2' = (ggplot(mapping = aes(fill=type_d1d2)) +
                                                              geom_bar(stat='count', position='fill') + 
                                                              scale_y_continuous(labels=scales::percent_format()) +
                                                              theme(plot.margin = margin(t = 3, 1, 1, 1, "lines")) +
@@ -4993,7 +5001,7 @@ upset_ggplot <- upset(upset_ggplot_prep,
                                                              scale_fill_manual(values=c('gain_high_d1_d5' = '#31a354', 'gain_medium_d1_d5' = '#74c476', 'other_d1_d5' = '#cccccc', 'lose_medium_d1_d5' = '#fb6a4a', 'lose_high_d1_d5' = '#de2d26'), 
                                                                                labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high'), guide = FALSE) +
                                                              labs(title = 'day 1 vs. day 5', fill = 'Amplitude', y = 'Proportion', x = ''))),
-                      name='clock components',
+                      name='group',
                       width_ratio=0.1,
                       # sort_intersections_by='ratio',
                       # sort_intersections_by=c('degree', 'cardinality'),
@@ -5015,6 +5023,49 @@ upset_ggplot <- upset(upset_ggplot_prep,
 upset_ggplot
 
 ggsave('./03_plots/UpSet_with_stacked_bar_all.png', dpi = 300, height = 8, width = 12, units = 'in')
+
+# **17.4.2 trimmed (intersection size >= 5)----
+
+upset_ggplot_trimmed <- upset(upset_ggplot_prep, 
+                      clock_components,
+                      annotations = list('Day1 vs Day2' = (ggplot(mapping = aes(fill=type_d1d2)) +
+                                                             geom_bar(stat='count', position='fill') + 
+                                                             scale_y_continuous(labels=scales::percent_format()) +
+                                                             theme(plot.margin = margin(t = 3, 1, 1, 1, "lines")) +
+                                                             theme(legend.direction = "horizontal") +
+                                                             theme(legend.position = c(0.5, 2)) +
+                                                             labs(title = 'day 1 vs. day 2', fill = 'Amplitude', y = 'Proportion', x = '') +
+                                                             scale_fill_manual(values=c('gain_high_d1_d2' = '#31a354', 'gain_medium_d1_d2' = '#74c476', 'other_d1_d2' = '#cccccc', 'lose_medium_d1_d2' = '#fb6a4a', 'lose_high_d1_d2' = '#de2d26'), 
+                                                                               labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high'))),
+                                         'Day1 vs Day5' = (ggplot(mapping=aes(fill = type_d1d5)) +
+                                                             geom_bar(stat='count', position='fill') +
+                                                             scale_y_continuous(labels=scales::percent_format()) +
+                                                             scale_fill_manual(values=c('gain_high_d1_d5' = '#31a354', 'gain_medium_d1_d5' = '#74c476', 'other_d1_d5' = '#cccccc', 'lose_medium_d1_d5' = '#fb6a4a', 'lose_high_d1_d5' = '#de2d26'), 
+                                                                               labels = c('gain - high', 'gain - medium', 'other', 'lose - medium', 'lose - high'), guide = FALSE) +
+                                                             labs(title = 'day 1 vs. day 5', fill = 'Amplitude', y = 'Proportion', x = ''))),
+                      name='group',
+                      width_ratio=0.1,
+                      # sort_intersections_by='ratio',
+                      # sort_intersections_by=c('degree', 'cardinality'),
+                      sort_sets=FALSE,
+                      min_size = 5,
+                      set_sizes = (upset_set_size() + 
+                                     theme(axis.text.x=element_text(angle=90),
+                                           axis.ticks.x=element_line())),
+                      queries=list(upset_query(set='LHY', fill='#1a9850'),
+                                   upset_query(set='CCA1', fill='#a6d96a'),
+                                   upset_query(set='TOC1', fill='#4575b4'),
+                                   upset_query(set='PRR5', fill='#fdae61'),
+                                   upset_query(set='PRR7', fill='#f46d43'),
+                                   upset_query(set='LUX', fill='#542788'),
+                                   upset_query(set='ELF3', fill='#636363'),
+                                   upset_query(set='ELF4', fill='#cccccc'))) + 
+  patchwork::plot_layout(heights=c(0.25, 0.25, 1, 0.5)) 
+
+upset_ggplot_trimmed
+
+ggsave('./03_plots/UpSet_with_stacked_bar_trimmed.png', dpi = 300, height = 8, width = 8, units = 'in')
+
 
 # *17.5 UpSet Plot column identities .csv export----
 
@@ -5127,13 +5178,13 @@ rownames(sets_trimmed_clock_wide_weighted_id_column_df)
 
 colnames(sets_trimmed_clock_wide_weighted_id_column_df)
 
-bip_sets_trimmed_clock_wide_weighted_id_column_df <- graph_from_incidence_matrix(sets_trimmed_clock_wide_weighted_id_column_df, weighted = TRUE)
+bip_sets_trimmed_clock_wide_weighted_id_column_df <- graph_from_biadjacency_matrix(sets_trimmed_clock_wide_weighted_id_column_df, weighted = TRUE)
 
 bip_sets_trimmed_clock_wide_weighted_id_column_df[]
 
 class(bip_sets_trimmed_clock_wide_weighted_id_column_df)
 
-bip_sets_trimmed_clock_wide
+#bip_sets_trimmed_clock_wide
 
 E(bip_sets_trimmed_clock_wide_weighted_id_column_df)
 
