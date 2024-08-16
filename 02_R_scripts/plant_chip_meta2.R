@@ -336,6 +336,8 @@ day1_vs_day2_150 <- full_join(day1_output, day2_output, by = "cluster") %>%
   mutate(cluster_id = as.character(paste(1:74))) %>% 
   relocate(cluster_id)
 
+count(day1_vs_day5_150, pval_flag)
+
 # write_csv(day1_vs_day2_150, './01_tidy_data/day1_vs_day2_150.csv')
 
 # *3.2 compare d1d5----
@@ -749,7 +751,7 @@ df_table <- df_table %>%
          percent = yes_network/Total *100) %>% 
   select(1, 2, 3, 4, 5, 7, 8, 6, 9)
 
-# dding plots to the table
+# adding plots to the table
 # used a function which takes two inputs: 
 # (i) the dataframe (df), 
 # (ii) a unique identifier for each row - this is the clock component (protein)
