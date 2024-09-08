@@ -142,6 +142,34 @@ clusters_aggregated_pivot_longer <- clusters_aggregated %>%
                         id == 25 ~ 117,
                         id == 26 ~ 120))
 
+cluster9_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_9') %>% 
+  ggplot(aes(x=id, y=z_score)) +
+  geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_line() +
+  geom_point() +
+  theme_linedraw() +
+  xlim(-1, 122) +
+  scale_x_break(c(48, 96)) +
+  scale_x_continuous(breaks = seq(0, 120, 6)) +
+  scale_y_continuous(breaks = seq(-1, 2.5, 0.5)) +
+  theme(axis.text.x.top = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.line.x.top = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold"),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=16,face="bold")) +
+  labs(title = "Cluster 9", y = "mean Z-score", x = "hr") +
+  annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
+           alpha = 0.2, fill = "grey50") +
+  annotate("text", x = 4, y = 2.2, label = "day 1") +
+  annotate("text", x = 29, y = 2.2, label = "day 2") +
+  annotate("text", x = 100, y = 2.2, label = "day 5")
+
+cluster9_z_plot
+
 cluster10_z_plot <- clusters_aggregated_pivot_longer %>% 
   filter(cluster == 'cluster_10') %>% 
   ggplot(aes(x=id, y=z_score)) +
@@ -254,23 +282,53 @@ cluster20_z_plot <- clusters_aggregated_pivot_longer %>%
 
 cluster20_z_plot
 
+cluster25_z_plot <- clusters_aggregated_pivot_longer %>% 
+  filter(cluster == 'cluster_25') %>%
+  ggplot(aes(x=id, y=z_score)) +
+  geom_vline(xintercept = 24, col = "lightblue", size = 2) +
+  geom_line() +
+  geom_point() +
+  theme_linedraw() +
+  xlim(-1, 122) +
+  scale_x_break(c(48, 96)) +
+  scale_x_continuous(breaks = seq(0, 120, 6)) +
+  scale_y_continuous(breaks = seq(-1, 2, 0.5)) +
+  theme(axis.text.x.top = element_blank(),
+        axis.ticks.x.top = element_blank(),
+        axis.line.x.top = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.grid.major = element_blank(),
+        plot.title = element_text(hjust=0.5, size = 16, face = "bold"),
+        axis.text = element_text(size=12),
+        axis.title=element_text(size=16,face="bold")) +
+  labs(title = "Cluster 25", y = "mean Z-score", x = "hr") +
+  annotate("rect", xmin = c(0, 24, 96), xmax = c(12, 36, 108), ymin = -Inf, ymax = Inf,
+           alpha = 0.2, fill = "grey50") +
+  annotate("text", x = 4, y = 1.8, label = "day 1") +
+  annotate("text", x = 29, y = 1.8, label = "day 2") +
+  annotate("text", x = 100, y = 1.8, label = "day 5")
+
+cluster25_z_plot
+
 # *2.2 patchwork plot Figure 1----
 packageVersion("patchwork")
 
 # Set theme for annotations
 thm <- theme(plot.title = element_text(face = 2, size = 20))
 
-fig1_top_plot <- wrap_elements((cluster10_z_plot + cluster11_z_plot) / (cluster17_z_plot + cluster20_z_plot)) 
+fig1_top_plot <- wrap_elements((cluster9_z_plot + cluster10_z_plot) / (cluster11_z_plot + cluster17_z_plot) / (cluster20_z_plot + cluster25_z_plot)) 
 #+ plot_annotation(title = "A", theme = thm))
+
+fig1_top_plot <- (cluster9_z_plot + cluster10_z_plot) / (cluster11_z_plot + cluster17_z_plot) / (cluster20_z_plot + cluster25_z_plot) 
 
 fig1_bottom_plot <- wrap_elements(clock_plot + plot_annotation(title = "B", theme = thm)) 
 
 fig_1 <- fig1_top_plot / fig1_bottom_plot + 
   plot_layout(heights = unit(c(1, 1.5), c('null', 'null')))
 
-fig_1
+fig1_top_plot
 
-ggsave('./03_plots/fig1_top_plot.png', dpi = 300, height = 8, width = 10, units = 'in')
+ggsave('./03_plots/fig1_top_plot2.png', dpi = 300, height = 12, width = 12, units = 'in')
 
 # 3 MetaCycle - RHYTHMIC SIGNALS----
 
@@ -5474,7 +5532,7 @@ ani.options("convert")
 
 ani.options(convert="/usr/local/Cellar/imagemagick/7.1.1-16/convert.exe")
 
-/usr/local/Cellar/imagemagick/7.1.1-16
+#/usr/local/Cellar/imagemagick/7.1.1-16
 
 par('mar')
 dev.set(dev.next())
