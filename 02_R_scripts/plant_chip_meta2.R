@@ -28,6 +28,9 @@ library(patchwork)
 library(readxl)
 library(readr)
 library(gt)
+library(GOplot)
+library(org.At.tair.db)
+library(clusterProfiler)
 
 
 setwd("/Users/Allan/Documents/plant_ChIP_meta2/")
@@ -5015,10 +5018,9 @@ UpSet_trimmed_col1_col64 <- bind_rows(UpSet_trimmed_col1,
                                       UpSet_trimmed_col62,
                                       UpSet_trimmed_col63,
                                       UpSet_trimmed_col64) %>% 
-  mutate(heatmap = case_when(cluster %in% c(9, 24, 25, 38, 52) ~ 'g1', 
-                             cluster %in% c(20, 29, 34, 42, 44, 65, 71) ~ 'g2',
-                             cluster %in% c(10, 22, 31, 56, 72) ~ 'g3',
-                             cluster %in% c(11, 58, 67) ~ 'g4',
+  mutate(heatmap = case_when(cluster %in% c(10, 20, 22, 29, 31, 34, 44, 56, 65, 71, 72) ~ 'g1', 
+                             cluster %in% c(9, 24, 25, 38, 42, 52) ~ 'g2',
+                             cluster %in% c(11, 58, 67) ~ 'g3',
                              TRUE ~ 'NA'))
 
 # *17.3 UpSet ggplot matrix prep----
@@ -5028,7 +5030,7 @@ upset_ggplot_prep <- sets_trimmed_clock %>% group_by(clock) %>% dplyr::mutate(id
   select(-id) %>% 
   mutate(type_d1d2 = factor(type_d1d2, levels = c('gain_high_d1_d2', 'gain_medium_d1_d2', 'other_d1_d2', 'lose_medium_d1_d2', 'lose_high_d1_d2')),
          type_d1d5 = factor(type_d1d5, levels = c('gain_high_d1_d5', 'gain_medium_d1_d5', 'other_d1_d5', 'lose_medium_d1_d5', 'lose_high_d1_d5')),
-         heatmap = factor(heatmap, levels = c('g1', 'g2', 'g3', 'g4')))
+         heatmap = factor(heatmap, levels = c('g1', 'g2', 'g3')))
 
 clock_components = colnames(sets_trimmed)[1:8]
 
@@ -5466,7 +5468,11 @@ ceb <- cluster_edge_betweenness(bip_sets_trimmed_clock_wide_weighted_id_column_d
 length(ceb)
 membership(ceb)
 modularity(ceb)
-# dendPlot(ceb, mode="hclust")
+sizes(ceb)
+algorithm(ceb)
+merges(ceb)
+is_hierarchical(ceb)
+#dendPlot(ceb, mode="hclust")
 clp <- cluster_label_prop(bip_sets_trimmed_clock_wide_weighted_id_column_df)
 cfg <- cluster_fast_greedy(as.undirected(bip_sets_trimmed_clock_wide_weighted_id_column_df))
 
@@ -5554,6 +5560,65 @@ names(igraph:::.igraph.shapes)
 
 # https://robjhyndman.com/hyndsight/crop-r-figures/index.html
 
+# 19 GO enrich plots----
+At_genes_all<-read.csv('./00_raw_data/Gene TPM.csv')
+all_genes<- At_genes_all[,1]
+
+upset_column_makeup_g1 <- upset_column_makeup %>% 
+  filter(heatmap == 'g1') %>% 
+  write_csv('./01_tidy_data/upset_column_makeup_g1.csv')
+
+upset_column_makeup_g2 <- upset_column_makeup %>% 
+  filter(heatmap == 'g2')
+
+upset_column_makeup_g3 <- upset_column_makeup %>% 
+  filter(heatmap == 'g3')
+
+table(upset_column_makeup_g3$cluster)
+
+# *19.1 GO repressed----
+GO_analysis <- enrichGO(gene = upset_column_makeup_g1$gene_ID,
+                        universe = all_genes,
+                        OrgDb = org.At.tair.db,
+                        keyType = "TAIR",
+                        ont = "BP",
+                        # pAdjustMethod = "none",
+                        pAdjustMethod = "BH",
+                        # pvalueCutoff = 1,
+                        pvalueCutoff = 0.05,
+                        # qvalueCutoff = 1,
+                        qvalueCutoff = 0.10,
+                        readable = TRUE,
+                        pool = TRUE)
+
+dotplot(GO_analysis, showCategory=10, font.size=12, label_format = 55)
+dp_repressed <- dotplot(GO_analysis, showCategory=10, font.size=12, label_format = 55)
+
+arabidopsis <- search_kegg_organism('Arabidopsis thaliana', by='scientific_name')
+dim(arabidopsis)
+
+install.packages("remotes")
+remotes::install_github("Bioconductor/KEGGREST")
+
+if (!require("BiocManager", quietly = TRUE))
+  install.packages("BiocManager")
+
+BiocManager::install("KEGGREST")
+
+pathways.list <- keggList("pathway", "ath")
+head(pathways.list)
+
+source("http://bioconductor.org/biocLite.R")
+
+KEGG_analysis <- enrichKEGG(gene = upset_column_makeup_g1$gene_ID,
+                            universe = all_genes,
+                            organism     = 'ath',
+                            pAdjustMethod = "BH",
+                            minGSSize = 15, 
+                            maxGSSize = 500,
+                            # nPermSimple = 10000,
+                            pvalueCutoff = 0.05)
+KEGG_analysis
 
 
 
